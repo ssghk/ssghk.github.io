@@ -13,8 +13,73 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <div id="main"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <script>
+
+/*
+      :::::::::           :::        ::::::::       ::::::::
+     :+:    :+:        :+: :+:     :+:    :+:     :+:    :+:
+    +:+    +:+       +:+   +:+    +:+            +:+
+   +#++:++#+       +#++:++#++:   +#++:++#++     +#++:++#++
+  +#+    +#+      +#+     +#+          +#+            +#+
+ #+#    #+#      #+#     #+#   #+#    #+#     #+#    #+#
+#########       ###     ###    ########       ########
+*/
   // Firebase 配置
     const firebaseConfig = {
       apiKey: "AIzaSyAe9fiJ-awc_QcHaT_GjrcYnSSGhl-weLM",
@@ -67,10 +132,10 @@
         const adDiv = document.createElement('div');
         adDiv.style = 'border:1px solid #ccc;margin:8px 0;padding:4px;';
         adDiv.innerHTML = `
-          <div>廣告圖片網址：<input type="text" value="${ad.img||''}" data-idx="${i}" class="ad-img"></div>
-          <div>廣告名：<input type="text" value="${ad.title||''}" data-idx="${i}" class="ad-title"></div>
-          <div>描述1：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1"></div>
-          <div>描述2：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2"></div>
+          <div>消息劵圖片網址：<input type="text" value="${ad.img||''}" data-idx="${i}" class="ad-img"></div>
+          <div>消息劵名：<input type="text" value="${ad.title||''}" data-idx="${i}" class="ad-title"></div>
+          <div>消息劵條款：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1"></div>
+          <div>消息劵地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2"></div>
           <button class="removeAdBtn" data-idx="${i}">移除</button>
         `;
         adsList.appendChild(adDiv);
@@ -102,6 +167,40 @@
       });
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+          :::        :::::::::         :::   :::       :::::::::::       ::::    :::
+       :+: :+:      :+:    :+:       :+:+: :+:+:          :+:           :+:+:   :+:
+     +:+   +:+     +:+    +:+      +:+ +:+:+ +:+         +:+           :+:+:+  +:+
+   +#++:++#++:    +#+    +:+      +#+  +:+  +#+         +#+           +#+ +:+ +#+
+  +#+     +#+    +#+    +#+      +#+       +#+         +#+           +#+  +#+#+#
+ #+#     #+#    #+#    #+#      #+#       #+#         #+#           #+#   #+#+#
+###     ###    #########       ###       ###     ###########       ###    ####
+
+*/
+
+
+
+
     // admin 頁流程
     function renderAdminPage() {
       window.addEventListener('DOMContentLoaded', function() {
@@ -114,17 +213,33 @@
           // 取得網站資料
           const siteDoc = await db.collection('site').doc('main').get();
           const site = siteDoc.exists ? siteDoc.data() : {};
-          let html = '<h3>網站資料管理</h3>';
-          html += `
-            <div style="border:1px solid #888;margin:8px 0;padding:4px;">
-              <div>本公司logo網址：<input type="text" id="site_logo" value="${site.logo||''}" style="width:60%"></div>
-              <div>本公司名：<input type="text" id="site_name" value="${site.name||''}"></div>
-              <div>本公司地址：<input type="text" id="site_address" value="${site.address||''}"></div>
-              <div>本公司電話：<input type="text" id="site_phone" value="${site.phone||''}"></div>
-              <div>本公司描述：<input type="text" id="site_desc" value="${site.desc||''}" style="width:80%"></div>
-              <button id="saveSiteBtn">儲存網站資料</button>
-            </div>
-            <h3>會員管理</h3>`;
+          let html = `
+            <style>
+              #adminWrap { max-width: 900px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
+              #adminWrap h3 { color: #1e3a5c; margin-top: 0; }
+              .admin-section { border:1px solid #bfa046; border-radius:12px; margin:18px 0; padding:18px 12px; background:#fff; box-shadow:0 2px 8px #eee; }
+              .admin-section input[type="text"] { font-size:1.1em; padding:4px 8px; border-radius:6px; border:1px solid #bfa046; background:#f5f6fa; margin:4px 0 8px 0; width:60%; }
+              .admin-section button { font-size:1.1em; padding:8px 18px; border-radius:8px; border:none; background:linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color:#222; font-weight:bold; margin:6px 4px 0 0; box-shadow:0 2px 8px #eee; cursor:pointer; }
+              .admin-section button:active { background:#bfa046; color:#fff; }
+              .memberCard { border:2px solid #bfa046; border-radius:14px; margin:18px 0; padding:16px 10px; background:#f5f6fa; box-shadow:0 2px 8px #ccc; }
+              .memberCard input[type="text"] { font-size:1em; padding:3px 7px; border-radius:5px; border:1px solid #bfa046; background:#fff; margin:2px 0 6px 0; width:55%; }
+              .memberCard .ad-block { border:1px dashed #aaa; border-radius:8px; margin:6px 0; padding:6px; background:#fff; }
+              .memberCard .ad-block input[type="text"] { width:50%; }
+              .memberCard .removeAdBtn, .memberCard .addAdBtn, .memberCard .editUser { font-size:1em; padding:5px 14px; border-radius:7px; border:none; background:linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color:#222; font-weight:bold; margin:4px 2px 0 0; box-shadow:0 1px 4px #eee; cursor:pointer; }
+              .memberCard .removeAdBtn:active, .memberCard .addAdBtn:active, .memberCard .editUser:active { background:#bfa046; color:#fff; }
+            </style>
+            <div id="adminWrap">
+              <h3>網站資料管理</h3>
+              <div class="admin-section">
+                <div>本公司logo網址：<input type="text" id="site_logo" value="${site.logo||''}"></div>
+                <div>本公司名：<input type="text" id="site_name" value="${site.name||''}"></div>
+                <div>本公司地址：<input type="text" id="site_address" value="${site.address||''}"></div>
+                <div>本公司電話：<input type="text" id="site_phone" value="${site.phone||''}"></div>
+                <div>本公司描述：<input type="text" id="site_desc" value="${site.desc||''}" style="width:80%"></div>
+                <button id="saveSiteBtn">儲存網站資料</button>
+              </div>
+              <h3>會員管理</h3>
+          `;
           // 取得所有會員
           const snap = await db.collection('users').get();
           snap.forEach(doc => {
@@ -132,25 +247,28 @@
             let adsHtml = '';
             const ads = Array.isArray(d.ads) ? d.ads : [];
             ads.forEach((ad, i) => {
-              adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
-                <div>圖片網址：<input type='text' class='ad-img' data-uid='${doc.id}' data-idx='${i}' value='${ad.img||''}'></div>
-                <div>廣告名：<input type='text' class='ad-title' data-uid='${doc.id}' data-idx='${i}' value='${ad.title||''}'></div>
-                <div>描述1：<input type='text' class='ad-desc1' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc1||''}'></div>
-                <div>描述2：<input type='text' class='ad-desc2' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc2||''}'></div>
+              adsHtml += `<div class='ad-block'>
+                <div>消息劵圖片網址：<input type='text' class='ad-img' data-uid='${doc.id}' data-idx='${i}' value='${ad.img||''}'></div>
+                <div>消息劵名：<input type='text' class='ad-title' data-uid='${doc.id}' data-idx='${i}' value='${ad.title||''}'></div>
+                <div>消息劵條款：<input type='text' class='ad-desc1' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc1||''}'></div>
+                <div>消息劵地址或網址：<input type='text' class='ad-desc2' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc2||''}'></div>
                 <button class='removeAdBtn' data-uid='${doc.id}' data-idx='${i}'>移除</button>
               </div>`;
             });
-            adsHtml += `<button class='addAdBtn' data-uid='${doc.id}'>新增廣告</button>`;
-            html += `<div style="border:1px solid #ccc;margin:8px 0;padding:4px;">
-              <b>${d.name || ''}</b> (${doc.id})<br>
-              VIP: <input type="checkbox" class="vip" data-uid="${doc.id}" ${d.vip ? 'checked' : ''}><br>
-              電話: <input type="text" class="phone" data-uid="${doc.id}" value="${d.phone||''}"><br>
-              地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"><br>
-              logo: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
-              <div>廣告管理：${adsHtml}</div>
+            adsHtml += `<button class='addAdBtn' data-uid='${doc.id}'>新增消息劵</button>`;
+            html += `<div class="memberCard">
+              <div style="color:#888;font-size:0.95em;">(${doc.id})</div>
+              <div>商家名稱: <input type="text" class="shopName" data-uid="${doc.id}" value="${d.name||''}"></div>
+              <div>VIP: <input type="checkbox" class="vip" data-uid="${doc.id}" ${d.vip ? 'checked' : ''}></div>
+              <div>商家電話: <input type="text" class="phone" data-uid="${doc.id}" value="${d.phone||''}"></div>
+              <div>商家地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"></div>
+              <div>商家logo: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"></div>
+              <div><a href="${d.url}" target="_blank">商家網址</a></div>
+              <div>消息劵管理：${adsHtml}</div>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
             </div>`;
           });
+          html += `</div>`;
           document.getElementById('main').innerHTML = html;
           // 儲存網站資料
           document.getElementById('saveSiteBtn').onclick = async () => {
@@ -170,6 +288,7 @@
               const phone = document.querySelector(`.phone[data-uid='${uid}']`).value;
               const address = document.querySelector(`.address[data-uid='${uid}']`).value;
               const logo = document.querySelector(`.logo[data-uid='${uid}']`).value;
+              const name = document.querySelector(`.shopName[data-uid='${uid}']`).value;
               // 取得所有廣告內容
               const userDiv = btn.closest('div[style*="border:1px solid"]');
               let ads = Array.from(userDiv.querySelectorAll('.ad-img')).map((imgInput, i) => ({
@@ -183,7 +302,7 @@
               try {
                 // 呼叫 Cloud Function
                 const adminUpdateUser = firebase.functions().httpsCallable('adminUpdateUser');
-                await adminUpdateUser({ uid, update: { vip, phone, address, logo, ads } });
+                await adminUpdateUser({ uid, update: { vip, phone, address, logo, ads, name } });
                 alert('已更新');
               } finally {
                 btn.disabled = false;
@@ -213,10 +332,10 @@
             let adsHtml = '';
             ads.forEach((ad, i) => {
               adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
-                <div>圖片網址：<input type='text' class='ad-img' data-uid='${uid}' data-idx='${i}' value='${ad.img||''}'></div>
-                <div>廣告名：<input type='text' class='ad-title' data-uid='${uid}' data-idx='${i}' value='${ad.title||''}'></div>
-                <div>描述1：<input type='text' class='ad-desc1' data-uid='${uid}' data-idx='${i}' value='${ad.desc1||''}'></div>
-                <div>描述2：<input type='text' class='ad-desc2' data-uid='${uid}' data-idx='${i}' value='${ad.desc2||''}'></div>
+                <div>消息劵圖片網址：<input type='text' class='ad-img' data-uid='${uid}' data-idx='${i}' value='${ad.img||''}'></div>
+                <div>消息劵名：<input type='text' class='ad-title' data-uid='${uid}' data-idx='${i}' value='${ad.title||''}'></div>
+                <div>消息劵條款：<input type='text' class='ad-desc1' data-uid='${uid}' data-idx='${i}' value='${ad.desc1||''}'></div>
+                <div>消息劵地址或網址：<input type='text' class='ad-desc2' data-uid='${uid}' data-idx='${i}' value='${ad.desc2||''}'></div>
                 <button class='removeAdBtn' data-uid='${uid}' data-idx='${i}'>移除</button>
               </div>`;
             });
@@ -243,45 +362,183 @@
       });
     }
 
-    // 公開頁流程
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+      ::::::::       :::    :::       ::::::::       :::::::::
+    :+:    :+:      :+:    :+:      :+:    :+:      :+:    :+:
+   +:+             +:+    +:+      +:+    +:+      +:+    +:+
+  +#++:++#++      +#++:++#++      +#+    +:+      +#++:++#+
+        +#+      +#+    +#+      +#+    +#+      +#+
+#+#    #+#      #+#    #+#      #+#    #+#      #+#
+########       ###    ###       ########       ###
+*/
+    // 商家頁流程
     function renderPublicPage() {
       db.collection('site').doc('main').get().then(siteDoc => {
         const site = siteDoc.exists ? siteDoc.data() : {};
-        const siteHtml = renderSiteInfo(site);
+        // const siteHtml = renderSiteInfo(site); // 不顯示共用網站資料
         const uid = userParam;
         db.collection('users').doc(uid).get().then(doc => {
-          let html = siteHtml;
+          let html = '';
           if (doc.exists && doc.data().vip) {
             const data = doc.data();
-            html += `<div style='font-size:1.3em;font-weight:bold;'>${data.name||''}</div>`;
-            html += `<div>電話：${data.phone||''}</div>`;
-            html += `<div>地址：${data.address||''}</div>`;
-            if (data.logo) html += `<div><img src='${data.logo}' style='max-width:120px;'></div>`;
-            if (Array.isArray(data.ads) && data.ads.length) {
-              html += `<div style='margin-top:1em;'>廣告：</div>`;
-              data.ads.forEach(ad => {
-                html += `<div style='border:1px solid #ccc;margin:8px 0;padding:4px;'>`;
-                if (ad.img) html += `<div><img src='${ad.img}' style='max-width:100px;'></div>`;
-                if (ad.title) html += `<div>名稱：${ad.title}</div>`;
-                if (ad.desc1) html += `<div>${ad.desc1}</div>`;
-                if (ad.desc2) html += `<div>${ad.desc2}</div>`;
-                html += `</div>`;
-              });
+            // 設定 title 為 data.name | 公司名
+            if (data.name && site.name) {
+              document.title = data.name + ' | ' + site.name;
+            } else if (data.name) {
+              document.title = data.name;
+            } else if (site.name) {
+              document.title = site.name;
             }
-            html += `<div>本月發出消費劵數：${data.month||0}</div>`;
-            html += `<div>累計發出消費劵數：${data.total||0}</div>`;
+            // 消費劵區塊
+            if (Array.isArray(data.ads) && data.ads.length) {
+              html += `<div id="couponsArea" style="display:flex;flex-direction:column;align-items:center;">`;
+              data.ads.forEach(ad => {
+                // 判斷 desc2 是否為網址
+                let isUrl = ad.desc2 && /^https?:\/\//.test(ad.desc2);
+                html += `<div class="coupon-card" style="height:200px;width:100%;max-width:720px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;cursor:${isUrl?'pointer':'default'};background:linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border:2px solid #bfa046;margin-bottom:12px;box-shadow:0 2px 8px #bbb;" ${isUrl?`onclick=\"window.open('${ad.desc2}','_blank')\"`:''}>
+                  <img src="${ad.img||''}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.85;">
+                  <div style="position:absolute;top:8px;left:12px;z-index:2;color:#111;font-size:24px;font-weight:900;
+                    padding:6px 18px;border-radius:12px;letter-spacing:1px;
+                    background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 20%,rgba(255,255,255,0.95) 80%,rgba(255,255,255,0) 100%);">${ad.title||''}</div>
+                  <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:flex-end;z-index:2;
+                      color:#fff;font-size:38px;font-weight:900;letter-spacing:1px;
+                      padding:6px 18px;border-radius:12px;
+                      background:transparent;">
+                    <span style="text-align:right;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.5) 60%,rgba(0,0,0,0) 100%);padding:6px 18px;border-radius:12px;">${ad.desc1||''}</span>
+                  </div>
+                  ${ad.desc2 ? (
+                    isUrl ? '' : `<div style='position:absolute;bottom:8px;left:0;width:100%;text-align:center;z-index:2;color:#fff;font-size:24px;font-weight:900;letter-spacing:1px;
+                      padding:6px 18px;border-radius:12px;display:inline-block;
+                      background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 20%,rgba(0,0,0,0.5) 80%,rgba(0,0,0,0) 100%);'>${ad.desc2}</div>`
+                  ) : ''}
+                </div>`;
+              });
+              html += `</div>`;
+            }
+            // logo區塊
+            html += `<div id="logoArea" style="display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0;background:linear-gradient(90deg,#e6e8ea 0%,#fffbe6 100%);border:2px solid #bfa046;box-shadow:0 2px 8px #bbb;">
+              <div id="shopLogoBox" style="flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer;" onclick="showShopInfo()">
+                ${data.logo?`<img src='${data.logo}' style='max-height:80px;max-width:90%;object-fit:contain;'>`:''}
+              </div>
+              <div id="siteLogoBox" style="flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer;" onclick="showSiteInfo()">
+                ${site.logo?`<img src='${site.logo}' style='max-height:80px;max-width:90%;object-fit:contain;'>`:''}
+              </div>
+            </div>`;
+            // 彈窗顯示商家/網站資料
+            html += `<div id="infoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+              <div id="infoContent" style="background:#fffbe6;border:3px solid #bfa046;padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
+              <button onclick=\"document.getElementById('infoModal').style.display='none'\" style='position:absolute;top:12px;right:24px;font-size:32px;background:none;border:none;color:#bfa046;cursor:pointer;'>×</button>
+            </div>`;
+            html += `<style>
+              body { background: #f5f6fa; }
+              #couponsArea .coupon-card:hover { box-shadow:0 4px 16px #bfa046; border-color:#1e3a5c; }
+            </style>`;
             document.getElementById('main').innerHTML = html;
+            // 彈窗遮罩點擊可關閉
+            const infoModal = document.getElementById('infoModal');
+            if (infoModal) {
+              infoModal.onclick = function(e) {
+                if (e.target === infoModal) infoModal.style.display = 'none';
+              };
+            }
+            // 彈窗顯示資料 function
+            window.showShopInfo = function() {
+              document.getElementById('infoContent').innerHTML = `
+                <div style='font-size:2em;font-weight:bold;color:#bfa046;margin-bottom:8px;'>${data.name||''}</div>
+                <div>${data.phone||''}</div>
+                <div>${data.address||''}</div>
+                <div>${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
+                <div>本月發出消費劵數：${data.month||0}</div>
+                <div>累計發出消費劵數：${data.total||0}</div>
+              `;
+              document.getElementById('infoModal').style.display = 'flex';
+            };
+            window.showSiteInfo = function() {
+              document.getElementById('infoContent').innerHTML = `
+                <div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;'>${site.name||''}</div>
+                <div>${site.phone||''}</div>
+                <div>${site.address||''}</div>
+                <div>${site.logo?`<img src='${site.logo}' style='max-width:120px;'>`:''}</div>
+                <div>${site.desc||''}</div>
+              `;
+              document.getElementById('infoModal').style.display = 'flex';
+            };
           } else {
             html += '<div style="color:#888">商家準備中...</div>';
             document.getElementById('main').innerHTML = html;
           }
         }).catch(e => {
           document.getElementById('main').innerHTML = siteHtml + '<div style="color:red">資料載入失敗</div>';
-          console.error('公開頁載入失敗', e);
+          console.error('商家頁載入失敗', e);
         });
       });
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+     :::    :::       ::::::::       ::::::::::       :::::::::
+    :+:    :+:      :+:    :+:      :+:              :+:    :+:
+   +:+    +:+      +:+             +:+              +:+    +:+
+  +#+    +:+      +#++:++#++      +#++:++#         +#++:++#:
+ +#+    +#+             +#+      +#+              +#+    +#+
+#+#    #+#      #+#    #+#      #+#              #+#    #+#
+########        ########       ##########       ###    ###
+*/
     // 會員主頁/首頁流程
     function renderMemberPage() {
       auth.onAuthStateChanged(user => {
@@ -290,27 +547,54 @@
             var siteData = siteDoc.exists ? siteDoc.data() : {};
             const siteHtml = renderSiteInfo(siteData);
             document.getElementById('main').innerHTML = `
-              ${siteHtml}
-              <button id="loginBtn" style="display:none">Google登入</button>
-              <div id="userPanel" style="display:none">
-                <button id="showPrivacyBtn">💰</button>
-                <div id="商家私隱" style="display:none">
-                  <div>會員名字：<input id="name" type="text"></div>
-                  <div>會員電話：<input id="phone" type="text"></div>
-                  <div>會員地址：<input id="address" type="text"></div>
-                  <div>會員logo網址：<input id="logo" type="text" style="width:60%"><span id="logoPreview"></span></div>
-                  <div id="adsList"></div>
-                  <button id="addAdBtn">新增廣告</button>
-                  <div>VIP：<span id="vip"></span></div>
-                  <div style="display:none">獨立網址：<span id="url"></span></div>
-                  <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
-                  <div>本月發出消費劵數：<span id="month"></span></div>
-                  <div>累計發出消費劵數：<span id="total"></span></div>
-                  <div>客戶每次使用相機掃qr獲取消費劵，店主將消費1元</div>
-                  <button id="saveProfileBtn">儲存會員資料</button>
-                  <button id="logoutBtn">登出</button>
+              <style>
+                #qrcode { width:100% !important; height:100% !important; display:block; }
+                #memberMainWrap { max-width: 720px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 18px 8px 32px 8px; }
+                #userPanel { margin-top: 12px; }
+                #商家私隱 > div { margin-bottom: 10px; font-size: 1.1em; }
+                #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid #bfa046; background: #fff; margin-left: 4px; }
+                #商家私隱 button, #userPanel button, #loginBtn { font-size: 1.1em; padding: 8px 18px; border-radius: 8px; border: none; background: linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color: #222; font-weight: bold; margin: 6px 4px 0 0; box-shadow: 0 2px 8px #eee; cursor: pointer; }
+                #商家私隱 button:active, #userPanel button:active, #loginBtn:active { background: #bfa046; color: #fff; }
+                #商家私隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
+                #logoPreview img { border-radius: 8px; border: 1px solid #bfa046; margin-left: 8px; }
+                #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid #bfa046; margin: 8px 0; padding: 8px; }
+                #qr位 { margin-top: 18px; text-align: center; }
+                #showPrivacyBtn { background: #1e3a5c; color: #fff; border: none; }
+                #showPrivacyBtn:active { background: #bfa046; color: #fff; }
+                #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0;background:linear-gradient(90deg,#e6e8ea 0%,#fffbe6 100%);border:2px solid #bfa046;box-shadow:0 2px 8px #bbb; }
+                #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
+                #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
+              </style>
+              <div id="memberMainWrap">
+                <button id="loginBtn" style="display:none">Google登入</button>
+                <div id="userPanel" style="display:none">
+                  <button id="showPrivacyBtn">💰 </button>
+                  <div id="商家私隱" style="display:none">
+                    <div>會員名字：<input id="name" type="text"></div>
+                    <div>會員電話：<input id="phone" type="text"></div>
+                    <div>會員地址：<input id="address" type="text"></div>
+                    <div>會員logo網址：<input id="logo" type="text" style="width:60%"><span id="logoPreview"></span></div>
+                    <div id="adsList"></div>
+                    <button id="addAdBtn">新增廣告</button>
+                    <div>VIP：<span id="vip"></span></div>
+                    <div style="display:none">獨立網址：<span id="url"></span></div>
+                    <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
+                    <div>本月發出消費劵數：<span id="month"></span></div>
+                    <div>累計發出消費劵數：<span id="total"></span></div>
+                    <div style="color:#bfa046;font-size:0.95em;">客戶每次使用相機掃qr獲取消費劵，店主將消費1元</div>
+                    <button id="saveProfileBtn">儲存會員資料</button>
+                    <button id="logoutBtn">登出</button>
+                  </div>
+                  <div id="qr位"><canvas id="qrcode"></canvas></div>
                 </div>
-                <div id="qr位">請客戶使用相機掃qr獲取消費劵：<canvas id="qrcode"></canvas></div>
+                <div id="logoAreaMember">
+                  <div id="memberLogoBox"></div>
+                  <div id="siteLogoBoxMember"></div>
+                </div>
+                <div id="infoModalMember" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+                  <div id="infoContentMember" style="background:#fffbe6;border:3px solid #bfa046;padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
+                  <button onclick=\"document.getElementById('infoModalMember').style.display='none'\" style='position:absolute;top:12px;right:24px;font-size:32px;background:none;border:none;color:#bfa046;cursor:pointer;'>×</button>
+                </div>
               </div>
             `;
             const loginBtn = document.getElementById('loginBtn');
@@ -359,6 +643,45 @@
               addressInput.value = data.address || '';
               logoInput.value = data.logo || '';
               logoPreview.innerHTML = data.logo ? `<img src='${data.logo}' style='max-width:60px;'>` : '';
+              // 會員logo與site.logo顯示於底部
+              const memberLogoBox = document.getElementById('memberLogoBox');
+              const siteLogoBox = document.getElementById('siteLogoBoxMember');
+              memberLogoBox.innerHTML = data.logo ? `<img src='${data.logo}' alt='會員logo'>` : '';
+              siteLogoBox.innerHTML = siteData.logo ? `<img src='${siteData.logo}' alt='網站logo'>` : '';
+              // 點擊顯示彈窗
+              memberLogoBox.onclick = function() {
+                document.getElementById('infoContentMember').innerHTML = `
+                  <div style='font-size:2em;font-weight:bold;color:#bfa046;margin-bottom:8px;'>${data.name||''}</div>
+                  <div>電話：${data.phone||''}</div>
+                  <div>地址：${data.address||''}</div>
+                  <div>logo：${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
+                  <div>VIP：${data.vip?'是':'否'}</div>
+                  <div>本月發出消費劵數：${data.month||0}</div>
+                  <div>累計發出消費劵數：${data.total||0}</div>
+                `;
+                document.getElementById('infoModalMember').style.display = 'flex';
+              };
+              siteLogoBox.onclick = function() {
+                document.getElementById('infoContentMember').innerHTML = `
+                  <div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;'>${siteData.name||''}</div>
+                  <div>電話：${siteData.phone||''}</div>
+                  <div>地址：${siteData.address||''}</div>
+                  <div>logo：${siteData.logo?`<img src='${siteData.logo}' style='max-width:120px;'>`:''}</div>
+                  <div>描述：${siteData.desc||''}</div>
+                `;
+                document.getElementById('infoModalMember').style.display = 'flex';
+              };
+              // 彈窗遮罩點擊可關閉（點內容不關閉）
+              const infoModalMember = document.getElementById('infoModalMember');
+              const infoContentMember = document.getElementById('infoContentMember');
+              if (infoModalMember) {
+                infoModalMember.onclick = function(e) {
+                  if (e.target === infoModalMember) infoModalMember.style.display = 'none';
+                };
+                if (infoContentMember) {
+                  infoContentMember.onclick = function(e) { e.stopPropagation(); };
+                }
+              }
               function renderAdsLoop(ads) {
                 renderAds(ads, adsList, function(idx) {
                   const adsNow = getCurrentAds(adsList);
@@ -434,9 +757,27 @@
           // 未登入顯示網站資料+登入按鈕
           db.collection('site').doc('main').get().then(doc => {
             var siteData = doc.exists ? doc.data() : {};
-            let html = renderSiteInfo(siteData);
-            html += `<button id="loginBtn">Google登入</button>`;
-            document.getElementById('main').innerHTML = html;
+            document.getElementById('main').innerHTML = `
+              <style>
+                #guestWrap { max-width: 720px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
+                #guestLogo { text-align:center; margin-bottom:18px; }
+                #guestLogo img { max-width:120px; border-radius:16px; box-shadow:0 2px 8px #bfa046; }
+                #guestInfo { font-size:1.3em; color:#1e3a5c; font-weight:bold; text-align:center; margin-bottom:18px; }
+                #guestDesc { font-size:1.1em; color:#333; text-align:center; margin-bottom:18px; }
+                #loginBtn { font-size:1.2em; padding:12px 32px; border-radius:12px; border:none; background:linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color:#222; font-weight:bold; box-shadow:0 2px 8px #eee; cursor:pointer; display:block; margin:0 auto; }
+                #loginBtn:active { background:#bfa046; color:#fff; }
+              </style>
+              <div id="guestWrap">
+                <div id="guestLogo">${siteData.logo?`<img src='${siteData.logo}'>`:''}</div>
+                <div id="guestInfo">
+                  ${siteData.name?siteData.name:''}<br>
+                  ${siteData.phone?`電話：${siteData.phone}<br>`:''}
+                  ${siteData.address?`地址：${siteData.address}`:''}
+                </div>
+                <div id="guestDesc">${siteData.desc?siteData.desc:''}</div>
+                <button id="loginBtn">Google登入</button>
+              </div>
+            `;
             document.getElementById('loginBtn').onclick = () => {
               const provider = new firebase.auth.GoogleAuthProvider();
               auth.signInWithPopup(provider);
@@ -446,6 +787,36 @@
       });
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+      ::::::::::       :::        ::::::::     :::       :::
+     :+:              :+:       :+:    :+:    :+:       :+:
+    +:+              +:+       +:+    +:+    +:+       +:+
+   :#::+::#         +#+       +#+    +:+    +#+  +:+  +#+
+  +#+              +#+       +#+    +#+    +#+ +#+#+ +#+
+ #+#              #+#       #+#    #+#     #+#+# #+#+#
+###              ########## ########       ###   ###
+*/
     // 主流程
     if (getParam) {
       handleGet();
