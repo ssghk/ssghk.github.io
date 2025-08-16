@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>會員系統</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-functions-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
   <div id="main"></div>
   <script>
-    
-    // 填入你的 firebaseConfig
-        // Firebase 配置
-        const firebaseConfig = {
-            apiKey: "AIzaSyAe9fiJ-awc_QcHaT_GjrcYnSSGhl-weLM",
-            authDomain: "ssg1111.firebaseapp.com",
-            projectId: "ssg1111",
-            storageBucket: "ssg1111.firebasestorage.app",
-            messagingSenderId: "645347114148",
-            appId: "1:645347114148:web:a380b5bf76f659c7e47a31",
-            measurementId: "G-EH0Z16872Q"
-        };
+    // Firebase 配置
+    const firebaseConfig = {
+      apiKey: "AIzaSyAe9fiJ-awc_QcHaT_GjrcYnSSGhl-weLM",
+      authDomain: "ssg1111.firebaseapp.com",
+      projectId: "ssg1111",
+      storageBucket: "ssg1111.firebasestorage.app",
+      messagingSenderId: "645347114148",
+      appId: "1:645347114148:web:a380b5bf76f659c7e47a31",
+      measurementId: "G-EH0Z16872Q"
+    };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
@@ -34,124 +32,405 @@
     const userParam = params.get('user');
     const getParam = params.get('get');
 
-    console.log('functions:', firebase.functions());
-    if (getParam) {
-  const uid = getParam;
-  const incrementCount = firebase.functions().httpsCallable('incrementCount');
-  incrementCount({ uid }).then(result => {
-    location.href = result.data.url;
-  }).catch(e => {
-    document.getElementById('main').textContent = '計數失敗';
-  });
-}else if (userParam) {
-      // 公開頁：顯示會員名字（VIP才可瀏覽）
-      const uid = userParam;
-      db.collection('users').doc(uid).get().then(doc => {
-        if (doc.exists && doc.data().vip) {
-          document.getElementById('main').textContent = doc.data().name;
-        } else {
-          document.getElementById('main').textContent = '商家準備中...';
-        }
+    // 共用網站資料渲染 function
+    function renderSiteInfo(site) {
+      let html = '';
+      if (site.logo) html += `<div><img src='${site.logo}' style='max-width:120px;'></div>`;
+      if (site.name) html += `<div style='font-size:1.2em;font-weight:bold;'>${site.name}</div>`;
+      if (site.address) html += `<div>地址：${site.address}</div>`;
+      if (site.phone) html += `<div>電話：${site.phone}</div>`;
+      if (site.desc) html += `<div>${site.desc}</div>`;
+      return html ? `<div id="siteInfo" style="margin-bottom:1em;">${html}</div>` : '';
+    }
+
+    // 共用廣告渲染/取得 function
+    function renderAds(ads, adsList, removeCb) {
+      adsList.innerHTML = '';
+      (ads || []).forEach((ad, i) => {
+        const adDiv = document.createElement('div');
+        adDiv.style = 'border:1px solid #ccc;margin:8px 0;padding:4px;';
+        adDiv.innerHTML = `
+          <div>廣告圖片網址：<input type="text" value="${ad.img||''}" data-idx="${i}" class="ad-img"></div>
+          <div>廣告名：<input type="text" value="${ad.title||''}" data-idx="${i}" class="ad-title"></div>
+          <div>描述1：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1"></div>
+          <div>描述2：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2"></div>
+          <button class="removeAdBtn" data-idx="${i}">移除</button>
+        `;
+        adsList.appendChild(adDiv);
       });
-    } else {
-      // 會員主頁
-      document.getElementById('main').innerHTML = `
-        <button id="loginBtn">Google登入</button>
-        <div id="userPanel" style="display:none">
-          <button id="showPrivacyBtn">💰</button>
-          <div id="商家私隱" style="display:none">
-            <div>商家：<span id="name"></span></div>
-            <div>VIP：<span id="vip"></span></div>
-            <div style="display:none">獨立網址：<span id="url"></span></div>
-            <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
-            <div>本月發出消費劵數：<span id="month"></span></div>
-            <div>累計發出消費劵數：<span id="total"></span></div>
-            <div>客戶每次使用相機掃qr獲取消費劵，店主將消費1元</div>
-            <button id="logoutBtn">登出</button>
-          </div>
-          <div id="qr位">請客戶使用相機掃qr獲取消費劵：<canvas id="qrcode"></canvas></div>
-        </div>
-      `;
-      const loginBtn = document.getElementById('loginBtn');
-      const logoutBtn = document.getElementById('logoutBtn');
-      const userPanel = document.getElementById('userPanel');
-      loginBtn.onclick = () => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        auth.signInWithPopup(provider);
-      };
-      logoutBtn.onclick = () => auth.signOut();
-      auth.onAuthStateChanged(async user => {
-
-        console.log('登入成功', user);
-
-
-        // 商家私隱顯示按鈕
-        const showPrivacyBtn = document.getElementById('showPrivacyBtn');
-        const privacyPanel = document.getElementById('商家私隱');
-        showPrivacyBtn.onclick = () => {
-          privacyPanel.style.display = '';
-          showPrivacyBtn.style.display = 'none';
+      adsList.querySelectorAll('.removeAdBtn').forEach(btn => {
+        btn.onclick = () => {
+          const idx = +btn.getAttribute('data-idx');
+          removeCb(idx);
         };
-        if (!user) {
-          userPanel.style.display = 'none';
-          loginBtn.style.display = '';
-          return;
-        }
-        // user 已登入，開始取得 Firestore 資料
-        const uid = user.uid;
-        const userRef = db.collection('users').doc(uid);
-        async function waitForUserDoc(retry = 0) {
-          const doc = await userRef.get();
-          if (!doc.exists) {
-            document.getElementById('name').textContent = '帳號建立中，請稍候...';
-            if (retry < 20) setTimeout(() => waitForUserDoc(retry + 1), 1000);
+      });
+    }
+    function getCurrentAds(adsList) {
+      return Array.from(adsList.querySelectorAll('.ad-img')).map((imgInput, i) => ({
+        img: imgInput.value,
+        title: adsList.querySelector(`.ad-title[data-idx="${i}"]`).value,
+        desc1: adsList.querySelector(`.ad-desc1[data-idx="${i}"]`).value,
+        desc2: adsList.querySelector(`.ad-desc2[data-idx="${i}"]`).value
+      }));
+    }
+
+    // get 參數流程
+    function handleGet() {
+      const uid = getParam;
+      const incrementCount = firebase.functions().httpsCallable('incrementCount');
+      incrementCount({ uid }).then(result => {
+        location.href = result.data.url;
+      }).catch(e => {
+        document.getElementById('main').textContent = '計數失敗';
+      });
+    }
+
+    // admin 頁流程
+    function renderAdminPage() {
+      window.addEventListener('DOMContentLoaded', function() {
+        auth.onAuthStateChanged(async user => {
+          const adminUid = '109EjNOTmkh2CRuLghiIuwTDzl02';
+          if (!user || user.uid !== adminUid) {
+            document.getElementById('main').textContent = '無權限';
             return;
           }
-          // 登入後自動顯示 userPanel 並隱藏登入按鈕
-          userPanel.style.display = '';
-          loginBtn.style.display = 'none';
-          // 自動顯示商家私隱區塊
-          privacyPanel.style.display = '';
-          showPrivacyBtn.style.display = 'none';
-          const data = doc.data();
-          document.getElementById('name').textContent = data.name;
-          document.getElementById('url').textContent = data.url || data.localUrl || '';
-          document.getElementById('geturl').textContent = data.geturl || data.localGeturl || '';
-          document.getElementById('vip').textContent = data.vip ? '是' : '否';
-          document.getElementById('month').textContent = data.month || 0;
-          document.getElementById('total').textContent = data.total || 0;
-          const qrDiv = document.getElementById('qr位');
-          const qrcodeEl = document.getElementById('qrcode');
-          if (data.vip) {
-            // VIP顯示QRCode
-            if (qrcodeEl.tagName === 'A') {
-              const newCanvas = document.createElement('canvas');
-              newCanvas.id = 'qrcode';
-              qrDiv.replaceChild(newCanvas, qrcodeEl);
-              QRCode.toCanvas(newCanvas, data.geturl || data.localGeturl);
-            } else {
-              qrcodeEl.style.display = '';
-              QRCode.toCanvas(qrcodeEl, data.geturl || data.localGeturl);
-            }
-          } else {
-            // 非VIP顯示a href
-            if (qrcodeEl.tagName === 'CANVAS') {
-              const a = document.createElement('a');
-              a.id = 'qrcode';
-              a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-              a.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
-              a.target = '_blank';
-              qrDiv.replaceChild(a, qrcodeEl);
-            } else {
-              qrcodeEl.style.display = '';
-              qrcodeEl.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-              qrcodeEl.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
-              qrcodeEl.target = '_blank';
-            }
-          }
-        }
-        waitForUserDoc();
+          // 取得網站資料
+          const siteDoc = await db.collection('site').doc('main').get();
+          const site = siteDoc.exists ? siteDoc.data() : {};
+          let html = '<h3>網站資料管理</h3>';
+          html += `
+            <div style="border:1px solid #888;margin:8px 0;padding:4px;">
+              <div>公司logo網址：<input type="text" id="site_logo" value="${site.logo||''}" style="width:60%"></div>
+              <div>公司名：<input type="text" id="site_name" value="${site.name||''}"></div>
+              <div>公司地址：<input type="text" id="site_address" value="${site.address||''}"></div>
+              <div>公司電話：<input type="text" id="site_phone" value="${site.phone||''}"></div>
+              <div>公司描述：<input type="text" id="site_desc" value="${site.desc||''}" style="width:80%"></div>
+              <button id="saveSiteBtn">儲存網站資料</button>
+            </div>
+            <h3>會員管理</h3>`;
+          // 取得所有會員
+          const snap = await db.collection('users').get();
+          snap.forEach(doc => {
+            const d = doc.data();
+            let adsHtml = '';
+            const ads = Array.isArray(d.ads) ? d.ads : [];
+            ads.forEach((ad, i) => {
+              adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
+                <div>圖片網址：<input type='text' class='ad-img' data-uid='${doc.id}' data-idx='${i}' value='${ad.img||''}'></div>
+                <div>廣告名：<input type='text' class='ad-title' data-uid='${doc.id}' data-idx='${i}' value='${ad.title||''}'></div>
+                <div>描述1：<input type='text' class='ad-desc1' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc1||''}'></div>
+                <div>描述2：<input type='text' class='ad-desc2' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc2||''}'></div>
+                <button class='removeAdBtn' data-uid='${doc.id}' data-idx='${i}'>移除</button>
+              </div>`;
+            });
+            adsHtml += `<button class='addAdBtn' data-uid='${doc.id}'>新增廣告</button>`;
+            html += `<div style="border:1px solid #ccc;margin:8px 0;padding:4px;">
+              <b>${d.name || ''}</b> (${doc.id})<br>
+              VIP: <input type="checkbox" class="vip" data-uid="${doc.id}" ${d.vip ? 'checked' : ''}><br>
+              電話: <input type="text" class="phone" data-uid="${doc.id}" value="${d.phone||''}"><br>
+              地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"><br>
+              logo: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
+              <div>廣告管理：${adsHtml}</div>
+              <button class="editUser" data-uid="${doc.id}">儲存</button>
+            </div>`;
+          });
+          document.getElementById('main').innerHTML = html;
+          // 儲存網站資料
+          document.getElementById('saveSiteBtn').onclick = async () => {
+            const logo = document.getElementById('site_logo').value;
+            const name = document.getElementById('site_name').value;
+            const address = document.getElementById('site_address').value;
+            const phone = document.getElementById('site_phone').value;
+            const desc = document.getElementById('site_desc').value;
+            await firebase.firestore().collection('site').doc('main').set({logo, name, address, phone, desc});
+            alert('已更新');
+          };
+          // 綁定會員儲存按鈕
+          document.querySelectorAll('.editUser').forEach(btn => {
+            btn.onclick = async () => {
+              const uid = btn.getAttribute('data-uid');
+              const vip = document.querySelector(`.vip[data-uid='${uid}']`).checked;
+              const phone = document.querySelector(`.phone[data-uid='${uid}']`).value;
+              const address = document.querySelector(`.address[data-uid='${uid}']`).value;
+              const logo = document.querySelector(`.logo[data-uid='${uid}']`).value;
+              // 取得所有廣告內容
+              const userDiv = btn.closest('div[style*="border:1px solid"]');
+              let ads = Array.from(userDiv.querySelectorAll('.ad-img')).map((imgInput, i) => ({
+                img: imgInput.value,
+                title: userDiv.querySelector(`.ad-title[data-idx='${i}']`).value,
+                desc1: userDiv.querySelector(`.ad-desc1[data-idx='${i}']`).value,
+                desc2: userDiv.querySelector(`.ad-desc2[data-idx='${i}']`).value
+              }));
+              btn.disabled = true;
+              btn.textContent = '儲存中...';
+              try {
+                // 呼叫 Cloud Function
+                const adminUpdateUser = firebase.functions().httpsCallable('adminUpdateUser');
+                await adminUpdateUser({ uid, update: { vip, phone, address, logo, ads } });
+                alert('已更新');
+              } finally {
+                btn.disabled = false;
+                btn.textContent = '儲存';
+              }
+            };
+          });
+          // 綁定會員新增廣告按鈕
+          document.querySelectorAll('.addAdBtn').forEach(btn => {
+            btn.onclick = () => {
+              const uid = btn.getAttribute('data-uid');
+              // 找到該會員的廣告欄位
+              const userDiv = btn.closest('div[style*="border:1px solid"]');
+              // 取得現有廣告
+              let ads = Array.from(userDiv.querySelectorAll('.ad-img')).map((imgInput, i) => ({
+                img: imgInput.value,
+                title: userDiv.querySelector(`.ad-title[data-idx='${i}']`).value,
+                desc1: userDiv.querySelector(`.ad-desc1[data-idx='${i}']`).value,
+                desc2: userDiv.querySelector(`.ad-desc2[data-idx='${i}']`).value
+              }));
+              // 新增一個空廣告
+              ads.push({img:'',title:'',desc1:'',desc2:''});
+              // 重新渲染該會員的廣告欄位
+              let adsHtml = '';
+              ads.forEach((ad, i) => {
+                adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
+                  <div>圖片網址：<input type='text' class='ad-img' data-uid='${uid}' data-idx='${i}' value='${ad.img||''}'></div>
+                  <div>廣告名：<input type='text' class='ad-title' data-uid='${uid}' data-idx='${i}' value='${ad.title||''}'></div>
+                  <div>描述1：<input type='text' class='ad-desc1' data-uid='${uid}' data-idx='${i}' value='${ad.desc1||''}'></div>
+                  <div>描述2：<input type='text' class='ad-desc2' data-uid='${uid}' data-idx='${i}' value='${ad.desc2||''}'></div>
+                  <button class='removeAdBtn' data-uid='${uid}' data-idx='${i}'>移除</button>
+                </div>`;
+              });
+              adsHtml += `<button class='addAdBtn' data-uid='${uid}'>新增廣告</button>`;
+              userDiv.querySelector('div').innerHTML = '廣告管理：' + adsHtml;
+              // 重新綁定移除/新增事件
+              userDiv.querySelectorAll('.removeAdBtn').forEach(rbtn => {
+                rbtn.onclick = () => {
+                  const idx = +rbtn.getAttribute('data-idx');
+                  ads.splice(idx, 1);
+                  btn.onclick(); // 重新觸發新增廣告，刷新畫面
+                };
+              });
+              userDiv.querySelectorAll('.addAdBtn').forEach(abtn => {
+                abtn.onclick = btn.onclick;
+              });
+            };
+          });
+        });
       });
+    }
+
+    // 公開頁流程
+    function renderPublicPage() {
+      db.collection('site').doc('main').get().then(siteDoc => {
+        const site = siteDoc.exists ? siteDoc.data() : {};
+        const siteHtml = renderSiteInfo(site);
+        const uid = userParam;
+        db.collection('users').doc(uid).get().then(doc => {
+          let html = siteHtml;
+          if (doc.exists && doc.data().vip) {
+            const data = doc.data();
+            html += `<div style='font-size:1.3em;font-weight:bold;'>${data.name||''}</div>`;
+            html += `<div>電話：${data.phone||''}</div>`;
+            html += `<div>地址：${data.address||''}</div>`;
+            if (data.logo) html += `<div><img src='${data.logo}' style='max-width:120px;'></div>`;
+            if (Array.isArray(data.ads) && data.ads.length) {
+              html += `<div style='margin-top:1em;'>廣告：</div>`;
+              data.ads.forEach(ad => {
+                html += `<div style='border:1px solid #ccc;margin:8px 0;padding:4px;'>`;
+                if (ad.img) html += `<div><img src='${ad.img}' style='max-width:100px;'></div>`;
+                if (ad.title) html += `<div>名稱：${ad.title}</div>`;
+                if (ad.desc1) html += `<div>${ad.desc1}</div>`;
+                if (ad.desc2) html += `<div>${ad.desc2}</div>`;
+                html += `</div>`;
+              });
+            }
+            html += `<div>本月發出消費劵數：${data.month||0}</div>`;
+            html += `<div>累計發出消費劵數：${data.total||0}</div>`;
+            document.getElementById('main').innerHTML = html;
+          } else {
+            html += '<div style="color:#888">商家準備中...</div>';
+            document.getElementById('main').innerHTML = html;
+          }
+        }).catch(e => {
+          document.getElementById('main').innerHTML = siteHtml + '<div style="color:red">資料載入失敗</div>';
+          console.error('公開頁載入失敗', e);
+        });
+      });
+    }
+
+    // 會員主頁/首頁流程
+    function renderMemberPage() {
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          db.collection('site').doc('main').get().then(siteDoc => {
+            var siteData = siteDoc.exists ? siteDoc.data() : {};
+            const siteHtml = renderSiteInfo(siteData);
+            document.getElementById('main').innerHTML = `
+              ${siteHtml}
+              <button id="loginBtn" style="display:none">Google登入</button>
+              <div id="userPanel" style="display:none">
+                <button id="showPrivacyBtn">💰</button>
+                <div id="商家私隱" style="display:none">
+                  <div>會員名字：<input id="name" type="text"></div>
+                  <div>會員電話：<input id="phone" type="text"></div>
+                  <div>會員地址：<input id="address" type="text"></div>
+                  <div>會員logo網址：<input id="logo" type="text" style="width:60%"><span id="logoPreview"></span></div>
+                  <div id="adsList"></div>
+                  <button id="addAdBtn">新增廣告</button>
+                  <div>VIP：<span id="vip"></span></div>
+                  <div style="display:none">獨立網址：<span id="url"></span></div>
+                  <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
+                  <div>本月發出消費劵數：<span id="month"></span></div>
+                  <div>累計發出消費劵數：<span id="total"></span></div>
+                  <div>客戶每次使用相機掃qr獲取消費劵，店主將消費1元</div>
+                  <button id="saveProfileBtn">儲存會員資料</button>
+                  <button id="logoutBtn">登出</button>
+                </div>
+                <div id="qr位">請客戶使用相機掃qr獲取消費劵：<canvas id="qrcode"></canvas></div>
+              </div>
+            `;
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userPanel = document.getElementById('userPanel');
+            loginBtn.onclick = () => {
+              const provider = new firebase.auth.GoogleAuthProvider();
+              auth.signInWithPopup(provider);
+            };
+            logoutBtn.onclick = () => auth.signOut();
+            // 商家私隱顯示按鈕
+            const showPrivacyBtn = document.getElementById('showPrivacyBtn');
+            const privacyPanel = document.getElementById('商家私隱');
+            showPrivacyBtn.onclick = () => {
+              if (privacyPanel.style.display === 'none' || privacyPanel.style.display === '') {
+                privacyPanel.style.display = 'block';
+              } else {
+                privacyPanel.style.display = 'none';
+              }
+            };
+            // user 已登入，開始取得 Firestore 資料
+            const uid = user.uid;
+            const userRef = db.collection('users').doc(uid);
+            async function waitForUserDoc(retry = 0) {
+              const doc = await userRef.get();
+              if (!doc.exists) {
+                document.getElementById('name').textContent = '帳號建立中，請稍候...';
+                if (retry < 20) setTimeout(() => waitForUserDoc(retry + 1), 1000);
+                return;
+              }
+              userPanel.style.display = '';
+              loginBtn.style.display = 'none';
+              privacyPanel.style.display = 'none';
+              showPrivacyBtn.style.display = '';
+              const nameInput = document.getElementById('name');
+              const phoneInput = document.getElementById('phone');
+              const addressInput = document.getElementById('address');
+              const logoInput = document.getElementById('logo');
+              const logoPreview = document.getElementById('logoPreview');
+              const adsList = document.getElementById('adsList');
+              const addAdBtn = document.getElementById('addAdBtn');
+              const saveProfileBtn = document.getElementById('saveProfileBtn');
+              const data = doc.data();
+              nameInput.value = data.name || '';
+              phoneInput.value = data.phone || '';
+              addressInput.value = data.address || '';
+              logoInput.value = data.logo || '';
+              logoPreview.innerHTML = data.logo ? `<img src='${data.logo}' style='max-width:60px;'>` : '';
+              function renderAdsLoop(ads) {
+                renderAds(ads, adsList, function(idx) {
+                  const adsNow = getCurrentAds(adsList);
+                  adsNow.splice(idx, 1);
+                  renderAdsLoop(adsNow);
+                });
+              }
+              renderAdsLoop(data.ads || []);
+              document.getElementById('url').textContent = data.url || data.localUrl || '';
+              document.getElementById('geturl').textContent = data.geturl || data.localGeturl || '';
+              document.getElementById('vip').textContent = data.vip ? '是' : '否';
+              document.getElementById('month').textContent = data.month || 0;
+              document.getElementById('total').textContent = data.total || 0;
+              logoInput.oninput = () => {
+                logoPreview.innerHTML = logoInput.value ? `<img src='${logoInput.value}' style='max-width:60px;'>` : '';
+              };
+              addAdBtn.onclick = function() {
+                const ads = getCurrentAds(adsList);
+                ads.push({img:'',title:'',desc1:'',desc2:''});
+                renderAdsLoop(ads);
+              };
+              saveProfileBtn.onclick = async () => {
+                const newData = {
+                  name: nameInput.value,
+                  phone: phoneInput.value,
+                  address: addressInput.value,
+                  logo: logoInput.value,
+                  ads: getCurrentAds(adsList)
+                };
+                saveProfileBtn.disabled = true;
+                saveProfileBtn.textContent = '儲存中...';
+                try {
+                  const updateUserProfile = firebase.functions().httpsCallable('updateUserProfile');
+                  await updateUserProfile(newData);
+                  alert('已儲存');
+                } finally {
+                  saveProfileBtn.disabled = false;
+                  saveProfileBtn.textContent = '儲存會員資料';
+                }
+              };
+              const qrDiv = document.getElementById('qr位');
+              const qrcodeEl = document.getElementById('qrcode');
+              if (data.vip) {
+                let qrUrl = data.geturl || data.localGeturl || '';
+                if (qrcodeEl.tagName === 'A') {
+                  const newCanvas = document.createElement('canvas');
+                  newCanvas.id = 'qrcode';
+                  qrDiv.replaceChild(newCanvas, qrcodeEl);
+                  setTimeout(() => QRCode.toCanvas(newCanvas, qrUrl), 0);
+                } else {
+                  qrcodeEl.style.display = '';
+                  setTimeout(() => QRCode.toCanvas(qrcodeEl, qrUrl), 0);
+                }
+              } else {
+                if (qrcodeEl.tagName === 'CANVAS') {
+                  const a = document.createElement('a');
+                  a.id = 'qrcode';
+                  a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
+                  a.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
+                  a.target = '_blank';
+                  qrDiv.replaceChild(a, qrcodeEl);
+                } else {
+                  qrcodeEl.style.display = '';
+                  qrcodeEl.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
+                  qrcodeEl.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
+                  qrcodeEl.target = '_blank';
+                }
+              }
+            }
+            waitForUserDoc();
+          });
+        } else {
+          // 未登入顯示網站資料+登入按鈕
+          db.collection('site').doc('main').get().then(doc => {
+            var siteData = doc.exists ? doc.data() : {};
+            let html = renderSiteInfo(siteData);
+            html += `<button id="loginBtn">Google登入</button>`;
+            document.getElementById('main').innerHTML = html;
+            document.getElementById('loginBtn').onclick = () => {
+              const provider = new firebase.auth.GoogleAuthProvider();
+              auth.signInWithPopup(provider);
+            };
+          });
+        }
+      });
+    }
+
+    // 主流程
+    if (getParam) {
+      handleGet();
+    } else if (params.has('u')) {
+      renderAdminPage();
+    } else if (userParam) {
+      renderPublicPage();
+    } else {
+      renderMemberPage();
     }
   </script>
 </body>
