@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>會員系統</title>
+  <title id="dynamicTitle">莫氏消費劵系統</title>
+  <link id="dynamicFavicon" rel="icon" type="image/png" href="">
+  <meta id="dynamicDesc" name="description" content="">
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -13,7 +15,7 @@
 <body>
   <div id="main"></div>
   <script>
-    // Firebase 配置
+  // Firebase 配置
     const firebaseConfig = {
       apiKey: "AIzaSyAe9fiJ-awc_QcHaT_GjrcYnSSGhl-weLM",
       authDomain: "ssg1111.firebaseapp.com",
@@ -32,8 +34,23 @@
     const userParam = params.get('user');
     const getParam = params.get('get');
 
+    // 設定SEO資訊
+    function setSEO(site) {
+      if (site) {
+        if (site.name) document.title = site.name;
+        if (site.logo) {
+          let favicon = document.getElementById('dynamicFavicon');
+          if (favicon) favicon.href = site.logo;
+        }
+        if (site.desc) {
+          let desc = document.getElementById('dynamicDesc');
+          if (desc) desc.setAttribute('content', site.desc);
+        }
+      }
+    }
     // 共用網站資料渲染 function
     function renderSiteInfo(site) {
+      setSEO(site);
       let html = '';
       if (site.logo) html += `<div><img src='${site.logo}' style='max-width:120px;'></div>`;
       if (site.name) html += `<div style='font-size:1.2em;font-weight:bold;'>${site.name}</div>`;
@@ -100,11 +117,11 @@
           let html = '<h3>網站資料管理</h3>';
           html += `
             <div style="border:1px solid #888;margin:8px 0;padding:4px;">
-              <div>公司logo網址：<input type="text" id="site_logo" value="${site.logo||''}" style="width:60%"></div>
-              <div>公司名：<input type="text" id="site_name" value="${site.name||''}"></div>
-              <div>公司地址：<input type="text" id="site_address" value="${site.address||''}"></div>
-              <div>公司電話：<input type="text" id="site_phone" value="${site.phone||''}"></div>
-              <div>公司描述：<input type="text" id="site_desc" value="${site.desc||''}" style="width:80%"></div>
+              <div>本公司logo網址：<input type="text" id="site_logo" value="${site.logo||''}" style="width:60%"></div>
+              <div>本公司名：<input type="text" id="site_name" value="${site.name||''}"></div>
+              <div>本公司地址：<input type="text" id="site_address" value="${site.address||''}"></div>
+              <div>本公司電話：<input type="text" id="site_phone" value="${site.phone||''}"></div>
+              <div>本公司描述：<input type="text" id="site_desc" value="${site.desc||''}" style="width:80%"></div>
               <button id="saveSiteBtn">儲存網站資料</button>
             </div>
             <h3>會員管理</h3>`;
@@ -178,7 +195,6 @@
           document.querySelectorAll('.addAdBtn').forEach(btn => {
             btn.onclick = () => {
               const uid = btn.getAttribute('data-uid');
-              // 找到該會員的廣告欄位
               const userDiv = btn.closest('div[style*="border:1px solid"]');
               // 取得現有廣告
               let ads = Array.from(userDiv.querySelectorAll('.ad-img')).map((imgInput, i) => ({
@@ -189,31 +205,39 @@
               }));
               // 新增一個空廣告
               ads.push({img:'',title:'',desc1:'',desc2:''});
-              // 重新渲染該會員的廣告欄位
-              let adsHtml = '';
-              ads.forEach((ad, i) => {
-                adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
-                  <div>圖片網址：<input type='text' class='ad-img' data-uid='${uid}' data-idx='${i}' value='${ad.img||''}'></div>
-                  <div>廣告名：<input type='text' class='ad-title' data-uid='${uid}' data-idx='${i}' value='${ad.title||''}'></div>
-                  <div>描述1：<input type='text' class='ad-desc1' data-uid='${uid}' data-idx='${i}' value='${ad.desc1||''}'></div>
-                  <div>描述2：<input type='text' class='ad-desc2' data-uid='${uid}' data-idx='${i}' value='${ad.desc2||''}'></div>
-                  <button class='removeAdBtn' data-uid='${uid}' data-idx='${i}'>移除</button>
-                </div>`;
-              });
-              adsHtml += `<button class='addAdBtn' data-uid='${uid}'>新增廣告</button>`;
-              userDiv.querySelector('div').innerHTML = '廣告管理：' + adsHtml;
-              // 重新綁定移除/新增事件
-              userDiv.querySelectorAll('.removeAdBtn').forEach(rbtn => {
-                rbtn.onclick = () => {
-                  const idx = +rbtn.getAttribute('data-idx');
-                  ads.splice(idx, 1);
-                  btn.onclick(); // 重新觸發新增廣告，刷新畫面
-                };
-              });
-              userDiv.querySelectorAll('.addAdBtn').forEach(abtn => {
-                abtn.onclick = btn.onclick;
-              });
+              renderAdminAds(userDiv, uid, ads);
             };
+
+          // 新增一個渲染函數，專門處理該會員廣告區塊的渲染與事件
+          function renderAdminAds(userDiv, uid, ads) {
+            let adsHtml = '';
+            ads.forEach((ad, i) => {
+              adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
+                <div>圖片網址：<input type='text' class='ad-img' data-uid='${uid}' data-idx='${i}' value='${ad.img||''}'></div>
+                <div>廣告名：<input type='text' class='ad-title' data-uid='${uid}' data-idx='${i}' value='${ad.title||''}'></div>
+                <div>描述1：<input type='text' class='ad-desc1' data-uid='${uid}' data-idx='${i}' value='${ad.desc1||''}'></div>
+                <div>描述2：<input type='text' class='ad-desc2' data-uid='${uid}' data-idx='${i}' value='${ad.desc2||''}'></div>
+                <button class='removeAdBtn' data-uid='${uid}' data-idx='${i}'>移除</button>
+              </div>`;
+            });
+            adsHtml += `<button class='addAdBtn' data-uid='${uid}'>新增廣告</button>`;
+            userDiv.querySelector('div').innerHTML = '廣告管理：' + adsHtml;
+            // 綁定移除事件
+            userDiv.querySelectorAll('.removeAdBtn').forEach(rbtn => {
+              rbtn.onclick = () => {
+                const idx = +rbtn.getAttribute('data-idx');
+                ads.splice(idx, 1);
+                renderAdminAds(userDiv, uid, ads);
+              };
+            });
+            // 綁定新增事件
+            userDiv.querySelectorAll('.addAdBtn').forEach(abtn => {
+              abtn.onclick = () => {
+                ads.push({img:'',title:'',desc1:'',desc2:''});
+                renderAdminAds(userDiv, uid, ads);
+              };
+            });
+          }
           });
         });
       });
