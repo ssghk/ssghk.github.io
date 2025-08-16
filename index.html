@@ -81,91 +81,78 @@
       };
       logoutBtn.onclick = () => auth.signOut();
       auth.onAuthStateChanged(async user => {
-      // 商家私隱顯示按鈕
-      const showPrivacyBtn = document.getElementById('showPrivacyBtn');
-      const privacyPanel = document.getElementById('商家私隱');
-      showPrivacyBtn.onclick = () => {
-        privacyPanel.style.display = '';
-        showPrivacyBtn.style.display = 'none';
-      };
+
+        console.log('登入成功', user);
+
+
+        // 商家私隱顯示按鈕
+        const showPrivacyBtn = document.getElementById('showPrivacyBtn');
+        const privacyPanel = document.getElementById('商家私隱');
+        showPrivacyBtn.onclick = () => {
+          privacyPanel.style.display = '';
+          showPrivacyBtn.style.display = 'none';
+        };
         if (!user) {
           userPanel.style.display = 'none';
           loginBtn.style.display = '';
           return;
         }
-        loginBtn.style.display = 'none';
-        userPanel.style.display = '';
+        // user 已登入，開始取得 Firestore 資料
         const uid = user.uid;
         const userRef = db.collection('users').doc(uid);
-        let doc = await userRef.get();
-        if (!doc.exists) {
-          const url = location.origin + location.pathname + '?user=' + uid;
-          const geturl = location.origin + location.pathname + '?get=' + uid;
-          await userRef.set({
-            name: user.displayName,
-            vip: false,
-            url, geturl,
-            month: 0, total: 0
-          });
-          doc = await userRef.get();
-        }
-        const data = doc.data();
-        document.getElementById('name').textContent = data.name;
-        document.getElementById('url').textContent = data.url;
-        document.getElementById('geturl').textContent = data.geturl;
-        document.getElementById('vip').textContent = data.vip ? '是' : '否';
-        document.getElementById('month').textContent = data.month || 0;
-        document.getElementById('total').textContent = data.total || 0;
-        const qrDiv = document.getElementById('qr位');
-        const qrcodeEl = document.getElementById('qrcode');
-        if (data.vip) {
-          // VIP顯示QRCode
-          if (qrcodeEl.tagName === 'A') {
-            const newCanvas = document.createElement('canvas');
-            newCanvas.id = 'qrcode';
-            qrDiv.replaceChild(newCanvas, qrcodeEl);
-            QRCode.toCanvas(newCanvas, data.geturl);
-          } else {
-            qrcodeEl.style.display = '';
-            QRCode.toCanvas(qrcodeEl, data.geturl);
+        async function waitForUserDoc(retry = 0) {
+          const doc = await userRef.get();
+          if (!doc.exists) {
+            document.getElementById('name').textContent = '帳號建立中，請稍候...';
+            if (retry < 20) setTimeout(() => waitForUserDoc(retry + 1), 1000);
+            return;
           }
-        } else {
-          // 非VIP顯示a href
-          if (qrcodeEl.tagName === 'CANVAS') {
-            const a = document.createElement('a');
-            a.id = 'qrcode';
-            a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-            a.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
-            a.target = '_blank';
-            qrDiv.replaceChild(a, qrcodeEl);
+          // 登入後自動顯示 userPanel 並隱藏登入按鈕
+          userPanel.style.display = '';
+          loginBtn.style.display = 'none';
+          // 自動顯示商家私隱區塊
+          privacyPanel.style.display = '';
+          showPrivacyBtn.style.display = 'none';
+          const data = doc.data();
+          document.getElementById('name').textContent = data.name;
+          document.getElementById('url').textContent = data.url || data.localUrl || '';
+          document.getElementById('geturl').textContent = data.geturl || data.localGeturl || '';
+          document.getElementById('vip').textContent = data.vip ? '是' : '否';
+          document.getElementById('month').textContent = data.month || 0;
+          document.getElementById('total').textContent = data.total || 0;
+          const qrDiv = document.getElementById('qr位');
+          const qrcodeEl = document.getElementById('qrcode');
+          if (data.vip) {
+            // VIP顯示QRCode
+            if (qrcodeEl.tagName === 'A') {
+              const newCanvas = document.createElement('canvas');
+              newCanvas.id = 'qrcode';
+              qrDiv.replaceChild(newCanvas, qrcodeEl);
+              QRCode.toCanvas(newCanvas, data.geturl || data.localGeturl);
+            } else {
+              qrcodeEl.style.display = '';
+              QRCode.toCanvas(qrcodeEl, data.geturl || data.localGeturl);
+            }
           } else {
-            qrcodeEl.style.display = '';
-            qrcodeEl.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-            qrcodeEl.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
-            qrcodeEl.target = '_blank';
+            // 非VIP顯示a href
+            if (qrcodeEl.tagName === 'CANVAS') {
+              const a = document.createElement('a');
+              a.id = 'qrcode';
+              a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
+              a.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
+              a.target = '_blank';
+              qrDiv.replaceChild(a, qrcodeEl);
+            } else {
+              qrcodeEl.style.display = '';
+              qrcodeEl.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
+              qrcodeEl.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
+              qrcodeEl.target = '_blank';
+            }
           }
         }
+        waitForUserDoc();
       });
     }
-
-    /*
-    
-    rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read: if true;
-      // 只允許 Cloud Function 寫入 month、total、monthKey
-      allow update: if request.auth != null &&
-        request.auth.token.firebase.sign_in_provider == 'custom' &&
-        request.resource.data.keys().hasOnly(['month', 'total', 'monthKey']);
-      // 會員本人不可修改任何欄位
-      allow write: if false;
-    }
-  }
-}
-    
-    */
   </script>
 </body>
 </html>
