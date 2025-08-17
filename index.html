@@ -164,35 +164,68 @@
       }
     }
   </style>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.net/translate.js/3.1.7/translate.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://64071181.github.io/mokJsapi/a.js">//琪琪修改</script>
 </head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<p id="translate"></p>
   <div id="main"></div>
 
+
+
+    <div id="ContactAKI" class="ContactAKI"><!-- JS _顯示聯莫 --></div>
+    <div class="copyright">
+        <p class="mokJsApi_copyright">版權</p>
+    </div>
+    <div class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</div>
+    <script>
+  // 動態內容自動翻譯小函數
+  function callTranslate() {
+    if (window.translate && typeof translate.execute === 'function') {
+      translate.execute();
+    }
+  }
+        translate.service.use('client.edge'); //設置機器翻譯服務通道，直接客戶端本身，不依賴服務端 。相關說明參考 http://translate.zvo.cn/43086.html
+        translate.execute();//進行翻譯 
+        function Start() {
+            // 顯示聯莫
+            const 聯莫 = ['moksurky@gmail.com','https://wa.me/85264071181/','https://i.meee.com.tw/atcX6QM.png','https://www.instagram.com/moksurky2025/','https://line.me/ti/p/UlSPd7p9zh/','https://www.facebook.com/aki.mok.10/','http://t.me/mokaki/','https://github.com/GoldComeHK/GoldComeHK.github.io'
+            ];
+            _顯示聯莫(聯莫);
+        }
+        琪琪修改('https://64071181.github.io/')
+    </script>
 
 
 
@@ -410,6 +443,7 @@
             </div>`;
           });
           document.getElementById('main').innerHTML = html;
+          callTranslate();
           // 儲存網站資料
           document.getElementById('saveSiteBtn').onclick = async () => {
             const logo = document.getElementById('site_logo').value;
@@ -617,6 +651,7 @@
               #couponsArea .coupon-card:hover { box-shadow:0 4px 16px #bfa046; border-color:#1e3a5c; }
             </style>`;
             document.getElementById('main').innerHTML = html;
+            callTranslate();
             // 彈窗遮罩點擊可關閉
             const infoModal = document.getElementById('infoModal');
             if (infoModal) {
@@ -905,6 +940,7 @@
             let html = renderSiteInfo(siteData);
             html += `<button id="loginBtn">Google登入</button>`;
             document.getElementById('main').innerHTML = html;
+            callTranslate();
             document.getElementById('loginBtn').onclick = () => {
               const provider = new firebase.auth.GoogleAuthProvider();
               auth.signInWithPopup(provider);
