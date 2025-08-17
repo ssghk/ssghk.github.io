@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title id="dynamicTitle">莫氏消費劵系統</title>
@@ -11,6 +12,105 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  <style>
+    /* 管理員界面美化 */
+    #main h3 {
+      font-size: 1.5em;
+      color: #1e3a5c;
+      margin: 24px 0 12px 0;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    #main > div[style*="border:1px solid #888"],
+    #main > div[style*="border:1px solid #ccc"] {
+      background: linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px #bbb;
+      margin-bottom: 18px;
+      padding: 18px 12px 12px 12px !important;
+      border-width: 2px !important;
+    }
+    #main input[type="text"] {
+      font-size: 1.1em;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1.5px solid #bfa046;
+      background: #fff;
+      margin: 4px 0 8px 0;
+      width: 70%;
+      box-sizing: border-box;
+    }
+    #main input[type="checkbox"] {
+      transform: scale(1.3);
+      margin: 0 8px 0 0;
+    }
+    #main button,
+    #main .editUser,
+    #main .addAdBtn,
+    #main .removeAdBtn,
+    #main #saveSiteBtn {
+      font-size: 1.1em;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%);
+      color: #222;
+      font-weight: bold;
+      margin: 6px 4px 0 0;
+      box-shadow: 0 2px 8px #eee;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    #main button:active,
+    #main .editUser:active,
+    #main .addAdBtn:active,
+    #main .removeAdBtn:active,
+    #main #saveSiteBtn:active {
+      background: #bfa046;
+      color: #fff;
+    }
+    #main .addAdBtn {
+      background: linear-gradient(90deg,#1e3a5c 0%,#bfa046 100%);
+      color: #fff;
+      margin-top: 8px;
+    }
+    #main .removeAdBtn {
+      background: #fff;
+      color: #bfa046;
+      border: 1.5px solid #bfa046;
+      margin-left: 8px;
+    }
+    #main .removeAdBtn:active {
+      background: #bfa046;
+      color: #fff;
+    }
+    #main a {
+      color: #1e3a5c;
+      text-decoration: underline;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    #main .ad-img, #main .ad-title, #main .ad-desc1, #main .ad-desc2 {
+      width: 60%;
+      margin-bottom: 4px;
+    }
+    #main div[style*="border:1px dashed #aaa"] {
+      background: #f5f6fa;
+      border-radius: 10px;
+      margin: 8px 0;
+      padding: 8px 8px 8px 12px;
+      border-width: 1.5px !important;
+    }
+    @media (max-width: 600px) {
+      #main h3 { font-size: 1.2em; }
+      #main input[type="text"] { font-size: 1em; }
+      #main button { font-size: 1em; padding: 7px 12px; }
+      #main > div[style*="border:1px solid #888"],
+      #main > div[style*="border:1px solid #ccc"] {
+        padding: 10px 4px 8px 4px !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -213,33 +313,19 @@
           // 取得網站資料
           const siteDoc = await db.collection('site').doc('main').get();
           const site = siteDoc.exists ? siteDoc.data() : {};
-          let html = `
-            <style>
-              #adminWrap { max-width: 900px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
-              #adminWrap h3 { color: #1e3a5c; margin-top: 0; }
-              .admin-section { border:1px solid #bfa046; border-radius:12px; margin:18px 0; padding:18px 12px; background:#fff; box-shadow:0 2px 8px #eee; }
-              .admin-section input[type="text"] { font-size:1.1em; padding:4px 8px; border-radius:6px; border:1px solid #bfa046; background:#f5f6fa; margin:4px 0 8px 0; width:60%; }
-              .admin-section button { font-size:1.1em; padding:8px 18px; border-radius:8px; border:none; background:linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color:#222; font-weight:bold; margin:6px 4px 0 0; box-shadow:0 2px 8px #eee; cursor:pointer; }
-              .admin-section button:active { background:#bfa046; color:#fff; }
-              .memberCard { border:2px solid #bfa046; border-radius:14px; margin:18px 0; padding:16px 10px; background:#f5f6fa; box-shadow:0 2px 8px #ccc; }
-              .memberCard input[type="text"] { font-size:1em; padding:3px 7px; border-radius:5px; border:1px solid #bfa046; background:#fff; margin:2px 0 6px 0; width:55%; }
-              .memberCard .ad-block { border:1px dashed #aaa; border-radius:8px; margin:6px 0; padding:6px; background:#fff; }
-              .memberCard .ad-block input[type="text"] { width:50%; }
-              .memberCard .removeAdBtn, .memberCard .addAdBtn, .memberCard .editUser { font-size:1em; padding:5px 14px; border-radius:7px; border:none; background:linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color:#222; font-weight:bold; margin:4px 2px 0 0; box-shadow:0 1px 4px #eee; cursor:pointer; }
-              .memberCard .removeAdBtn:active, .memberCard .addAdBtn:active, .memberCard .editUser:active { background:#bfa046; color:#fff; }
-            </style>
-            <div id="adminWrap">
-              <h3>網站資料管理</h3>
-              <div class="admin-section">
-                <div>本公司logo網址：<input type="text" id="site_logo" value="${site.logo||''}"></div>
-                <div>本公司名：<input type="text" id="site_name" value="${site.name||''}"></div>
-                <div>本公司地址：<input type="text" id="site_address" value="${site.address||''}"></div>
-                <div>本公司電話：<input type="text" id="site_phone" value="${site.phone||''}"></div>
-                <div>本公司描述：<input type="text" id="site_desc" value="${site.desc||''}" style="width:80%"></div>
-                <button id="saveSiteBtn">儲存網站資料</button>
-              </div>
-              <h3>會員管理</h3>
-          `;
+          let html = '<h3>網站資料管理</h3>';
+          html += `
+            <div style="border:1px solid #888;margin:8px 0;padding:4px;">
+              <div>本公司logo網址：<input type="text" id="site_logo" value="${site.logo||''}" style="width:60%"></div>
+              <div>本公司名：<input type="text" id="site_name" value="${site.name||''}"></div>
+              <div>本公司地址：<input type="text" id="site_address" value="${site.address||''}"></div>
+              <div>本公司電話：<input type="text" id="site_phone" value="${site.phone||''}"></div>
+              <div>本公司描述：<input type="text" id="site_desc" value="${site.desc||''}" style="width:80%"></div>
+
+
+              <button id="saveSiteBtn">儲存網站資料</button>
+            </div>
+            <h3>會員管理</h3>`;
           // 取得所有會員
           const snap = await db.collection('users').get();
           snap.forEach(doc => {
@@ -247,7 +333,7 @@
             let adsHtml = '';
             const ads = Array.isArray(d.ads) ? d.ads : [];
             ads.forEach((ad, i) => {
-              adsHtml += `<div class='ad-block'>
+              adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
                 <div>消息劵圖片網址：<input type='text' class='ad-img' data-uid='${doc.id}' data-idx='${i}' value='${ad.img||''}'></div>
                 <div>消息劵名：<input type='text' class='ad-title' data-uid='${doc.id}' data-idx='${i}' value='${ad.title||''}'></div>
                 <div>消息劵條款：<input type='text' class='ad-desc1' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc1||''}'></div>
@@ -256,19 +342,20 @@
               </div>`;
             });
             adsHtml += `<button class='addAdBtn' data-uid='${doc.id}'>新增消息劵</button>`;
-            html += `<div class="memberCard">
-              <div style="color:#888;font-size:0.95em;">(${doc.id})</div>
-              <div>商家名稱: <input type="text" class="shopName" data-uid="${doc.id}" value="${d.name||''}"></div>
-              <div>VIP: <input type="checkbox" class="vip" data-uid="${doc.id}" ${d.vip ? 'checked' : ''}></div>
-              <div>商家電話: <input type="text" class="phone" data-uid="${doc.id}" value="${d.phone||''}"></div>
-              <div>商家地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"></div>
-              <div>商家logo: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"></div>
-              <div><a href="${d.url}" target="_blank">商家網址</a></div>
+            html += `<div style="border:1px solid #ccc;margin:8px 0;padding:4px;">
+              (${doc.id})<br>
+
+
+              商家名稱: <input type="text" class="shopName" data-uid="${doc.id}" value="${d.name||''}"><br>
+              VIP: <input type="checkbox" class="vip" data-uid="${doc.id}" ${d.vip ? 'checked' : ''}><br>
+              商家電話: <input type="text" class="phone" data-uid="${doc.id}" value="${d.phone||''}"><br>
+              商家地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"><br>
+              商家logo: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
+              <a href="${d.url}" target="_blank">商家網址</a><br>
               <div>消息劵管理：${adsHtml}</div>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
             </div>`;
           });
-          html += `</div>`;
           document.getElementById('main').innerHTML = html;
           // 儲存網站資料
           document.getElementById('saveSiteBtn').onclick = async () => {
@@ -548,8 +635,7 @@
             const siteHtml = renderSiteInfo(siteData);
             document.getElementById('main').innerHTML = `
               <style>
-                #qrcode { width:100% !important; height:100% !important; display:block; }
-                #memberMainWrap { max-width: 720px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 18px 8px 32px 8px; }
+                #memberMainWrap { max-width: 720px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
                 #userPanel { margin-top: 12px; }
                 #商家私隱 > div { margin-bottom: 10px; font-size: 1.1em; }
                 #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid #bfa046; background: #fff; margin-left: 4px; }
@@ -559,6 +645,7 @@
                 #logoPreview img { border-radius: 8px; border: 1px solid #bfa046; margin-left: 8px; }
                 #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid #bfa046; margin: 8px 0; padding: 8px; }
                 #qr位 { margin-top: 18px; text-align: center; }
+                #qrcode { width:100% !important; height:100% !important; display:block; }
                 #showPrivacyBtn { background: #1e3a5c; color: #fff; border: none; }
                 #showPrivacyBtn:active { background: #bfa046; color: #fff; }
                 #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0;background:linear-gradient(90deg,#e6e8ea 0%,#fffbe6 100%);border:2px solid #bfa046;box-shadow:0 2px 8px #bbb; }
@@ -568,7 +655,7 @@
               <div id="memberMainWrap">
                 <button id="loginBtn" style="display:none">Google登入</button>
                 <div id="userPanel" style="display:none">
-                  <button id="showPrivacyBtn">💰 </button>
+                  <button id="showPrivacyBtn">💰</button>
                   <div id="商家私隱" style="display:none">
                     <div>會員名字：<input id="name" type="text"></div>
                     <div>會員電話：<input id="phone" type="text"></div>
@@ -643,45 +730,6 @@
               addressInput.value = data.address || '';
               logoInput.value = data.logo || '';
               logoPreview.innerHTML = data.logo ? `<img src='${data.logo}' style='max-width:60px;'>` : '';
-              // 會員logo與site.logo顯示於底部
-              const memberLogoBox = document.getElementById('memberLogoBox');
-              const siteLogoBox = document.getElementById('siteLogoBoxMember');
-              memberLogoBox.innerHTML = data.logo ? `<img src='${data.logo}' alt='會員logo'>` : '';
-              siteLogoBox.innerHTML = siteData.logo ? `<img src='${siteData.logo}' alt='網站logo'>` : '';
-              // 點擊顯示彈窗
-              memberLogoBox.onclick = function() {
-                document.getElementById('infoContentMember').innerHTML = `
-                  <div style='font-size:2em;font-weight:bold;color:#bfa046;margin-bottom:8px;'>${data.name||''}</div>
-                  <div>電話：${data.phone||''}</div>
-                  <div>地址：${data.address||''}</div>
-                  <div>logo：${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
-                  <div>VIP：${data.vip?'是':'否'}</div>
-                  <div>本月發出消費劵數：${data.month||0}</div>
-                  <div>累計發出消費劵數：${data.total||0}</div>
-                `;
-                document.getElementById('infoModalMember').style.display = 'flex';
-              };
-              siteLogoBox.onclick = function() {
-                document.getElementById('infoContentMember').innerHTML = `
-                  <div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;'>${siteData.name||''}</div>
-                  <div>電話：${siteData.phone||''}</div>
-                  <div>地址：${siteData.address||''}</div>
-                  <div>logo：${siteData.logo?`<img src='${siteData.logo}' style='max-width:120px;'>`:''}</div>
-                  <div>描述：${siteData.desc||''}</div>
-                `;
-                document.getElementById('infoModalMember').style.display = 'flex';
-              };
-              // 彈窗遮罩點擊可關閉（點內容不關閉）
-              const infoModalMember = document.getElementById('infoModalMember');
-              const infoContentMember = document.getElementById('infoContentMember');
-              if (infoModalMember) {
-                infoModalMember.onclick = function(e) {
-                  if (e.target === infoModalMember) infoModalMember.style.display = 'none';
-                };
-                if (infoContentMember) {
-                  infoContentMember.onclick = function(e) { e.stopPropagation(); };
-                }
-              }
               function renderAdsLoop(ads) {
                 renderAds(ads, adsList, function(idx) {
                   const adsNow = getCurrentAds(adsList);
@@ -722,6 +770,45 @@
                   saveProfileBtn.textContent = '儲存會員資料';
                 }
               };
+              // logo區塊渲染
+              const memberLogoBox = document.getElementById('memberLogoBox');
+              const siteLogoBox = document.getElementById('siteLogoBoxMember');
+              memberLogoBox.innerHTML = data.logo ? `<img src='${data.logo}' alt='會員logo'>` : '';
+              siteLogoBox.innerHTML = siteData.logo ? `<img src='${siteData.logo}' alt='網站logo'>` : '';
+              // 點擊顯示彈窗
+              memberLogoBox.onclick = function() {
+                document.getElementById('infoContentMember').innerHTML = `
+                  <div style='font-size:2em;font-weight:bold;color:#bfa046;margin-bottom:8px;'>${data.name||''}</div>
+                  <div>電話：${data.phone||''}</div>
+                  <div>地址：${data.address||''}</div>
+                  <div>logo：${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
+                  <div>VIP：${data.vip?'是':'否'}</div>
+                  <div>本月發出消費劵數：${data.month||0}</div>
+                  <div>累計發出消費劵數：${data.total||0}</div>
+                `;
+                document.getElementById('infoModalMember').style.display = 'flex';
+              };
+              siteLogoBox.onclick = function() {
+                document.getElementById('infoContentMember').innerHTML = `
+                  <div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;'>${siteData.name||''}</div>
+                  <div>電話：${siteData.phone||''}</div>
+                  <div>地址：${siteData.address||''}</div>
+                  <div>logo：${siteData.logo?`<img src='${siteData.logo}' style='max-width:120px;'>`:''}</div>
+                  <div>描述：${siteData.desc||''}</div>
+                `;
+                document.getElementById('infoModalMember').style.display = 'flex';
+              };
+              // 彈窗遮罩點擊可關閉（點內容不關閉）
+              const infoModalMember = document.getElementById('infoModalMember');
+              const infoContentMember = document.getElementById('infoContentMember');
+              if (infoModalMember) {
+                infoModalMember.onclick = function(e) {
+                  if (e.target === infoModalMember) infoModalMember.style.display = 'none';
+                };
+                if (infoContentMember) {
+                  infoContentMember.onclick = function(e) { e.stopPropagation(); };
+                }
+              }
               const qrDiv = document.getElementById('qr位');
               const qrcodeEl = document.getElementById('qrcode');
               if (data.vip) {
@@ -757,27 +844,9 @@
           // 未登入顯示網站資料+登入按鈕
           db.collection('site').doc('main').get().then(doc => {
             var siteData = doc.exists ? doc.data() : {};
-            document.getElementById('main').innerHTML = `
-              <style>
-                #guestWrap { max-width: 720px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
-                #guestLogo { text-align:center; margin-bottom:18px; }
-                #guestLogo img { max-width:120px; border-radius:16px; box-shadow:0 2px 8px #bfa046; }
-                #guestInfo { font-size:1.3em; color:#1e3a5c; font-weight:bold; text-align:center; margin-bottom:18px; }
-                #guestDesc { font-size:1.1em; color:#333; text-align:center; margin-bottom:18px; }
-                #loginBtn { font-size:1.2em; padding:12px 32px; border-radius:12px; border:none; background:linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color:#222; font-weight:bold; box-shadow:0 2px 8px #eee; cursor:pointer; display:block; margin:0 auto; }
-                #loginBtn:active { background:#bfa046; color:#fff; }
-              </style>
-              <div id="guestWrap">
-                <div id="guestLogo">${siteData.logo?`<img src='${siteData.logo}'>`:''}</div>
-                <div id="guestInfo">
-                  ${siteData.name?siteData.name:''}<br>
-                  ${siteData.phone?`電話：${siteData.phone}<br>`:''}
-                  ${siteData.address?`地址：${siteData.address}`:''}
-                </div>
-                <div id="guestDesc">${siteData.desc?siteData.desc:''}</div>
-                <button id="loginBtn">Google登入</button>
-              </div>
-            `;
+            let html = renderSiteInfo(siteData);
+            html += `<button id="loginBtn">Google登入</button>`;
+            document.getElementById('main').innerHTML = html;
             document.getElementById('loginBtn').onclick = () => {
               const provider = new firebase.auth.GoogleAuthProvider();
               auth.signInWithPopup(provider);
