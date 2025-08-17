@@ -1,6 +1,59 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
+  <style>
+    /* 未登入界面美化 */
+    body:not([data-login]) #main > button#loginBtn {
+      display: block;
+      margin: 40px auto 0 auto;
+      font-size: 1.3em;
+      padding: 16px 40px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(90deg,#1e3a5c 0%,#bfa046 100%);
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 2px 12px #bbb;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    body:not([data-login]) #main > button#loginBtn:active {
+      background: #bfa046;
+      color: #fff;
+    }
+    body:not([data-login]) #main > #siteInfo {
+      max-width: 420px;
+      margin: 40px auto 0 auto;
+      background: linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);
+      border-radius: 18px;
+      box-shadow: 0 2px 12px #bbb;
+      padding: 28px 18px 18px 18px;
+      font-size: 1.15em;
+      color: #222;
+    }
+    body:not([data-login]) #main > #siteInfo img {
+      display: block;
+      margin: 0 auto 18px auto;
+      max-width: 120px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #ccc;
+    }
+    body:not([data-login]) #main > #siteInfo div {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      body:not([data-login]) #main > #siteInfo {
+        padding: 16px 4px 12px 4px;
+        font-size: 1em;
+      }
+      body:not([data-login]) #main > button#loginBtn {
+        font-size: 1.1em;
+        padding: 12px 18px;
+      }
+    }
+  </style>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -232,10 +285,10 @@
         const adDiv = document.createElement('div');
         adDiv.style = 'border:1px solid #ccc;margin:8px 0;padding:4px;';
         adDiv.innerHTML = `
-          <div>消息劵圖片網址：<input type="text" value="${ad.img||''}" data-idx="${i}" class="ad-img"></div>
-          <div>消息劵名：<input type="text" value="${ad.title||''}" data-idx="${i}" class="ad-title"></div>
-          <div>消息劵條款：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1"></div>
-          <div>消息劵地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2"></div>
+          <div>消費劵圖片網址：<input type="text" value="${ad.img||''}" data-idx="${i}" class="ad-img"></div>
+          <div>消費劵名：<input type="text" value="${ad.title||''}" data-idx="${i}" class="ad-title"></div>
+          <div>消費劵條款：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1"></div>
+          <div>消費劵地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2"></div>
           <button class="removeAdBtn" data-idx="${i}">移除</button>
         `;
         adsList.appendChild(adDiv);
@@ -334,14 +387,14 @@
             const ads = Array.isArray(d.ads) ? d.ads : [];
             ads.forEach((ad, i) => {
               adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
-                <div>消息劵圖片網址：<input type='text' class='ad-img' data-uid='${doc.id}' data-idx='${i}' value='${ad.img||''}'></div>
-                <div>消息劵名：<input type='text' class='ad-title' data-uid='${doc.id}' data-idx='${i}' value='${ad.title||''}'></div>
-                <div>消息劵條款：<input type='text' class='ad-desc1' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc1||''}'></div>
-                <div>消息劵地址或網址：<input type='text' class='ad-desc2' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc2||''}'></div>
+                <div>消費劵圖片網址：<input type='text' class='ad-img' data-uid='${doc.id}' data-idx='${i}' value='${ad.img||''}'></div>
+                <div>消費劵名：<input type='text' class='ad-title' data-uid='${doc.id}' data-idx='${i}' value='${ad.title||''}'></div>
+                <div>消費劵條款：<input type='text' class='ad-desc1' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc1||''}'></div>
+                <div>消費劵地址或網址：<input type='text' class='ad-desc2' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc2||''}'></div>
                 <button class='removeAdBtn' data-uid='${doc.id}' data-idx='${i}'>移除</button>
               </div>`;
             });
-            adsHtml += `<button class='addAdBtn' data-uid='${doc.id}'>新增消息劵</button>`;
+            adsHtml += `<button class='addAdBtn' data-uid='${doc.id}'>新增消費劵</button>`;
             html += `<div style="border:1px solid #ccc;margin:8px 0;padding:4px;">
               (${doc.id})<br>
 
@@ -352,7 +405,7 @@
               商家地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"><br>
               商家logo: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
               <a href="${d.url}" target="_blank">商家網址</a><br>
-              <div>消息劵管理：${adsHtml}</div>
+              <div>消費劵管理：${adsHtml}</div>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
             </div>`;
           });
@@ -419,10 +472,10 @@
             let adsHtml = '';
             ads.forEach((ad, i) => {
               adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
-                <div>消息劵圖片網址：<input type='text' class='ad-img' data-uid='${uid}' data-idx='${i}' value='${ad.img||''}'></div>
-                <div>消息劵名：<input type='text' class='ad-title' data-uid='${uid}' data-idx='${i}' value='${ad.title||''}'></div>
-                <div>消息劵條款：<input type='text' class='ad-desc1' data-uid='${uid}' data-idx='${i}' value='${ad.desc1||''}'></div>
-                <div>消息劵地址或網址：<input type='text' class='ad-desc2' data-uid='${uid}' data-idx='${i}' value='${ad.desc2||''}'></div>
+                <div>消費劵圖片網址：<input type='text' class='ad-img' data-uid='${uid}' data-idx='${i}' value='${ad.img||''}'></div>
+                <div>消費劵名：<input type='text' class='ad-title' data-uid='${uid}' data-idx='${i}' value='${ad.title||''}'></div>
+                <div>消費劵條款：<input type='text' class='ad-desc1' data-uid='${uid}' data-idx='${i}' value='${ad.desc1||''}'></div>
+                <div>消費劵地址或網址：<input type='text' class='ad-desc2' data-uid='${uid}' data-idx='${i}' value='${ad.desc2||''}'></div>
                 <button class='removeAdBtn' data-uid='${uid}' data-idx='${i}'>移除</button>
               </div>`;
             });
@@ -513,6 +566,11 @@
               document.title = data.name;
             } else if (site.name) {
               document.title = site.name;
+            }
+            // 設定 favicon 為商家 logo
+            if (data.logo) {
+              let favicon = document.getElementById('dynamicFavicon');
+              if (favicon) favicon.href = data.logo;
             }
             // 消費劵區塊
             if (Array.isArray(data.ads) && data.ads.length) {
