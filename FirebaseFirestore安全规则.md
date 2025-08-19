@@ -1,6 +1,19 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // 類別集合
+    match /categories/{doc} {
+      allow read: if request.auth != null && request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02';
+      allow write: if request.auth != null && request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02';
+    }
+
+    // 公用廣告資料集合 ads
+    match /ads/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02';
+    }
+
     match /users/{userId} {
       allow read: if true;
       // 只允許 Cloud Function 寫入統計欄位
@@ -23,3 +36,5 @@ service cloud.firestore {
 
   }
 }
+
+

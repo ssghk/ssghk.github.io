@@ -2,6 +2,24 @@
 <html lang="zh-Hant">
 <head>
   <style>
+    /* 類別下拉美化 */
+    #main select.ad-category-admin {
+      font-size: 1.1em;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1.5px solid #bfa046;
+      background: #fffbe6;
+      color: #1e3a5c;
+      margin: 4px 0 8px 0;
+      width: 70%;
+      box-sizing: border-box;
+      outline: none;
+      transition: border 0.2s;
+    }
+    #main select.ad-category-admin:focus {
+      border: 2px solid #1e3a5c;
+      background: #fff;
+    }
     /* 未登入界面美化 */
     body:not([data-login]) #main > button#loginBtn {
       display: block;
@@ -208,7 +226,7 @@
     <div class="copyright">
         <p class="mokJsApi_copyright">版權</p>
     </div>
-    <div class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</div>
+    <div class="scroll-top" id="scrollTop" style="background: gold;" onclick="scrollToTop()">↑</div>
     <script>
   // 動態內容自動翻譯小函數
   function callTranslate() {
@@ -314,18 +332,7 @@
     // 共用廣告渲染/取得 function
     function renderAds(ads, adsList, removeCb) {
       adsList.innerHTML = '';
-      (ads || []).forEach((ad, i) => {
-        const adDiv = document.createElement('div');
-        adDiv.style = 'border:1px solid #ccc;margin:8px 0;padding:4px;';
-        adDiv.innerHTML = `
-          <div>消費劵圖片網址：<input type="text" value="${ad.img||''}" data-idx="${i}" class="ad-img"></div>
-          <div>消費劵名：<input type="text" value="${ad.title||''}" data-idx="${i}" class="ad-title"></div>
-          <div>消費劵條款：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1"></div>
-          <div>消費劵地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2"></div>
-          <button class="removeAdBtn" data-idx="${i}">移除</button>
-        `;
-        adsList.appendChild(adDiv);
-      });
+
       adsList.querySelectorAll('.removeAdBtn').forEach(btn => {
         btn.onclick = () => {
           const idx = +btn.getAttribute('data-idx');
@@ -399,51 +406,184 @@
           // 取得網站資料
           const siteDoc = await db.collection('site').doc('main').get();
           const site = siteDoc.exists ? siteDoc.data() : {};
-          let html = '<h3>網站資料管理</h3>';
-          html += `
-            <div style="border:1px solid #888;margin:8px 0;padding:4px;">
-              <div>本公司logo網址：<input type="text" id="site_logo" value="${site.logo||''}" style="width:60%"></div>
-              <div>本公司名：<input type="text" id="site_name" value="${site.name||''}"></div>
-              <div>本公司地址：<input type="text" id="site_address" value="${site.address||''}"></div>
-              <div>本公司電話：<input type="text" id="site_phone" value="${site.phone||''}"></div>
-              <div>本公司描述：<input type="text" id="site_desc" value="${site.desc||''}" style="width:80%"></div>
-
-
-              <button id="saveSiteBtn">儲存網站資料</button>
+          let html = `
+            <style>
+              .admin-nav { display:flex;gap:12px;margin-bottom:18px; }
+              .admin-nav-btn { font-size:1.1em;padding:8px 18px;border-radius:8px;border:none;background:#e6e8ea;color:#1e3a5c;font-weight:bold;cursor:pointer;transition:background 0.2s; }
+              .admin-nav-btn.active { background:#bfa046;color:#fff; }
+              .admin-section { display:none;background:linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border-radius:16px;box-shadow:0 2px 12px #bbb;padding:18px 12px 12px 12px;margin-bottom:18px; }
+              .admin-section.active { display:block; }
+            </style>
+            <div class="admin-nav">
+              <button class="admin-nav-btn active" data-section="site">網站資料管理</button>
+              <button class="admin-nav-btn" data-section="ads">公用廣告管理</button>
+              <button class="admin-nav-btn" data-section="users">會員管理</button>
             </div>
-            <h3>會員管理</h3>`;
+            <div id="adminSectionSite" class="admin-section active">
+              <h3>網站資料管理</h3>
+              <div style="border:1px solid #888;margin:8px 0;padding:4px;">
+                <div><a href="https://meee.com.tw/" target="_blank" >本公司logo網址：</a><input type="text" id="site_logo" value="${site.logo||''}" style="width:60%"></div>
+                <div>本公司名：<input type="text" id="site_name" value="${site.name||''}"></div>
+                <div>本公司地址：<input type="text" id="site_address" value="${site.address||''}"></div>
+                <div>本公司電話：<input type="text" id="site_phone" value="${site.phone||''}"></div>
+                <div>本公司描述：<input type="text" id="site_desc" value="${site.desc||''}" style="width:80%"></div>
+                <button id="saveSiteBtn">儲存網站資料</button>
+              </div>
+            </div>
+            <div id="adminSectionAds" class="admin-section">
+              <h3>公用廣告管理</h3>
+              <div id="categoryAdminWrap" style="border:1px solid #bfa046;margin:8px 0 18px 0;padding:8px 8px 8px 12px;border-radius:10px;background:#f5f6fa;">
+                <b>類別管理：</b>
+                <div id="categoryListAdmin" style="margin-bottom:8px;"></div>
+                <input type="text" id="newCategoryInput" placeholder="新增類別名稱" style="padding:4px 8px;border-radius:6px;border:1px solid #bfa046;">
+                <button id="addCategoryBtn" style="padding:4px 12px;border-radius:6px;background:#bfa046;color:#fff;font-weight:bold;border:none;">新增類別</button>
+              </div>
+              <div style="border:1px solid #888;margin:8px 0 18px 0;padding:4px;" id="adsAdminWrap">
+                <div id="adsListAdmin"></div>
+                <button id="addAdAdmin">新增廣告</button>
+                <button id="saveAdsAdmin">儲存全部廣告</button>
+              </div>
+            </div>
+            <div id="adminSectionUsers" class="admin-section">
+              <h3>會員管理</h3>
+          `;
+          // 取得公用廣告資料
+          const adsDoc = await db.collection('ads').doc('main').get();
+          let adsArr = (adsDoc.exists && Array.isArray(adsDoc.data().ads)) ? adsDoc.data().ads : [];
           // 取得所有會員
           const snap = await db.collection('users').get();
           snap.forEach(doc => {
             const d = doc.data();
-            let adsHtml = '';
-            const ads = Array.isArray(d.ads) ? d.ads : [];
-            ads.forEach((ad, i) => {
-              adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
-                <div>消費劵圖片網址：<input type='text' class='ad-img' data-uid='${doc.id}' data-idx='${i}' value='${ad.img||''}'></div>
-                <div>消費劵名：<input type='text' class='ad-title' data-uid='${doc.id}' data-idx='${i}' value='${ad.title||''}'></div>
-                <div>消費劵條款：<input type='text' class='ad-desc1' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc1||''}'></div>
-                <div>消費劵地址或網址：<input type='text' class='ad-desc2' data-uid='${doc.id}' data-idx='${i}' value='${ad.desc2||''}'></div>
-                <button class='removeAdBtn' data-uid='${doc.id}' data-idx='${i}'>移除</button>
-              </div>`;
-            });
-            adsHtml += `<button class='addAdBtn' data-uid='${doc.id}'>新增消費劵</button>`;
             html += `<div style="border:1px solid #ccc;margin:8px 0;padding:4px;">
               (${doc.id})<br>
-
-
               商家名稱: <input type="text" class="shopName" data-uid="${doc.id}" value="${d.name||''}"><br>
               VIP: <input type="checkbox" class="vip" data-uid="${doc.id}" ${d.vip ? 'checked' : ''}><br>
               商家電話: <input type="text" class="phone" data-uid="${doc.id}" value="${d.phone||''}"><br>
               商家地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"><br>
-              商家logo: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
+              <a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
               <a href="${d.url}" target="_blank">商家網址</a><br>
-              <div>消費劵管理：${adsHtml}</div>
+              <span style='color:#bfa046;font-weight:bold;'>本月發出消費劵數：${d.month||0}　累計：${d.total||0}</span><br>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
             </div>`;
           });
+          html += `</div>`; // 關閉 adminSectionUsers
           document.getElementById('main').innerHTML = html;
+          // 分頁導航切換事件
+          document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+            btn.onclick = function() {
+              document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('active'));
+              btn.classList.add('active');
+              const section = btn.getAttribute('data-section');
+              document.querySelectorAll('.admin-section').forEach(sec=>sec.classList.remove('active'));
+              if(section==='site') document.getElementById('adminSectionSite').classList.add('active');
+              if(section==='ads') document.getElementById('adminSectionAds').classList.add('active');
+              if(section==='users') document.getElementById('adminSectionUsers').classList.add('active');
+            };
+          });
           callTranslate();
+          // 取得與渲染類別
+          let categories = [];
+          async function loadCategories() {
+            const catSnap = await db.collection('categories').get();
+            categories = catSnap.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+            window.categories = categories;
+            renderCategoryList();
+            // 僅首次載入後渲染廣告管理區
+            if (!window._adsAdminRendered) {
+              window._adsAdminRendered = true;
+              if(typeof renderAdsAdmin === 'function') renderAdsAdmin();
+            }
+          }
+          function renderCategoryList() {
+            const list = document.getElementById('categoryListAdmin');
+            if (!list) return;
+            list.innerHTML = '';
+            categories.forEach(cat => {
+              const div = document.createElement('div');
+              div.style = 'display:flex;align-items:center;margin-bottom:4px;';
+              div.innerHTML = `<input type="text" value="${cat.name}" data-id="${cat.id}" class="cat-name-edit" style="padding:2px 6px;border-radius:4px;border:1px solid #bfa046;width:120px;"> <button class="cat-del-btn" data-id="${cat.id}" style="margin-left:4px;padding:2px 8px;border-radius:4px;background:#fff;color:#bfa046;border:1px solid #bfa046;">刪除</button>`;
+              list.appendChild(div);
+            });
+            // 綁定儲存/刪除
+            list.querySelectorAll('.cat-save-btn').forEach(btn => {
+              btn.onclick = async function() {
+                const id = btn.getAttribute('data-id');
+                const name = list.querySelector(`.cat-name-edit[data-id="${id}"]`).value;
+                await db.collection('categories').doc(id).set({ name });
+                await loadCategories();
+              };
+            });
+            list.querySelectorAll('.cat-del-btn').forEach(btn => {
+              btn.onclick = async function() {
+                const id = btn.getAttribute('data-id');
+                await db.collection('categories').doc(id).delete();
+                await loadCategories();
+              };
+            });
+          }
+          document.getElementById('addCategoryBtn').onclick = async function() {
+            const input = document.getElementById('newCategoryInput');
+            const name = input.value.trim();
+            if (!name) return;
+            await db.collection('categories').add({ name });
+            input.value = '';
+            await loadCategories();
+          };
+          loadCategories();
+          // 公用廣告渲染與事件
+          function renderAdsAdmin() {
+            const adsListAdmin = document.getElementById('adsListAdmin');
+            if (!adsListAdmin) return;
+            adsListAdmin.innerHTML = '';
+            // 取得類別選項
+            let catOptions = '<option value="">請選擇</option>';
+            (window.categories||[]).forEach(cat => {
+              catOptions += `<option value="${cat.name}">${cat.name}</option>`;
+            });
+            (adsArr || []).forEach((ad, i) => {
+              const adDiv = document.createElement('div');
+              adDiv.style = 'border:1px dashed #aaa;margin:4px 0;padding:2px;';
+              adDiv.innerHTML = `
+                <div><a href="https://meee.com.tw/" target="_blank" >圖片網址</a>：<input type="text" value="${ad.img||''}" data-idx="${i}" class="ad-img-admin"></div>
+                <div>標題：<input type="text" value="${ad.title||''}" data-idx="${i}" class="ad-title-admin"></div>
+                <div>類別：<select data-idx="${i}" class="ad-category-admin">${catOptions}</select></div>
+                <div>聯絡方式：<input type="text" value="${ad.contact||''}" data-idx="${i}" class="ad-contact-admin"></div>
+                <div>條款：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1-admin"></div>
+                <div>地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2-admin"></div>
+                <button class="removeAdBtn" data-idx="${i}">移除</button>
+              `;
+              adsListAdmin.appendChild(adDiv);
+              // 設定選中值
+              const sel = adDiv.querySelector('.ad-category-admin');
+              if(sel && ad.category) sel.value = ad.category;
+            });
+            adsListAdmin.querySelectorAll('.removeAdBtn').forEach(btn => {
+              btn.onclick = () => {
+                const idx = +btn.getAttribute('data-idx');
+                adsArr.splice(idx, 1);
+                renderAdsAdmin();
+              };
+            });
+          }
+          renderAdsAdmin();
+          document.getElementById('addAdAdmin').onclick = () => {
+            adsArr.push({img:'',title:'',desc1:'',desc2:''});
+            renderAdsAdmin();
+          };
+          document.getElementById('saveAdsAdmin').onclick = async () => {
+            const adsListAdmin = document.getElementById('adsListAdmin');
+            if (!adsListAdmin) return;
+            adsArr = Array.from(adsListAdmin.querySelectorAll('.ad-img-admin')).map((imgInput, i) => ({
+              img: imgInput.value,
+              title: adsListAdmin.querySelector(`.ad-title-admin[data-idx="${i}"]`).value,
+              category: adsListAdmin.querySelector(`.ad-category-admin[data-idx="${i}"]`)?.value || '',
+              contact: adsListAdmin.querySelector(`.ad-contact-admin[data-idx="${i}"]`)?.value || '',
+              desc1: adsListAdmin.querySelector(`.ad-desc1-admin[data-idx="${i}"]`).value,
+              desc2: adsListAdmin.querySelector(`.ad-desc2-admin[data-idx="${i}"]`).value
+            }));
+            await db.collection('ads').doc('main').set({ ads: adsArr });
+            alert('已更新');
+          };
           // 儲存網站資料
           document.getElementById('saveSiteBtn').onclick = async () => {
             const logo = document.getElementById('site_logo').value;
@@ -483,54 +623,6 @@
                 btn.textContent = '儲存';
               }
             };
-          });
-          // 綁定會員新增廣告按鈕
-          document.querySelectorAll('.addAdBtn').forEach(btn => {
-            btn.onclick = () => {
-              const uid = btn.getAttribute('data-uid');
-              const userDiv = btn.closest('div[style*="border:1px solid"]');
-              // 取得現有廣告
-              let ads = Array.from(userDiv.querySelectorAll('.ad-img')).map((imgInput, i) => ({
-                img: imgInput.value,
-                title: userDiv.querySelector(`.ad-title[data-idx='${i}']`).value,
-                desc1: userDiv.querySelector(`.ad-desc1[data-idx='${i}']`).value,
-                desc2: userDiv.querySelector(`.ad-desc2[data-idx='${i}']`).value
-              }));
-              // 新增一個空廣告
-              ads.push({img:'',title:'',desc1:'',desc2:''});
-              renderAdminAds(userDiv, uid, ads);
-            };
-
-          // 新增一個渲染函數，專門處理該會員廣告區塊的渲染與事件
-          function renderAdminAds(userDiv, uid, ads) {
-            let adsHtml = '';
-            ads.forEach((ad, i) => {
-              adsHtml += `<div style='border:1px dashed #aaa;margin:4px 0;padding:2px;'>
-                <div>消費劵圖片網址：<input type='text' class='ad-img' data-uid='${uid}' data-idx='${i}' value='${ad.img||''}'></div>
-                <div>消費劵名：<input type='text' class='ad-title' data-uid='${uid}' data-idx='${i}' value='${ad.title||''}'></div>
-                <div>消費劵條款：<input type='text' class='ad-desc1' data-uid='${uid}' data-idx='${i}' value='${ad.desc1||''}'></div>
-                <div>消費劵地址或網址：<input type='text' class='ad-desc2' data-uid='${uid}' data-idx='${i}' value='${ad.desc2||''}'></div>
-                <button class='removeAdBtn' data-uid='${uid}' data-idx='${i}'>移除</button>
-              </div>`;
-            });
-            adsHtml += `<button class='addAdBtn' data-uid='${uid}'>新增廣告</button>`;
-            userDiv.querySelector('div').innerHTML = '廣告管理：' + adsHtml;
-            // 綁定移除事件
-            userDiv.querySelectorAll('.removeAdBtn').forEach(rbtn => {
-              rbtn.onclick = () => {
-                const idx = +rbtn.getAttribute('data-idx');
-                ads.splice(idx, 1);
-                renderAdminAds(userDiv, uid, ads);
-              };
-            });
-            // 綁定新增事件
-            userDiv.querySelectorAll('.addAdBtn').forEach(abtn => {
-              abtn.onclick = () => {
-                ads.push({img:'',title:'',desc1:'',desc2:''});
-                renderAdminAds(userDiv, uid, ads);
-              };
-            });
-          }
           });
         });
       });
@@ -601,46 +693,159 @@
             } else if (site.name) {
               document.title = site.name;
             }
-            // 設定 favicon 為商家 logo
+            // 設定 favicon 為會員 logo（如有）
             if (data.logo) {
               let favicon = document.getElementById('dynamicFavicon');
               if (favicon) favicon.href = data.logo;
             }
-            // 消費劵區塊
-            if (Array.isArray(data.ads) && data.ads.length) {
-              html += `<div id="couponsArea" style="display:flex;flex-direction:column;align-items:center;">`;
-              data.ads.forEach(ad => {
-                // 判斷 desc2 是否為網址
-                let isUrl = ad.desc2 && /^https?:\/\//.test(ad.desc2);
-                html += `<div class="coupon-card" style="height:200px;width:100%;max-width:720px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;cursor:${isUrl?'pointer':'default'};background:linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border:2px solid #bfa046;margin-bottom:12px;box-shadow:0 2px 8px #bbb;" ${isUrl?`onclick=\"window.open('${ad.desc2}','_blank')\"`:''}>
-                  <img src="${ad.img||''}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.85;">
-                  <div style="position:absolute;top:8px;left:12px;z-index:2;color:#111;font-size:24px;font-weight:900;
-                    padding:6px 18px;border-radius:12px;letter-spacing:1px;
-                    background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 20%,rgba(255,255,255,0.95) 80%,rgba(255,255,255,0) 100%);">${ad.title||''}</div>
-                  <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:flex-end;z-index:2;
-                      color:#fff;font-size:38px;font-weight:900;letter-spacing:1px;
-                      padding:6px 18px;border-radius:12px;
-                      background:transparent;">
-                    <span style="text-align:right;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.5) 60%,rgba(0,0,0,0) 100%);padding:6px 18px;border-radius:12px;">${ad.desc1||''}</span>
-                  </div>
-                  ${ad.desc2 ? (
-                    isUrl ? '' : `<div style='position:absolute;bottom:8px;left:0;width:100%;text-align:center;z-index:2;color:#fff;font-size:24px;font-weight:900;letter-spacing:1px;
-                      padding:6px 18px;border-radius:12px;display:inline-block;
-                      background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 20%,rgba(0,0,0,0.5) 80%,rgba(0,0,0,0) 100%);'>${ad.desc2}</div>`
-                  ) : ''}
-                </div>`;
+            // 商家專屬消費劵區塊已移除
+            // 公用廣告區塊（主內容渲染後再插入）
+            // 取得所有類別與廣告，插入類別導航
+            db.collection('categories').get().then(catSnap => {
+              const categories = catSnap.docs.map(doc => doc.data().name);
+              db.collection('ads').doc('main').get().then(adsDoc => {
+                let adsArr = (adsDoc.exists && Array.isArray(adsDoc.data().ads)) ? adsDoc.data().ads : [];
+                // 搜尋欄與類別導航只建立一次
+                let adsNavWrap = document.getElementById('adsNavWrap');
+                if (!adsNavWrap) {
+                  adsNavWrap = document.createElement('div');
+                  adsNavWrap.id = 'adsNavWrap';
+                  document.getElementById('main').insertAdjacentElement('afterbegin', adsNavWrap);
+                  // 新增搜尋欄
+                  const searchDiv = document.createElement('div');
+                  searchDiv.style = 'display:flex;justify-content:center;align-items:center;margin:10px 0 0 0;gap:8px;';
+                  const kwInput = document.createElement('input');
+                  kwInput.id = 'adKeywordInput';
+                  kwInput.type = 'text';
+                  kwInput.placeholder = '輸入關鍵字搜尋';
+                  kwInput.style = 'font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;width:60%;max-width:320px;';
+                  searchDiv.appendChild(kwInput);
+                  adsNavWrap.appendChild(searchDiv);
+                  // 新增類別導航
+                  let navHtml = '';
+                  if(categories.length) {
+                    navHtml += `<div id='adCatNav' style='display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0 0 0;'>`;
+                    navHtml += `<button class='ad-cat-btn active' data-cat=''>全部</button>`;
+                    categories.forEach(cat => {
+                      navHtml += `<button class='ad-cat-btn' data-cat='${cat}'>${cat}</button>`;
+                    });
+                    navHtml += `</div>`;
+                  }
+                  adsNavWrap.insertAdjacentHTML('beforeend', navHtml);
+                }
+                let currentCat = '';
+                let currentKeyword = '';
+                const kwInput = document.getElementById('adKeywordInput');
+                function renderAdsArea(filterCat, keyword) {
+                  let showAds = adsArr;
+                  if (filterCat) showAds = showAds.filter(ad=>ad.category===filterCat);
+                  if (keyword && keyword.trim()) {
+                    const kw = keyword.trim().toLowerCase();
+                    showAds = showAds.filter(ad =>
+                      (ad.title||'').toLowerCase().includes(kw) ||
+                      (ad.desc1||'').toLowerCase().includes(kw) ||
+                      (ad.desc2||'').toLowerCase().includes(kw) ||
+                      (ad.category||'').toLowerCase().includes(kw) ||
+                      (ad.contact||'').toLowerCase().includes(kw)
+                    );
+                  }
+                  let adsHtml = '';
+                  if (showAds.length) {
+                    adsHtml = `<div id="publicAdsArea" style="display:flex;flex-direction:column;align-items:center;margin-top:24px;">`;
+                    showAds.forEach((ad, idx) => {
+                      adsHtml += `<div class="coupon-card" data-idx="${idx}" style="height:200px;width:100%;max-width:720px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;cursor:pointer;background:linear-gradient(90deg,#e6e8ea 0%,#fffbe6 100%);border:2px solid #bfa046;margin-bottom:12px;box-shadow:0 2px 8px #bbb;">`;
+                      adsHtml += `<img src="${ad.img||''}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.85;">`;
+                      adsHtml += `<div style="position:absolute;top:8px;left:12px;z-index:2;color:#1e3a5c;font-size:24px;font-weight:900;padding:6px 18px;border-radius:12px;letter-spacing:1px;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 20%,rgba(255,255,255,0.95) 80%,rgba(255,255,255,0) 100%);">${ad.title||''}</div>`;
+                      adsHtml += `<div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:flex-end;z-index:2;color:#fff;font-size:38px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;background:transparent;">`;
+                      adsHtml += `<span style="text-align:right;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.5) 60%,rgba(0,0,0,0) 100%);padding:6px 18px;border-radius:12px;">${ad.desc1||''}</span>`;
+                      adsHtml += `</div>`;
+                      if(ad.desc2 && !(ad.desc2 && /^https?:\/\//.test(ad.desc2))) adsHtml += `<div style='position:absolute;bottom:8px;left:0;width:100%;text-align:center;z-index:2;color:#fff;font-size:24px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;display:inline-block;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 20%,rgba(0,0,0,0.5) 80%,rgba(0,0,0,0) 100%);'>${ad.desc2}</div>`;
+                      adsHtml += `</div>`;
+                    });
+                    adsHtml += `</div>`;
+                  }
+                  // 只更新廣告內容，不重建搜尋欄
+                  let adsArea = document.getElementById('publicAdsAreaWrap');
+                  if (!adsArea) {
+                    adsArea = document.createElement('div');
+                    adsArea.id = 'publicAdsAreaWrap';
+                    adsNavWrap.appendChild(adsArea);
+                  }
+                  adsArea.innerHTML = adsHtml;
+                  // 綁定每個廣告點擊事件
+                  adsArea.querySelectorAll('.coupon-card').forEach(card => {
+                    card.onclick = function(e) {
+                      const idx = card.getAttribute('data-idx');
+                      const ad = showAds[idx];
+                      let content = `<img src='${ad.img||''}' style='max-width:90vw;max-height:40vh;display:block;margin:0 auto 18px auto;border-radius:12px;box-shadow:0 2px 8px #bbb;'>`;
+                      content += `<div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;text-align:center;'>${ad.title||''}</div>`;
+                      content += `<div style='font-size:1.2em;color:#bfa046;margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
+                      if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:#bfa046;font-size:1.1em;'>類別：${ad.category}</div>`;
+                      if(ad.contact) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div>`;
+                      if(ad.desc2 && /^https?:\/\//.test(ad.desc2)) {
+                        content += `<div style='text-align:center;margin-bottom:8px;'><a href='${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>查詢</a></div>`;
+                      } else if(ad.desc2) {
+                        content += `<div style='text-align:center;margin-bottom:8px;color:#222;font-size:1.1em;'>${ad.desc2}</div>`;
+                      }
+                      document.getElementById('adInfoContent').innerHTML = content;
+                      document.getElementById('adInfoModal').style.display = 'flex';
+                    };
+                  });
+                  // 綁定類別按鈕
+                  adsNavWrap.querySelectorAll('.ad-cat-btn').forEach(btn => {
+                    btn.onclick = function() {
+                      adsNavWrap.querySelectorAll('.ad-cat-btn').forEach(b=>b.classList.remove('active'));
+                      btn.classList.add('active');
+                      currentCat = btn.getAttribute('data-cat');
+                      renderAdsArea(currentCat, currentKeyword);
+                    };
+                  });
+                }
+                // 初始值
+                currentCat = '';
+                currentKeyword = '';
+                if (kwInput) {
+                  kwInput.value = '';
+                  kwInput.oninput = function() {
+                    currentKeyword = kwInput.value;
+                    renderAdsArea(currentCat, currentKeyword);
+                  };
+                }
+                renderAdsArea(currentCat, currentKeyword);
               });
-              html += `</div>`;
-            }
-            // logo區塊
-            html += `<div id="logoArea" style="display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0;background:linear-gradient(90deg,#e6e8ea 0%,#fffbe6 100%);border:2px solid #bfa046;box-shadow:0 2px 8px #bbb;">
-              <div id="shopLogoBox" style="flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer;" onclick="showShopInfo()">
+            });
+            // ...existing code...
+            // logo區塊 + 加入主畫面按鈕
+            html += `<div id="logoArea" style="display:flex;justify-content:center;align-items:center;width:100%;height:100px;margin:24px 0;gap:16px;">
+              <div id="shopLogoBox" style="flex:1 1 0;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer;min-width:0;" onclick="showShopInfo()">
                 ${data.logo?`<img src='${data.logo}' style='max-height:80px;max-width:90%;object-fit:contain;'>`:''}
               </div>
-              <div id="siteLogoBox" style="flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer;" onclick="showSiteInfo()">
+              <div style="flex:1 1 0;display:flex;justify-content:center;align-items:center;height:100%;min-width:0;">
+                <button id="addToHomeBtn" style="padding:8px 18px;font-size:1.1em;border-radius:8px;border:none;background:#bfa046;color:#fff;font-weight:bold;box-shadow:0 2px 8px #bbb;cursor:pointer;">加入主畫面</button>
+              </div>
+              <div id="siteLogoBox" style="flex:1 1 0;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer;min-width:0;" onclick="showSiteInfo()">
                 ${site.logo?`<img src='${site.logo}' style='max-height:80px;max-width:90%;object-fit:contain;'>`:''}
               </div>
             </div>`;
+            // 加入主畫面按鈕事件
+            setTimeout(function() {
+              const addToHomeBtn = document.getElementById('addToHomeBtn');
+              if (!addToHomeBtn) return;
+              let deferredPrompt = null;
+              window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                addToHomeBtn.style.display = '';
+              });
+              addToHomeBtn.onclick = function() {
+                if (deferredPrompt) {
+                  deferredPrompt.prompt();
+                  deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+                } else {
+                  alert('請使用瀏覽器功能「加入主畫面」\n如Safari請點擊下方分享圖示再選擇「加入主畫面」');
+                }
+              };
+            }, 0);
             // 彈窗顯示商家/網站資料
             html += `<div id="infoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
               <div id="infoContent" style="background:#fffbe6;border:3px solid #bfa046;padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
@@ -678,6 +883,8 @@
                 <div>${site.address||''}</div>
                 <div>${site.logo?`<img src='${site.logo}' style='max-width:120px;'>`:''}</div>
                 <div>${site.desc||''}</div>
+                <br>
+                <a href="./" target="_blank" style="margin-left:10px;font-size:1em;padding:4px 12px;border-radius:6px;background:#bfa046;color:#fff;font-weight:bold;text-decoration:none;">限時加入聯盟，用本地商店消費劵幫你吸客!!</a>
               `;
               document.getElementById('infoModal').style.display = 'flex';
             };
@@ -741,7 +948,7 @@
                 #qrcode { width:100% !important; height:100% !important; display:block; }
                 #showPrivacyBtn { background: #1e3a5c; color: #fff; border: none; }
                 #showPrivacyBtn:active { background: #bfa046; color: #fff; }
-                #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0;background:linear-gradient(90deg,#e6e8ea 0%,#fffbe6 100%);border:2px solid #bfa046;box-shadow:0 2px 8px #bbb; }
+                #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
                 #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
                 #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
               </style>
@@ -750,19 +957,18 @@
                 <div id="userPanel" style="display:none">
                   <button id="showPrivacyBtn">💰</button>
                   <div id="商家私隱" style="display:none">
-                    <div>會員名字：<input id="name" type="text"></div>
-                    <div>會員電話：<input id="phone" type="text"></div>
-                    <div>會員地址：<input id="address" type="text"></div>
-                    <div>會員logo網址：<input id="logo" type="text" style="width:60%"><span id="logoPreview"></span></div>
-                    <div id="adsList"></div>
-                    <button id="addAdBtn">新增廣告</button>
+                    <div>商家名字：<input id="name" type="text"></div>
+                    <div>商家電話：<input id="phone" type="text"></div>
+                    <div>商家地址：<input id="address" type="text"></div>
+                    <div><a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input id="logo" type="text" style="width:60%"><span id="logoPreview"></span></div>
+                    <div id="adsList">已轉公用廣告</div>
                     <div>VIP：<span id="vip"></span></div>
                     <div style="display:none">獨立網址：<span id="url"></span></div>
                     <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
                     <div>本月發出消費劵數：<span id="month"></span></div>
                     <div>累計發出消費劵數：<span id="total"></span></div>
                     <div style="color:#bfa046;font-size:0.95em;">客戶每次使用相機掃qr獲取消費劵，店主將消費1元</div>
-                    <button id="saveProfileBtn">儲存會員資料</button>
+                    <button id="saveProfileBtn">儲存商家資料</button>
                     <button id="logoutBtn">登出</button>
                   </div>
                   <div id="qr位"><canvas id="qrcode"></canvas></div>
@@ -815,7 +1021,6 @@
               const logoInput = document.getElementById('logo');
               const logoPreview = document.getElementById('logoPreview');
               const adsList = document.getElementById('adsList');
-              const addAdBtn = document.getElementById('addAdBtn');
               const saveProfileBtn = document.getElementById('saveProfileBtn');
               const data = doc.data();
               nameInput.value = data.name || '';
@@ -839,11 +1044,7 @@
               logoInput.oninput = () => {
                 logoPreview.innerHTML = logoInput.value ? `<img src='${logoInput.value}' style='max-width:60px;'>` : '';
               };
-              addAdBtn.onclick = function() {
-                const ads = getCurrentAds(adsList);
-                ads.push({img:'',title:'',desc1:'',desc2:''});
-                renderAdsLoop(ads);
-              };
+
               saveProfileBtn.onclick = async () => {
                 const newData = {
                   name: nameInput.value,
@@ -874,7 +1075,7 @@
                   <div style='font-size:2em;font-weight:bold;color:#bfa046;margin-bottom:8px;'>${data.name||''}</div>
                   <div>電話：${data.phone||''}</div>
                   <div>地址：${data.address||''}</div>
-                  <div>logo：${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
+                  <div>${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
                   <div>VIP：${data.vip?'是':'否'}</div>
                   <div>本月發出消費劵數：${data.month||0}</div>
                   <div>累計發出消費劵數：${data.total||0}</div>
@@ -884,10 +1085,10 @@
               siteLogoBox.onclick = function() {
                 document.getElementById('infoContentMember').innerHTML = `
                   <div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;'>${siteData.name||''}</div>
-                  <div>電話：${siteData.phone||''}</div>
-                  <div>地址：${siteData.address||''}</div>
-                  <div>logo：${siteData.logo?`<img src='${siteData.logo}' style='max-width:120px;'>`:''}</div>
-                  <div>描述：${siteData.desc||''}</div>
+                  <div>${siteData.phone||''}</div>
+                  <div>${siteData.address||''}</div>
+                  <div>${siteData.logo?`<img src='${siteData.logo}' style='max-width:120px;'>`:''}</div>
+                  <div>${siteData.desc||''}</div>
                 `;
                 document.getElementById('infoModalMember').style.display = 'flex';
               };
@@ -938,7 +1139,7 @@
           db.collection('site').doc('main').get().then(doc => {
             var siteData = doc.exists ? doc.data() : {};
             let html = renderSiteInfo(siteData);
-            html += `<button id="loginBtn">Google登入</button>`;
+            html += `<button id="loginBtn">限時加入聯盟，用本地商店消費劵幫你吸客!!</button>`;
             document.getElementById('main').innerHTML = html;
             callTranslate();
             document.getElementById('loginBtn').onclick = () => {
