@@ -733,6 +733,21 @@
                   }
                   adsNavWrap.insertAdjacentHTML('beforeend', navHtml);
                 }
+                // 若沒有 adInfoModal，建立彈窗
+                if (!document.getElementById('adInfoModal')) {
+                  const modal = document.createElement('div');
+                  modal.id = 'adInfoModal';
+                  modal.style = 'display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;';
+                  modal.innerHTML = `<div id="adInfoContent" style="background:#fffbe6;border:3px solid #bfa046;padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;display:flex;flex-direction:column;align-items:center;"></div><button onclick=\"document.getElementById('adInfoModal').style.display='none'\" style='position:absolute;top:12px;right:24px;font-size:32px;background:none;border:none;color:#bfa046;cursor:pointer;'>×</button>`;
+                  document.body.appendChild(modal);
+                }
+                // 彈窗遮罩點擊可關閉
+                const adInfoModal = document.getElementById('adInfoModal');
+                if (adInfoModal) {
+                  adInfoModal.onclick = function(e) {
+                    if (e.target === adInfoModal) adInfoModal.style.display = 'none';
+                  };
+                }
                 let currentCat = '';
                 let currentKeyword = '';
                 const kwInput = document.getElementById('adKeywordInput');
