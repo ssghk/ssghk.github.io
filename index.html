@@ -246,7 +246,7 @@
             ];
             _顯示聯莫(聯莫);
         }
-        琪琪修改('https://64071181.github.io/')
+        琪_琪修改('https://64071181.github.io/')
     </script>
 
 
@@ -354,17 +354,44 @@
     }
 
     // get 參數流程
+    // geturl 流程：產生 token 並導向帶 token 的 shop page
     function handleGet() {
       const uid = getParam;
-      const incrementCount = firebase.functions().httpsCallable('incrementCount');
-      incrementCount({ uid }).then(result => {
-        location.href = result.data.url;
+      // 呼叫 createTokenForUser Cloud Function
+      const createTokenForUser = firebase.functions().httpsCallable('createTokenForUser');
+      createTokenForUser({ uid }).then(result => {
+        console.log('createTokenForUser result:', result);
+        const { token, expireAt } = result.data || {};
+        let baseUrl = location.origin + location.pathname.replace(/index.*\.html.*/i, 'index.html');
+        if (token) {
+          location.href = `${baseUrl}?user=${uid}&token=${token}`;
+        } else {
+          // fallback: 沒有 token 時，仍導向舊 user 頁
+          location.href = `${baseUrl}?user=${uid}`;
+        }
       }).catch(e => {
-        document.getElementById('main').textContent = '計數失敗';
+        document.getElementById('main').textContent = '產生消費劵連結失敗';
+        console.error('createTokenForUser error:', e);
       });
     }
 
 
+// 將 ISO 時間字串轉為香港時間格式
+function formatHKTime(isoStr) {
+  if (!isoStr) return '';
+  const d = new Date(isoStr);
+  if (isNaN(d.getTime())) return isoStr;
+  // 轉為香港時區（UTC+8）
+  const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  const hk = new Date(utc + 8 * 60 * 60000);
+  const y = hk.getFullYear();
+  const m = (hk.getMonth() + 1).toString().padStart(2, '0');
+  const day = hk.getDate().toString().padStart(2, '0');
+  const h = hk.getHours().toString().padStart(2, '0');
+  const min = hk.getMinutes().toString().padStart(2, '0');
+  const s = hk.getSeconds().toString().padStart(2, '0');
+  return `${y}-${m}-${day} ${h}:${min}:${s}`;
+}
 
 
 
@@ -468,7 +495,7 @@
               <a href="${d.url}" target="_blank">商家網址</a><br>
               <span style='color:#bfa046;font-weight:bold;'>本月發出消費劵數：${d.month||0}　累計：${d.total||0}</span><br>
               <span style='color:#1e3a5c;'>💰：<input type="number" class="usageCount" data-uid="${doc.id}" value="${typeof d.usageCount === 'number' ? d.usageCount : ''}" style="width:80px;"></span><br>
-              <span style='color:#1e3a5c;'>最後get日期(lastGetDate)：${d.lastGetDate||''}</span><br>
+              <span style='color:#1e3a5c;'>上次發出時間：${formatHKTime(d.lastGetDate)||''}</span><br>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
             </div>`;
           });
@@ -706,23 +733,53 @@
 */
     // 商家頁流程
     function renderPublicPage() {
-                // 彈窗遮罩點擊可關閉（點內容不關閉）
-                setTimeout(function() {
-                  const adInfoModal = document.getElementById('adInfoModal');
-                  const adInfoContent = document.getElementById('adInfoContent');
-                  if (adInfoModal) {
-                    adInfoModal.onclick = function(e) {
-                      if (e.target === adInfoModal) adInfoModal.style.display = 'none';
-                    };
-                    if (adInfoContent) {
-                      adInfoContent.onclick = function(e) { e.stopPropagation(); };
-                    }
-                  }
-                }, 0);
+      // 彈窗遮罩點擊可關閉（點內容不關閉）
+      setTimeout(function() {
+        const adInfoModal = document.getElementById('adInfoModal');
+        const adInfoContent = document.getElementById('adInfoContent');
+        if (adInfoModal) {
+          adInfoModal.onclick = function(e) {
+            if (e.target === adInfoModal) adInfoModal.style.display = 'none';
+          };
+          if (adInfoContent) {
+            adInfoContent.onclick = function(e) { e.stopPropagation(); };
+          }
+        }
+      }, 0);
+
+      // 取得 token 參數
+      const params = new URLSearchParams(location.search);
+      const tokenParam = params.get('token');
+      const uid = userParam;
       db.collection('site').doc('main').get().then(siteDoc => {
         const site = siteDoc.exists ? siteDoc.data() : {};
-        // const siteHtml = renderSiteInfo(site); // 不顯示共用網站資料
-        const uid = userParam;
+        // 若網址帶有 token，需驗證有效性
+        if (tokenParam) {
+          db.collection('users').doc(uid).collection('tokens').doc(tokenParam).get().then(tokenDoc => {
+            if (!tokenDoc.exists) {
+              document.getElementById('main').innerHTML = '<div style="color:red;font-size:1.3em;margin:40px auto;text-align:center;">消費劵過期或無效，請重新掃描 QR code</div>';
+              return;
+            }
+            const tokenData = tokenDoc.data();
+            const now = new Date();
+            const expireAt = tokenData.expireAt ? new Date(tokenData.expireAt) : null;
+            if (!expireAt || now > expireAt) {
+              document.getElementById('main').innerHTML = '<div style="color:red;font-size:1.3em;margin:40px auto;text-align:center;">消費劵過期，請重新掃描 QR code</div>';
+              return;
+            }
+            // token 有效，顯示商家頁，並顯示過期時間
+            renderShopPageWithExpiry(site, uid, expireAt);
+          }).catch(e => {
+            document.getElementById('main').innerHTML = '<div style="color:red;font-size:1.3em;margin:40px auto;text-align:center;">消費劵驗證失敗，請稍後再試</div>';
+          });
+        } else {
+          // 沒有 token 參數，直接顯示商家頁（舊流程，僅供兼容）
+          renderShopPageWithExpiry(site, uid, null);
+        }
+      });
+
+      // 包裝原本商家頁渲染，增加過期時間顯示
+      function renderShopPageWithExpiry(site, uid, expireAt) {
         db.collection('users').doc(uid).get().then(doc => {
           let html = '';
           if (doc.exists && doc.data().vip) {
@@ -740,6 +797,11 @@
               let favicon = document.getElementById('dynamicFavicon');
               if (favicon) favicon.href = data.logo;
             }
+            // 顯示過期時間（如有）
+            if (expireAt) {
+              html += `<div style='color:#bfa046;font-size:1.1em;text-align:center;margin:18px 0;'>本消費劵有效期至：${formatHKTime(expireAt.toISOString())}</div>`;
+            }
+            // ...原本內容...
             // 商家專屬消費劵區塊已移除
             // 公用廣告區塊（主內容渲染後再插入）
             // 取得所有類別與廣告，插入類別導航
@@ -960,12 +1022,11 @@
             document.getElementById('main').innerHTML = html;
           }
         }).catch(e => {
-          document.getElementById('main').innerHTML = siteHtml + '<div style="color:red">資料載入失敗</div>';
+          document.getElementById('main').innerHTML = '<div style="color:red">資料載入失敗</div>';
           console.error('商家頁載入失敗', e);
         });
-      });
+      }
     }
-
 
 
 
@@ -1115,7 +1176,8 @@
                 usageDiv.id = 'usageInfo';
                 document.getElementById('商家私隱').appendChild(usageDiv);
               }
-              usageDiv.innerHTML = `<div style='color:#1e3a5c;'>💰：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div><div style='color:#1e3a5c;'>最後get日期(lastGetDate)：${data.lastGetDate||''}</div>`;
+              usageDiv.innerHTML = `<div style='color:#1e3a5c;'>💰：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div><div style='color:#1e3a5c;'>上次發出時間：${formatHKTime(data.lastGetDate)||''}</div>`;
+
               logoInput.oninput = () => {
                 logoPreview.innerHTML = logoInput.value ? `<img src='${logoInput.value}' style='max-width:60px;'>` : '';
               };
