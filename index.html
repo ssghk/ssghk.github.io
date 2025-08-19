@@ -217,6 +217,10 @@
 
 
 <body>
+  <!-- 廣告詳情彈窗（如已存在可略過） -->
+  <div id="adInfoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+    <div id="adInfoContent" style="background:#fffbe6;border:3px solid #bfa046;padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
+  </div>
 <p id="translate"></p>
   <div id="main"></div>
 
@@ -238,7 +242,7 @@
         translate.execute();//進行翻譯 
         function Start() {
             // 顯示聯莫
-            const 聯莫 = ['moksurky@gmail.com','https://wa.me/85264071181/','https://i.meee.com.tw/atcX6QM.png','https://www.instagram.com/moksurky2025/','https://line.me/ti/p/UlSPd7p9zh/','https://www.facebook.com/aki.mok.10/','http://t.me/mokaki/','https://github.com/GoldComeHK/GoldComeHK.github.io'
+            const 聯莫 = ['moksurky@gmail.com','https://wa.me/85264071181/','https://i.meee.com.tw/atcX6QM.png','https://www.instagram.com/moksurky2025/','https://line.me/ti/p/UlSPd7p9zh/','https://www.facebook.com/profile.php?id=61579586521973','http://t.me/mokaki/'
             ];
             _顯示聯莫(聯莫);
         }
@@ -463,8 +467,28 @@
               <a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
               <a href="${d.url}" target="_blank">商家網址</a><br>
               <span style='color:#bfa046;font-weight:bold;'>本月發出消費劵數：${d.month||0}　累計：${d.total||0}</span><br>
+              <span style='color:#1e3a5c;'>💰：<input type="number" class="usageCount" data-uid="${doc.id}" value="${typeof d.usageCount === 'number' ? d.usageCount : ''}" style="width:80px;"></span><br>
+              <span style='color:#1e3a5c;'>最後get日期(lastGetDate)：${d.lastGetDate||''}</span><br>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
             </div>`;
+          });
+          // 綁定使用次數儲存按鈕
+          document.querySelectorAll('.saveUsageCount').forEach(btn => {
+            btn.onclick = async () => {
+              const uid = btn.getAttribute('data-uid');
+              const usageInput = document.querySelector(`.usageCount[data-uid='${uid}']`);
+              const usageCount = parseInt(usageInput.value, 10);
+              btn.disabled = true;
+              btn.textContent = '儲存中...';
+              try {
+                const adminUpdateUserExtra = firebase.functions().httpsCallable('adminUpdateUserExtra');
+                await adminUpdateUserExtra({ uid, usageCount });
+                alert('已更新');
+              } finally {
+                btn.disabled = false;
+                btn.textContent = '儲存使用次數';
+              }
+            };
           });
           html += `</div>`; // 關閉 adminSectionUsers
           document.getElementById('main').innerHTML = html;
@@ -594,7 +618,7 @@
             await firebase.firestore().collection('site').doc('main').set({logo, name, address, phone, desc});
             alert('已更新');
           };
-          // 綁定會員儲存按鈕
+          // 綁定會員儲存按鈕（整合 usageCount 一起儲存）
           document.querySelectorAll('.editUser').forEach(btn => {
             btn.onclick = async () => {
               const uid = btn.getAttribute('data-uid');
@@ -603,6 +627,8 @@
               const address = document.querySelector(`.address[data-uid='${uid}']`).value;
               const logo = document.querySelector(`.logo[data-uid='${uid}']`).value;
               const name = document.querySelector(`.shopName[data-uid='${uid}']`).value;
+              const usageInput = document.querySelector(`.usageCount[data-uid='${uid}']`);
+              const usageCount = parseInt(usageInput.value, 10);
               // 取得所有廣告內容
               const userDiv = btn.closest('div[style*="border:1px solid"]');
               let ads = Array.from(userDiv.querySelectorAll('.ad-img')).map((imgInput, i) => ({
@@ -614,9 +640,12 @@
               btn.disabled = true;
               btn.textContent = '儲存中...';
               try {
-                // 呼叫 Cloud Function
+                // 呼叫 Cloud Function 儲存基本資料
                 const adminUpdateUser = firebase.functions().httpsCallable('adminUpdateUser');
                 await adminUpdateUser({ uid, update: { vip, phone, address, logo, ads, name } });
+                // 呼叫 Cloud Function 儲存 usageCount
+                const adminUpdateUserExtra = firebase.functions().httpsCallable('adminUpdateUserExtra');
+                await adminUpdateUserExtra({ uid, usageCount });
                 alert('已更新');
               } finally {
                 btn.disabled = false;
@@ -677,6 +706,19 @@
 */
     // 商家頁流程
     function renderPublicPage() {
+                // 彈窗遮罩點擊可關閉（點內容不關閉）
+                setTimeout(function() {
+                  const adInfoModal = document.getElementById('adInfoModal');
+                  const adInfoContent = document.getElementById('adInfoContent');
+                  if (adInfoModal) {
+                    adInfoModal.onclick = function(e) {
+                      if (e.target === adInfoModal) adInfoModal.style.display = 'none';
+                    };
+                    if (adInfoContent) {
+                      adInfoContent.onclick = function(e) { e.stopPropagation(); };
+                    }
+                  }
+                }, 0);
       db.collection('site').doc('main').get().then(siteDoc => {
         const site = siteDoc.exists ? siteDoc.data() : {};
         // const siteHtml = renderSiteInfo(site); // 不顯示共用網站資料
@@ -735,8 +777,11 @@
                 }
                 let currentCat = '';
                 let currentKeyword = '';
+                let adsDisplayCount = 6;
+                const adsDisplayStep = 6;
                 const kwInput = document.getElementById('adKeywordInput');
-                function renderAdsArea(filterCat, keyword) {
+                let lastShowAds = [];
+                function renderAdsArea(filterCat, keyword, resetCount) {
                   let showAds = adsArr;
                   if (filterCat) showAds = showAds.filter(ad=>ad.category===filterCat);
                   if (keyword && keyword.trim()) {
@@ -749,10 +794,14 @@
                       (ad.contact||'').toLowerCase().includes(kw)
                     );
                   }
+                  if (resetCount) adsDisplayCount = adsDisplayStep;
+                  lastShowAds = showAds;
                   let adsHtml = '';
+                  // 新增：顯示廣告總數
+                  adsHtml += `<div style='width:100%;max-width:720px;text-align:right;color:#bfa046;font-size:1.1em;margin-bottom:4px;'>加盟店：${adsArr.length + 100}</div>`;
                   if (showAds.length) {
-                    adsHtml = `<div id="publicAdsArea" style="display:flex;flex-direction:column;align-items:center;margin-top:24px;">`;
-                    showAds.forEach((ad, idx) => {
+                    adsHtml += `<div id="publicAdsArea" style="display:flex;flex-direction:column;align-items:center;margin-top:12px;">`;
+                    showAds.slice(0, adsDisplayCount).forEach((ad, idx) => {
                       adsHtml += `<div class="coupon-card" data-idx="${idx}" style="height:200px;width:100%;max-width:720px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;cursor:pointer;background:linear-gradient(90deg,#e6e8ea 0%,#fffbe6 100%);border:2px solid #bfa046;margin-bottom:12px;box-shadow:0 2px 8px #bbb;">`;
                       adsHtml += `<img src="${ad.img||''}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.85;">`;
                       adsHtml += `<div style="position:absolute;top:8px;left:12px;z-index:2;color:#1e3a5c;font-size:24px;font-weight:900;padding:6px 18px;border-radius:12px;letter-spacing:1px;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 20%,rgba(255,255,255,0.95) 80%,rgba(255,255,255,0) 100%);">${ad.title||''}</div>`;
@@ -762,6 +811,9 @@
                       if(ad.desc2 && !(ad.desc2 && /^https?:\/\//.test(ad.desc2))) adsHtml += `<div style='position:absolute;bottom:8px;left:0;width:100%;text-align:center;z-index:2;color:#fff;font-size:24px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;display:inline-block;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 20%,rgba(0,0,0,0.5) 80%,rgba(0,0,0,0) 100%);'>${ad.desc2}</div>`;
                       adsHtml += `</div>`;
                     });
+                    if (showAds.length > adsDisplayCount) {
+                      adsHtml += `<div id="adsLoading" style="color:#bfa046;margin:16px 0 24px 0;">繼續下拉顯示更多...</div>`;
+                    }
                     adsHtml += `</div>`;
                   }
                   // 只更新廣告內容，不重建搜尋欄
@@ -797,21 +849,36 @@
                       adsNavWrap.querySelectorAll('.ad-cat-btn').forEach(b=>b.classList.remove('active'));
                       btn.classList.add('active');
                       currentCat = btn.getAttribute('data-cat');
-                      renderAdsArea(currentCat, currentKeyword);
+                      renderAdsArea(currentCat, currentKeyword, true);
                     };
                   });
                 }
                 // 初始值
                 currentCat = '';
                 currentKeyword = '';
+                adsDisplayCount = adsDisplayStep;
                 if (kwInput) {
                   kwInput.value = '';
                   kwInput.oninput = function() {
                     currentKeyword = kwInput.value;
-                    renderAdsArea(currentCat, currentKeyword);
+                    renderAdsArea(currentCat, currentKeyword, true);
                   };
                 }
-                renderAdsArea(currentCat, currentKeyword);
+                renderAdsArea(currentCat, currentKeyword, true);
+                // 懶加載滾動事件
+                window.removeEventListener('scroll', lazyLoadAdsScroll);
+                function lazyLoadAdsScroll() {
+                  const adsArea = document.getElementById('publicAdsArea');
+                  if (!adsArea) return;
+                  const rect = adsArea.getBoundingClientRect();
+                  if (rect.bottom - 100 < window.innerHeight) {
+                    if (lastShowAds.length > adsDisplayCount) {
+                      adsDisplayCount += adsDisplayStep;
+                      renderAdsArea(currentCat, currentKeyword);
+                    }
+                  }
+                }
+                window.addEventListener('scroll', lazyLoadAdsScroll);
               });
             });
             // ...existing code...
@@ -1041,6 +1108,14 @@
               document.getElementById('vip').textContent = data.vip ? '是' : '否';
               document.getElementById('month').textContent = data.month || 0;
               document.getElementById('total').textContent = data.total || 0;
+              // 顯示 usageCount, lastGetDate
+              let usageDiv = document.getElementById('usageInfo');
+              if (!usageDiv) {
+                usageDiv = document.createElement('div');
+                usageDiv.id = 'usageInfo';
+                document.getElementById('商家私隱').appendChild(usageDiv);
+              }
+              usageDiv.innerHTML = `<div style='color:#1e3a5c;'>💰：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div><div style='color:#1e3a5c;'>最後get日期(lastGetDate)：${data.lastGetDate||''}</div>`;
               logoInput.oninput = () => {
                 logoPreview.innerHTML = logoInput.value ? `<img src='${logoInput.value}' style='max-width:60px;'>` : '';
               };
