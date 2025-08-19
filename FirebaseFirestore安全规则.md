@@ -4,9 +4,9 @@ service cloud.firestore {
 
     // 類別集合
     match /categories/{doc} {
-      allow read: if request.auth != null && request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02';
-      allow write: if request.auth != null && request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02';
-    }
+        allow read: if true;
+        allow write: if request.auth != null && request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02';
+      }
 
     // 公用廣告資料集合 ads
     match /ads/{doc} {
