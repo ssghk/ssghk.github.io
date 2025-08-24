@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <style>
     /* 類別下拉美化 */
-    #main select.ad-category-admin {
+    #main select.ad-category-admin,#main select.ad-region-admin {
       font-size: 1.1em;
       padding: 6px 12px;
       border-radius: 8px;
@@ -16,7 +17,10 @@
       outline: none;
       transition: border 0.2s;
     }
-    #main select.ad-category-admin:focus {
+    #main select.ad-category-admin:focus,
+    #main select.ad-region-admin:focus
+    
+    {
       border: 2px solid #1e3a5c;
       background: #fff;
     }
@@ -192,31 +196,38 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://64071181.github.io/mokJsapi/a.js">//琪琪修改</script>
 </head>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <!-- 廣告詳情彈窗（如已存在可略過） -->
   <div id="adInfoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
     <div id="adInfoContent" style="background:#fffbe6;border:3px solid #bfa046;padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
@@ -231,7 +242,59 @@
         <p class="mokJsApi_copyright">版權</p>
     </div>
     <div class="scroll-top" id="scrollTop" style="background: gold;bottom: 40%;" onclick="scrollToTop()">↑</div>
-    <script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
   // 動態內容自動翻譯小函數
   function callTranslate() {
     if (window.translate && typeof translate.execute === 'function') {
@@ -247,7 +310,6 @@
             _顯示聯莫(聯莫);
         }
         琪琪修改('https://64071181.github.io/')
-    </script>
 
 
 
@@ -256,28 +318,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <script>
 
 /*
       :::::::::           :::        ::::::::       ::::::::
@@ -405,6 +445,27 @@ function formatHKTime(isoStr) {
 
 
 
+
+
+
+// 固定地區清單
+const REGIONS = [
+  '中西區','灣仔區','東區','南區','油尖旺區','深水埗區','九龍城區','黃大仙區','觀塘區','葵青區','荃灣區','屯門區','元朗區','北區','大埔區','沙田區','西貢區','離島區','全香港'
+];
+
+
+
+
+async function addRegionsToFirestore() {
+  const batch = db.batch();
+  REGIONS.forEach(region => {
+    const ref = db.collection('regions').doc(region);
+    batch.set(ref, { name: region });
+  });
+  await batch.commit();
+  alert('地區已寫入 Firestore');
+}
+// addRegionsToFirestore() // 一次性寫入地區集合到 Firestore（只需執行一次）
 
 
 
@@ -594,10 +655,13 @@ function formatHKTime(isoStr) {
             (adsArr || []).forEach((ad, i) => {
               const adDiv = document.createElement('div');
               adDiv.style = 'border:1px dashed #aaa;margin:4px 0;padding:2px;';
+              // 地區多選
+              let regionOptions = REGIONS.map(r => `<option value="${r}"${(ad.regions||['全香港']).includes(r)?' selected':''}>${r}</option>`).join('');
               adDiv.innerHTML = `
                 <div><a href="https://meee.com.tw/" target="_blank" >圖片網址</a>：<input type="text" value="${ad.img||''}" data-idx="${i}" class="ad-img-admin"></div>
                 <div>標題：<input type="text" value="${ad.title||''}" data-idx="${i}" class="ad-title-admin"></div>
                 <div>類別：<select data-idx="${i}" class="ad-category-admin">${catOptions}</select></div>
+                <div>地區：<select data-idx="${i}" class="ad-region-admin" >${regionOptions}</select></div>
                 <div>聯絡方式：<input type="text" value="${ad.contact||''}" data-idx="${i}" class="ad-contact-admin"></div>
                 <div>條款：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1-admin"></div>
                 <div>地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2-admin"></div>
@@ -624,14 +688,20 @@ function formatHKTime(isoStr) {
           document.getElementById('saveAdsAdmin').onclick = async () => {
             const adsListAdmin = document.getElementById('adsListAdmin');
             if (!adsListAdmin) return;
-            adsArr = Array.from(adsListAdmin.querySelectorAll('.ad-img-admin')).map((imgInput, i) => ({
-              img: imgInput.value,
-              title: adsListAdmin.querySelector(`.ad-title-admin[data-idx="${i}"]`).value,
-              category: adsListAdmin.querySelector(`.ad-category-admin[data-idx="${i}"]`)?.value || '',
-              contact: adsListAdmin.querySelector(`.ad-contact-admin[data-idx="${i}"]`)?.value || '',
-              desc1: adsListAdmin.querySelector(`.ad-desc1-admin[data-idx="${i}"]`).value,
-              desc2: adsListAdmin.querySelector(`.ad-desc2-admin[data-idx="${i}"]`).value
-            }));
+            adsArr = Array.from(adsListAdmin.querySelectorAll('.ad-img-admin')).map((imgInput, i) => {
+              // 多選地區
+              const regionSel = adsListAdmin.querySelector(`.ad-region-admin[data-idx="${i}"]`);
+              const regions = regionSel ? Array.from(regionSel.selectedOptions).map(opt=>opt.value) : ['全香港'];
+              return {
+                img: imgInput.value,
+                title: adsListAdmin.querySelector(`.ad-title-admin[data-idx="${i}"]`).value,
+                category: adsListAdmin.querySelector(`.ad-category-admin[data-idx="${i}"]`)?.value || '',
+                contact: adsListAdmin.querySelector(`.ad-contact-admin[data-idx="${i}"]`)?.value || '',
+                desc1: adsListAdmin.querySelector(`.ad-desc1-admin[data-idx="${i}"]`).value,
+                desc2: adsListAdmin.querySelector(`.ad-desc2-admin[data-idx="${i}"]`).value,
+                regions: regions.length ? regions : ['全香港']
+              };
+            });
             await db.collection('ads').doc('main').set({ ads: adsArr });
             alert('已更新');
           };
@@ -825,25 +895,32 @@ function formatHKTime(isoStr) {
                   kwInput.style = 'font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;width:60%;max-width:320px;';
                   searchDiv.appendChild(kwInput);
                   adsNavWrap.appendChild(searchDiv);
-                  // 新增類別導航
-                  let navHtml = '';
+                  // 新增地區選單
+                  let regionSelHtml = `<select id='adRegionSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;max-width:180px;margin-left:8px;'><option value=''>全部地區</option>`;
+                  REGIONS.forEach(r => { regionSelHtml += `<option value='${r}'>${r}</option>`; });
+                  regionSelHtml += `</select>`;
+                  adsNavWrap.insertAdjacentHTML('beforeend', regionSelHtml);
+                  // 類別導航改為 select
+                  let catSelHtml = '';
                   if(categories.length) {
-                    navHtml += `<div id='adCatNav' style='display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0 0 0;'>`;
-                    navHtml += `<button class='ad-cat-btn active' data-cat=''>全部</button>`;
+                    catSelHtml += `<select id='adCatSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;max-width:180px;margin-left:8px;'>`;
+                    catSelHtml += `<option value=''>全部類別</option>`;
                     categories.forEach(cat => {
-                      navHtml += `<button class='ad-cat-btn' data-cat='${cat}'>${cat}</button>`;
+                      catSelHtml += `<option value='${cat}'>${cat}</option>`;
                     });
-                    navHtml += `</div>`;
+                    catSelHtml += `</select>`;
                   }
-                  adsNavWrap.insertAdjacentHTML('beforeend', navHtml);
+                  adsNavWrap.insertAdjacentHTML('beforeend', catSelHtml);
                 }
                 let currentCat = '';
                 let currentKeyword = '';
+                let currentRegion = '';
                 let adsDisplayCount = 6;
                 const adsDisplayStep = 6;
                 const kwInput = document.getElementById('adKeywordInput');
+                const regionSelect = document.getElementById('adRegionSelect');
                 let lastShowAds = [];
-                function renderAdsArea(filterCat, keyword, resetCount) {
+                function renderAdsArea(filterCat, keyword, resetCount, filterRegion) {
                   let showAds = adsArr;
                   if (filterCat) showAds = showAds.filter(ad=>ad.category===filterCat);
                   if (keyword && keyword.trim()) {
@@ -855,6 +932,9 @@ function formatHKTime(isoStr) {
                       (ad.category||'').toLowerCase().includes(kw) ||
                       (ad.contact||'').toLowerCase().includes(kw)
                     );
+                  }
+                  if (filterRegion) {
+                    showAds = showAds.filter(ad => (ad.regions||['全香港']).includes(filterRegion));
                   }
                   if (resetCount) adsDisplayCount = adsDisplayStep;
                   lastShowAds = showAds;
@@ -872,6 +952,8 @@ function formatHKTime(isoStr) {
                       adsHtml += `</div>`;
                       if(ad.desc2 && !(ad.desc2 && /^https?:\/\//.test(ad.desc2))) adsHtml += `<div style='position:absolute;bottom:8px;left:0;width:100%;text-align:center;z-index:2;color:#fff;font-size:24px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;display:inline-block;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 20%,rgba(0,0,0,0.5) 80%,rgba(0,0,0,0) 100%);'>${ad.desc2}</div>`;
                       adsHtml += `</div>`;
+                      // 顯示地區
+                      if(ad.regions) adsHtml += `<div style='position:absolute;bottom:8px;right:8px;color:#1e3a5c;font-size:0.95em;background:#fffbe6;padding:2px 10px;border-radius:8px;'>地區：${ad.regions.join(', ')}</div>`;
                     });
                     if (showAds.length > adsDisplayCount) {
                       adsHtml += `<div id="adsLoading" style="color:#bfa046;margin:16px 0 24px 0;">繼續下拉顯示更多...</div>`;
@@ -895,6 +977,7 @@ function formatHKTime(isoStr) {
                       content += `<div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;text-align:center;'>${ad.title||''}</div>`;
                       content += `<div style='font-size:1.2em;color:#bfa046;margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
                       if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:#bfa046;font-size:1.1em;'>類別：${ad.category}</div>`;
+                      if(ad.regions) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>地區：${ad.regions.join(', ')}</div>`;
                       if(ad.contact) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div>`;
                       if(ad.desc2 && /^https?:\/\//.test(ad.desc2)) {
                         content += `<div style='text-align:center;margin-bottom:8px;'><a href='${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>查詢</a></div>`;
@@ -905,28 +988,35 @@ function formatHKTime(isoStr) {
                       document.getElementById('adInfoModal').style.display = 'flex';
                     };
                   });
-                  // 綁定類別按鈕
-                  adsNavWrap.querySelectorAll('.ad-cat-btn').forEach(btn => {
-                    btn.onclick = function() {
-                      adsNavWrap.querySelectorAll('.ad-cat-btn').forEach(b=>b.classList.remove('active'));
-                      btn.classList.add('active');
-                      currentCat = btn.getAttribute('data-cat');
-                      renderAdsArea(currentCat, currentKeyword, true);
+                  // 綁定類別 select
+                  const catSelect = document.getElementById('adCatSelect');
+                  if(catSelect) {
+                    catSelect.onchange = function() {
+                      currentCat = catSelect.value;
+                      renderAdsArea(currentCat, currentKeyword, true, currentRegion);
                     };
-                  });
+                  }
+                  // 綁定地區選單
+                  if(regionSelect) {
+                    regionSelect.onchange = function() {
+                      currentRegion = regionSelect.value;
+                      renderAdsArea(currentCat, currentKeyword, true, currentRegion);
+                    };
+                  }
                 }
                 // 初始值
                 currentCat = '';
                 currentKeyword = '';
+                currentRegion = '';
                 adsDisplayCount = adsDisplayStep;
                 if (kwInput) {
                   kwInput.value = '';
                   kwInput.oninput = function() {
                     currentKeyword = kwInput.value;
-                    renderAdsArea(currentCat, currentKeyword, true);
+                    renderAdsArea(currentCat, currentKeyword, true, currentRegion);
                   };
                 }
-                renderAdsArea(currentCat, currentKeyword, true);
+                renderAdsArea(currentCat, currentKeyword, true, currentRegion);
                 // 懶加載滾動事件
                 window.removeEventListener('scroll', lazyLoadAdsScroll);
                 function lazyLoadAdsScroll() {
@@ -936,7 +1026,7 @@ function formatHKTime(isoStr) {
                   if (rect.bottom - 100 < window.innerHeight) {
                     if (lastShowAds.length > adsDisplayCount) {
                       adsDisplayCount += adsDisplayStep;
-                      renderAdsArea(currentCat, currentKeyword);
+                      renderAdsArea(currentCat, currentKeyword, false, currentRegion);
                     }
                   }
                 }
