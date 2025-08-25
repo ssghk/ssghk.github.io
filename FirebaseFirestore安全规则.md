@@ -2,6 +2,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+match /users/{uid}/tokens/{token} {
+  allow read: if true;
+}
+
     // 類別集合
     match /categories/{doc} {
         allow read: if true;
@@ -16,6 +20,14 @@ service cloud.firestore {
 
     match /users/{userId} {
       allow read: if true;
+
+      allow update: if request.auth != null && (
+        // 會員自己可編輯自己的付款方式
+        (request.auth.uid == userId && request.resource.data.paymentMethods is list)
+        // 管理員可編輯所有會員的付款方式
+        || (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' && request.resource.data.paymentMethods is list)
+      );
+
       // 只允許 Cloud Function 寫入統計欄位
       allow update: if request.auth != null &&
         request.auth.token.firebase.sign_in_provider == 'custom' &&
