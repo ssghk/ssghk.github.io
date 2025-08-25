@@ -397,6 +397,23 @@
     // geturl 流程：產生 token 並導向帶 token 的 shop page
     function handleGet() {
       const uid = getParam;
+
+      // 顯示 loading 畫面
+      document.getElementById('main').innerHTML = '<div style="text-align:center;margin:60px 0;font-size:1.3em;color:#bfa046;"><div class="loader" style="margin-bottom:18px;"></div>產生消費劵連結中，請稍候...</div>';
+      // 加入簡單 loading 動畫
+      if (!document.getElementById('loadingStyle')) {
+        const style = document.createElement('style');
+        style.id = 'loadingStyle';
+        style.innerHTML = '.loader{border:8px solid #f3f3f3;border-top:8px solid #bfa046;border-radius:50%;width:48px;height:48px;animation:spin 1s linear infinite;}@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}';
+        document.head.appendChild(style);
+      }
+
+
+
+
+
+
+
       // 呼叫 createTokenForUser Cloud Function
       const createTokenForUser = firebase.functions().httpsCallable('createTokenForUser');
       createTokenForUser({ uid }).then(result => {
@@ -410,7 +427,7 @@
           location.href = `${baseUrl}?user=${uid}`;
         }
       }).catch(e => {
-        document.getElementById('main').textContent = '產生消費劵連結失敗';
+        document.getElementById('main').innerHTML = '<div style="color:red;text-align:center;margin:60px 0;font-size:1.2em;">產生消費劵連結失敗，請稍後再試</div>';
         console.error('createTokenForUser error:', e);
       });
     }
