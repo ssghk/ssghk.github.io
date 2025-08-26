@@ -81,50 +81,6 @@
               .admin-nav-btn.active { background:#bfa046;color:#fff; }
               .admin-section { display:none;background:linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border-radius:16px;box-shadow:0 2px 12px #bbb;padding:18px 12px 12px 12px;margin-bottom:18px; }
               .admin-section.active { display:block; }
-
-
-    
-
-    /* 會員界面美化 */
-                #memberMainWrap { max-width: 720px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
-                #userPanel { margin-top: 12px; }
-                #商家私隱 > div { margin-bottom: 10px; font-size: 1.1em; }
-                #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid #bfa046; background: #fff; margin-left: 4px; }
-                #商家私隱 button, #userPanel button, #loginBtn { font-size: 1.1em; padding: 8px 18px; border-radius: 8px; border: none; background: linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color: #222; font-weight: bold; margin: 6px 4px 0 0; box-shadow: 0 2px 8px #eee; cursor: pointer; }
-                #商家私隱 button:active, #userPanel button:active, #loginBtn:active { background: #bfa046; color: #fff; }
-                #商家私隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
-                #logoPreview img { border-radius: 8px; border: 1px solid #bfa046; margin-left: 8px; }
-                #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid #bfa046; margin: 8px 0; padding: 8px; }
-                #qr位 { margin-top: 18px; text-align: center; }
-                #qrcode { width:100% !important; height:100% !important; display:block; }
-                #showPrivacyBtn { background: #1e3a5c; color: #fff; border: none; }
-                #showPrivacyBtn:active { background: #bfa046; color: #fff; }
-                #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
-                #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
-                #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
-
-
-
-
-
-
-
-
-
-  </style>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title id="dynamicTitle">莫氏消費劵系統</title>
-  <link id="dynamicFavicon" rel="icon" type="image/png" href="">
-  <meta id="dynamicDesc" name="description" content="">
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
-  <style>
-    /* 管理員界面美化 */
     #main h3 {
       font-size: 1.5em;
       color: #1e3a5c;
@@ -221,7 +177,49 @@
         padding: 10px 4px 8px 4px !important;
       }
     }
+
+
+
+    
+
+    /* 會員界面美化 */
+                #memberMainWrap { max-width: 720px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
+                #userPanel { margin-top: 12px; }
+                #商家私隱 > div { margin-bottom: 10px; font-size: 1.1em; }
+                #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid #bfa046; background: #fff; margin-left: 4px; }
+                #商家私隱 button, #userPanel button, #loginBtn { font-size: 1.1em; padding: 8px 18px; border-radius: 8px; border: none; background: linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color: #222; font-weight: bold; margin: 6px 4px 0 0; box-shadow: 0 2px 8px #eee; cursor: pointer; }
+                #商家私隱 button:active, #userPanel button:active, #loginBtn:active { background: #bfa046; color: #fff; }
+                #商家私隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
+                #logoPreview img { border-radius: 8px; border: 1px solid #bfa046; margin-left: 8px; }
+                #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid #bfa046; margin: 8px 0; padding: 8px; }
+                #qr位 { margin-top: 18px; text-align: center; }
+                #qrcode { width:100% !important; height:100% !important; display:block; }
+                #showPrivacyBtn { background: #1e3a5c; color: #fff; border: none; }
+                #showPrivacyBtn:active { background: #bfa046; color: #fff; }
+                #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
+                #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
+                #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
+
+
+
+
+
+
+
+
+
   </style>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title id="dynamicTitle">街坊聯盟支付系統</title>
+  <link id="dynamicFavicon" rel="icon" type="image/png" href="">
+  <meta id="dynamicDesc" name="description" content="">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 
 
 
@@ -1230,7 +1228,7 @@ snap.forEach(doc => {
                 <div>${site.logo?`<img src='${site.logo}' style='max-width:120px;'>`:''}</div>
                 <div>${site.desc||''}</div>
                 <br>
-                <a href="./" target="_blank" style="margin-left:10px;font-size:1em;padding:4px 12px;border-radius:6px;background:#bfa046;color:#fff;font-weight:bold;text-decoration:none;">限時加入聯盟，用本地商店消費劵幫你吸客!!</a>
+                <a href="about.html" target="_blank" style="margin-left:10px;font-size:1em;padding:4px 12px;border-radius:6px;background:#bfa046;color:#fff;font-weight:bold;text-decoration:none;">限時加入聯盟，使用全港唯一可收加密幣、可幫你搵客、支付、留客，全包辦既商戶支付系統!!</a>
               `;
               document.getElementById('infoModal').style.display = 'flex';
             };
@@ -1457,13 +1455,13 @@ snap.forEach(doc => {
                   const a = document.createElement('a');
                   a.id = 'qrcode';
                   a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-                  a.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
+                  a.textContent = '成為vip啟動系統，(每次交易，我們將收取1元手續費)';
                   a.target = '_blank';
                   qrDiv.replaceChild(a, qrcodeEl);
                 } else {
                   qrcodeEl.style.display = '';
                   qrcodeEl.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-                  qrcodeEl.textContent = '成為vip,派發您的消費劵，(客戶每次獲取消費劵，您將支付1元)';
+                  qrcodeEl.textContent = '成為vip啟動系統，(每次交易，我們將收取1元手續費)';
                   qrcodeEl.target = '_blank';
                 }
               }
@@ -1481,7 +1479,7 @@ snap.forEach(doc => {
           db.collection('site').doc('main').get().then(doc => {
             var siteData = doc.exists ? doc.data() : {};
             let html = renderSiteInfo(siteData);
-            html += `<button id="loginBtn">限時加入聯盟，用本地商店消費劵幫你吸客!!</button>`;
+            html += `<button id="loginBtn">限時加入聯盟，使用全港唯一可收加密幣、可幫你搵客、支付、留客，全包辦既商戶支付系統!!</button>`;
             document.getElementById('main').innerHTML = html;
             callTranslate();
             document.getElementById('loginBtn').onclick = () => {
