@@ -459,11 +459,10 @@
       }));
     }
 
-    // get 參數流程
+
     // geturl 流程：產生 token 並導向帶 token 的 shop page
     function handleGet() {
       const uid = getParam;
-
       // 顯示 loading 畫面
       document.getElementById('main').innerHTML = '<div style="text-align:center;margin:60px 0;font-size:1.3em;color:#bfa046;"><div class="loader" style="margin-bottom:18px;"></div>產生消費劵連結中，請稍候...</div>';
       // 加入簡單 loading 動畫
@@ -474,12 +473,6 @@
         document.head.appendChild(style);
       }
 
-
-
-
-
-
-
       // 呼叫 createTokenForUser Cloud Function
       const createTokenForUser = firebase.functions().httpsCallable('createTokenForUser');
       createTokenForUser({ uid }).then(result => {
@@ -487,16 +480,21 @@
         const { token, expireAt } = result.data || {};
         let baseUrl = location.origin + location.pathname.replace(/index.*\.html.*/i, 'index.html');
         if (token) {
-          location.href = `${baseUrl}?user=${uid}&token=${token}`;
+          // 先計數
+          const incrementCount = firebase.functions().httpsCallable('incrementCount');
+          incrementCount({ uid }).then(() => {
+            location.href = `${baseUrl}?user=${uid}&token=${token}`;
+          });
         } else {
           // fallback: 沒有 token 時，仍導向舊 user 頁
           location.href = `${baseUrl}?user=${uid}`;
         }
       }).catch(e => {
         document.getElementById('main').innerHTML = '<div style="color:red;text-align:center;margin:60px 0;font-size:1.2em;">產生消費劵連結失敗，請稍後再試</div>';
-        console.error('createTokenForUser error:', e);
       });
     }
+
+
 
 
 // 將 ISO 時間字串轉為香港時間格式
@@ -632,7 +630,7 @@ async function addRegionsToFirestore() {
               <a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
               <div id="付款方式_${doc.id}"></div>
               <a href="${d.url}" target="_blank">商家網址</a><br>
-              <span style='color:#bfa046;font-weight:bold;'>本月發出消費劵數：${d.month||0}　累計：${d.total||0}</span><br>
+              <span style='color:#bfa046;font-weight:bold;'>本月使用數：${d.month||0}　累計使用數：${d.total||0}</span><br>
               <span style='color:#1e3a5c;'>💰：<input type="number" class="usageCount" data-uid="${doc.id}" value="${typeof d.usageCount === 'number' ? d.usageCount : ''}" style="width:80px;"></span><br>
               <span style='color:#1e3a5c;'>上次發出時間：${formatHKTime(d.lastGetDate)||''}</span><br>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
@@ -1296,9 +1294,9 @@ snap.forEach(doc => {
                     <div>VIP：<span id="vip"></span></div>
                     <div style="display:none">獨立網址：<span id="url"></span></div>
                     <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
-                    <div>本月發出消費劵數：<span id="month"></span></div>
-                    <div>累計發出消費劵數：<span id="total"></span></div>
-                    <div style="color:#bfa046;font-size:0.95em;">客戶每次使用相機掃qr獲取消費劵，店主將消費1元</div>
+                    <div>本月使用次數：<span id="month"></span></div>
+                    <div>累計使用次數：<span id="total"></span></div>
+                    <div style="color:#bfa046;font-size:2em;">每次掃qr，店主將消費1元</div>
                     <button id="saveProfileBtn">儲存商家資料</button>
                     <button id="logoutBtn">登出</button>
                   </div>
@@ -1417,9 +1415,6 @@ snap.forEach(doc => {
                   <div>電話：${data.phone||''}</div>
                   <div>地址：${data.address||''}</div>
                   <div>${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
-                  <div>VIP：${data.vip?'是':'否'}</div>
-                  <div>本月發出消費劵數：${data.month||0}</div>
-                  <div>累計發出消費劵數：${data.total||0}</div>
                 `;
                 document.getElementById('infoModalMember').style.display = 'flex';
               };
@@ -1501,7 +1496,7 @@ snap.forEach(doc => {
     
     // 付款方式管理
     function renderPaymentMethods(user, wrap) {
-      wrap.innerHTML = '';
+      wrap.innerHTML = '<h4>付款方式管理</h4>';
       let methods = Array.isArray(user.paymentMethods) ? user.paymentMethods : [];
       methods.forEach((pm, idx) => {
         const div = document.createElement('div');
