@@ -78,7 +78,7 @@ exports.incrementCount = functions
         total++;
 
         let usageCount = (userData.usageCount || 0) - 1;
-        if (usageCount < 0) usageCount = 0;
+        //if (usageCount < 0) usageCount = 0;
         let lastGetDate = now.toISOString();
 
         // 准备更新数据
