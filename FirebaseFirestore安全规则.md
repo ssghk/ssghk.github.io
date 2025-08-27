@@ -2,15 +2,15 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-match /users/{uid}/tokens/{token} {
-  allow read: if true;
-}
+    match /users/{uid}/tokens/{token} {
+      allow read: if true;
+    }
 
     // 類別集合
     match /categories/{doc} {
-        allow read: if true;
-        allow write: if request.auth != null && request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02';
-      }
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02';
+    }
 
     // 公用廣告資料集合 ads
     match /ads/{doc} {
@@ -21,32 +21,27 @@ match /users/{uid}/tokens/{token} {
     match /users/{userId} {
       allow read: if true;
 
+      // 允許管理員更新任何字段（包括付款方式）
       allow update: if request.auth != null && (
-        // 會員自己可編輯自己的付款方式
+        // 管理員可以更新所有字段
+        request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02'
+        ||
+        // 會員自己只能更新付款方式
         (request.auth.uid == userId && request.resource.data.paymentMethods is list)
-        // 管理員可編輯所有會員的付款方式
-        || (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' && request.resource.data.paymentMethods is list)
       );
 
       // 只允許 Cloud Function 寫入統計欄位
       allow update: if request.auth != null &&
         request.auth.token.firebase.sign_in_provider == 'custom' &&
         request.resource.data.keys().hasOnly(['month', 'total', 'monthKey']);
-      // 只允許管理員寫入會員資料（不能動統計欄位）
-      allow update: if request.auth != null &&
-        request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02' &&
-        !('month' in request.resource.data) &&
-        !('total' in request.resource.data) &&
-        !('monthKey' in request.resource.data);
+      
       allow write: if false;
     }
+    
     // 網站資料規則
     match /site/main {
       allow read: if true;
       allow write: if request.auth != null && request.auth.uid == '109EjNOTmkh2CRuLghiIuwTDzl02';
     }
-
   }
 }
-
-
