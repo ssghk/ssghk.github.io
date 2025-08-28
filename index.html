@@ -1488,7 +1488,10 @@ snap.forEach(doc => {
           db.collection('site').doc('main').get().then(doc => {
             var siteData = doc.exists ? doc.data() : {};
             let html = renderSiteInfo(siteData);
-            html += `<button id="loginBtn">限時加入聯盟，使用全港唯一可收加密幣、可幫你搵客、支付、留客，全包辦既商戶支付系統!!</button>`;
+            html += `<button id="loginBtn">限時加入聯盟，使用全港唯一可收加密幣、可幫你搵客、支付、留客，全包辦既商戶支付系統!!</button><br>
+            <a href="about.html" target="_blank" >關於我們</a>
+            
+            `;
             document.getElementById('main').innerHTML = html;
             callTranslate();
             document.getElementById('loginBtn').onclick = () => {
