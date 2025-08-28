@@ -23,7 +23,7 @@
       background: #fff;
     }
     /* 未登入界面美化 */
-    body:not([data-login]) #main > button#loginBtn {
+    body:not([data-login]) #main > button#loginBtn,#qr位 a,.Shop頁加入btn {
       display: block;
       margin: 40px auto 0 auto;
       font-size: 1.3em;
@@ -37,7 +37,7 @@
       cursor: pointer;
       transition: background 0.2s, color 0.2s;
     }
-    body:not([data-login]) #main > button#loginBtn:active {
+    body:not([data-login]) #main > button#loginBtn:active,#qr位 a:active,.Shop頁加入btn:active {
       background: #bfa046;
       color: #fff;
     }
@@ -192,8 +192,14 @@
                 #商家私隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
                 #logoPreview img { border-radius: 8px; border: 1px solid #bfa046; margin-left: 8px; }
                 #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid #bfa046; margin: 8px 0; padding: 8px; }
-                #qr位 { margin-top: 18px; text-align: center; }
-                #qrcode { width:100% !important; height:100% !important; display:block; }
+
+
+
+                #qr位 a{ margin-top: 18px; text-align: center; }
+
+
+
+                #payQrcodeCanvas_ { width:100% !important; height:100% !important; display:block; }
                 #showPrivacyBtn { background: #1e3a5c; color: #fff; border: none; }
                 #showPrivacyBtn:active { background: #bfa046; color: #fff; }
                 #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
@@ -984,17 +990,17 @@ snap.forEach(doc => {
 
                   // 新增搜尋欄
                   const searchDiv = document.createElement('div');
-                  searchDiv.style = 'display:flex;justify-content:left;align-items:center;margin:50px 0 0 0;gap:8px;';
+                  searchDiv.style = 'display:flex;justify-content:center;;align-items:center;gap:8px;';
                   const kwInput = document.createElement('input');
                   kwInput.id = 'adKeywordInput';
                   kwInput.type = 'text';
                   kwInput.placeholder = '輸入關鍵字搜尋';
-                  kwInput.style = 'font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;width:60%;max-width:320px;';
+                  kwInput.style = 'font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;width:100%;';
                   searchDiv.appendChild(kwInput);
                   topDiv.appendChild(searchDiv);
 
                   // 新增地區選單
-                  let regionSelHtml = `<select id='adRegionSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;max-width:180px;margin-left:8px;'><option value=''>全部地區</option>`;
+                  let regionSelHtml = `<select id='adRegionSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;width:48%;margin:1%'><option value=''>全部地區</option>`;
                   REGIONS.forEach(r => { regionSelHtml += `<option value='${r}'>${r}</option>`; });
                   regionSelHtml += `</select>`;
                   topDiv.insertAdjacentHTML('beforeend', regionSelHtml);
@@ -1003,7 +1009,7 @@ snap.forEach(doc => {
                   // 類別導航
                   let catSelHtml = '';
                   if(categories.length) {
-                    catSelHtml += `<select id='adCatSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;max-width:180px;margin-left:8px;'>`;
+                    catSelHtml += `<select id='adCatSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;width:48%;margin:1%'>`;
                     catSelHtml += `<option value=''>全部類別</option>`;
                     categories.forEach(cat => {
                       catSelHtml += `<option value='${cat}'>${cat}</option>`;
@@ -1011,33 +1017,6 @@ snap.forEach(doc => {
                     catSelHtml += `</select>`;
                   }
                   topDiv.insertAdjacentHTML('beforeend', catSelHtml);
-
-                  let payBtn = document.createElement('button');
-                  payBtn.id = 'navPayBtn';
-                  payBtn.innerHTML = '<span style="font-size:4em;font-weight:bold;">💰</span>';
-                  payBtn.style = 'position:absolute;right:0px;top:5px;width:60px;height:60px;border-radius:50%;background:#00000000;color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow 0.2s;z-index:10;font-size:1em;';
-                  payBtn.onmouseover = function(){payBtn.style.boxShadow='0 4px 16px #bfa046';};
-                  payBtn.onmouseout = function(){payBtn.style.boxShadow='0 2px 8px #bfa046';};
-                  payBtn.onclick = function() {
-                    db.collection('users').doc(uid).get().then(doc => {
-                      const userData = doc.exists ? doc.data() : {};
-                      const methods = Array.isArray(userData.paymentMethods) ? userData.paymentMethods : [];
-                      let html = `<div style='font-size:1.3em;font-weight:bold;color:#bfa046;margin-bottom:8px;'>付款方式</div>`;
-                      if (methods.length === 0) {
-                        html += `<div style='color:#888;font-size:1.1em;'>尚未設定付款方式</div>`;
-                      } else {
-                        methods.forEach(pm => {
-                          html += `<div style='margin-bottom:18px;text-align:center;'>`;
-                          html += `<div style='font-size:1.1em;font-weight:bold;margin-bottom:6px;'>${pm.name||''}</div>`;
-                          if(pm.img) html += `<img src='${pm.img}' style='width:100%;height:auto;max-width:320px;object-fit:contain;border-radius:10px;border:1px solid #eee;background:#fff;'>`;
-                          html += `</div>`;
-                        });
-                      }
-                      document.getElementById('infoContent').innerHTML = html;
-                      document.getElementById('infoModal').style.display = 'flex';
-                    });
-                  };
-                  topDiv.appendChild(payBtn);
                 }
 
                 let currentCat = '';
@@ -1231,7 +1210,7 @@ snap.forEach(doc => {
                 <div>${site.logo?`<img src='${site.logo}' style='max-width:120px;'>`:''}</div>
                 <div>${site.desc||''}</div>
                 <br>
-                <a href="about.html" target="_blank" style="margin-left:10px;font-size:1em;padding:4px 12px;border-radius:6px;background:#bfa046;color:#fff;font-weight:bold;text-decoration:none;">限時加入聯盟，使用全港唯一可收加密幣、可幫你搵客、支付、留客，全包辦既商戶支付系統!!</a>
+                <a href="about.html" target="_blank" class="Shop頁加入btn">限時加入聯盟，使用全港唯一可收加密幣、可幫你搵客、支付、留客，全包辦既商戶支付系統!!</a>
               `;
               document.getElementById('infoModal').style.display = 'flex';
             };
@@ -1441,32 +1420,25 @@ snap.forEach(doc => {
                 }
               }
               const qrDiv = document.getElementById('qr位');
-              const qrcodeEl = document.getElementById('qrcode');
+              // 依 vip 狀態顯示 QR code 或 WhatsApp 申請連結
+              qrDiv.innerHTML = '';
               if (data.vip) {
-                let qrUrl = data.geturl || data.localGeturl || '';
-                if (qrcodeEl.tagName === 'A') {
-                  const newCanvas = document.createElement('canvas');
-                  newCanvas.id = 'qrcode';
-                  qrDiv.replaceChild(newCanvas, qrcodeEl);
-                  setTimeout(() => QRCode.toCanvas(newCanvas, qrUrl), 0);
-                } else {
-                  qrcodeEl.style.display = '';
-                  setTimeout(() => QRCode.toCanvas(qrcodeEl, qrUrl), 0);
-                }
+                // 只顯示 pay.html QR code
+                let payQrCanvas = document.createElement('canvas');
+                payQrCanvas.id = 'payQrcodeCanvas_';
+                qrDiv.appendChild(payQrCanvas);
+                let payQrLabel = document.createElement('div');
+                setTimeout(() => {
+                  QRCode.toCanvas(payQrCanvas, location.origin + '/pay.html?uid=' + uid);
+                }, 0);
               } else {
-                if (qrcodeEl.tagName === 'CANVAS') {
-                  const a = document.createElement('a');
-                  a.id = 'qrcode';
-                  a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-                  a.textContent = '成為vip啟動系統，(每次交易，我們將收取1元手續費)';
-                  a.target = '_blank';
-                  qrDiv.replaceChild(a, qrcodeEl);
-                } else {
-                  qrcodeEl.style.display = '';
-                  qrcodeEl.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-                  qrcodeEl.textContent = '成為vip啟動系統，(每次交易，我們將收取1元手續費)';
-                  qrcodeEl.target = '_blank';
-                }
+                // 非vip：只顯示 WhatsApp 申請vip連結
+                const a = document.createElement('a');
+                a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
+                a.textContent = '成為vip啟動系統，(每次交易，我們將收取1元手續費)';
+                a.target = '_blank';
+                a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#bfa046;text-align:center;';
+                qrDiv.appendChild(a);
               }
             }
             waitForUserDoc();
