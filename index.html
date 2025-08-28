@@ -625,18 +625,17 @@ async function addRegionsToFirestore() {
           snap.forEach(doc => {
             const d = doc.data();
             html += `<div style="border:1px solid #ccc;margin:8px 0;padding:4px;">
-              (${doc.id})<br>
-              <span style='color:#1e3a5c;font-size:1em;'>Gmail：${d.email||''}</span><br>
+              <a href="${d.url}" target="_blank">${doc.id}</a><br>
+              <span style='color:#1e3a5c;font-size:1em;'>${d.email||''}</span><br>
               商家名稱: <input type="text" class="shopName" data-uid="${doc.id}" value="${d.name||''}"><br>
               VIP: <input type="checkbox" class="vip" data-uid="${doc.id}" ${d.vip ? 'checked' : ''}><br>
               商家電話: <input type="text" class="phone" data-uid="${doc.id}" value="${d.phone||''}"><br>
               商家地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"><br>
               <a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
               <div id="付款方式_${doc.id}"></div>
-              <a href="${d.url}" target="_blank">商家網址</a><br>
               <span style='color:#bfa046;font-weight:bold;'>本月使用數：${d.month||0}　累計使用數：${d.total||0}</span><br>
-              <span style='color:#1e3a5c;'>💰：<input type="number" class="usageCount" data-uid="${doc.id}" value="${typeof d.usageCount === 'number' ? d.usageCount : ''}" style="width:80px;"></span><br>
-              <span style='color:#1e3a5c;'>上次發出時間：${formatHKTime(d.lastGetDate)||''}</span><br>
+                <span style='color:#1e3a5c;'>💰：<input type="number" class="usageCount" data-uid="${doc.id}" value="${typeof d.usageCount === 'number' ? d.usageCount : 0}" style="width:80px;"></span><br>
+              <span style='color:#1e3a5c;'>上次使用時間：${formatHKTime(d.lastGetDate)||''}</span><br>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
             </div>`;
           });
@@ -833,7 +832,9 @@ snap.forEach(doc => {
                 // 儲存付款方式
                 await savePaymentMethods(uid, `付款方式_${uid}`);
                 alert(`已更新[ ${name} ]的資料`);
-              } finally {
+              } catch(e) {
+      alert(`儲存失敗: ${e.message || e}`);
+    } finally {
                 btn.disabled = false;
                 btn.textContent = '儲存';
               }
@@ -1242,6 +1243,20 @@ snap.forEach(doc => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
      :::    :::       ::::::::       ::::::::::       :::::::::
     :+:    :+:      :+:    :+:      :+:              :+:    :+:
@@ -1253,8 +1268,19 @@ snap.forEach(doc => {
 */
     // 會員主頁/首頁流程
     function renderMemberPage() {
-      auth.onAuthStateChanged(user => {
+      auth.onAuthStateChanged(async user => {
         if (user) {
+          // 會員登入後，先檢查 email 欄位，若沒有則補齊
+          const uid = user.uid;
+          const userRef = db.collection('users').doc(uid);
+          const doc = await userRef.get();
+          if (doc.exists) {
+            const data = doc.data();
+            if (!data.email && user.email) {
+              await userRef.update({ email: user.email });
+            }
+          }
+
           db.collection('site').doc('main').get().then(siteDoc => {
             var siteData = siteDoc.exists ? siteDoc.data() : {};
             const siteHtml = renderSiteInfo(siteData);
@@ -1320,6 +1346,11 @@ snap.forEach(doc => {
                 if (retry < 20) setTimeout(() => waitForUserDoc(retry + 1), 1000);
                 return;
               }
+
+
+
+
+
               userPanel.style.display = '';
               loginBtn.style.display = 'none';
               privacyPanel.style.display = 'none';
@@ -1332,6 +1363,10 @@ snap.forEach(doc => {
               const adsList = document.getElementById('adsList');
               const saveProfileBtn = document.getElementById('saveProfileBtn');
               const data = doc.data();
+
+
+
+
               nameInput.value = data.name || '';
               phoneInput.value = data.phone || '';
               addressInput.value = data.address || '';
@@ -1445,10 +1480,7 @@ snap.forEach(doc => {
 
             // 付款方式編輯位
             injectPaymentMethodsUI(uid,'付款方式位');
-
-
           });
-
         } else {
           // 未登入顯示網站資料+登入按鈕
           db.collection('site').doc('main').get().then(doc => {

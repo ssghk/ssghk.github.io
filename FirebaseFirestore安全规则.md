@@ -30,6 +30,14 @@ service cloud.firestore {
         (request.auth.uid == userId && request.resource.data.paymentMethods is list)
       );
 
+
+      // 會員自己只能新增/更新 email 欄位
+      allow update: if request.auth != null &&
+        request.auth.uid == userId &&
+        request.resource.data.keys().hasOnly(['email']);
+
+
+
       // 只允許 Cloud Function 寫入統計欄位
       allow update: if request.auth != null &&
         request.auth.token.firebase.sign_in_provider == 'custom' &&
