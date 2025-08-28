@@ -976,6 +976,8 @@ snap.forEach(doc => {
               const categories = catSnap.docs.map(doc => doc.data().name);
               db.collection('ads').doc('main').get().then(adsDoc => {
                 let adsArr = (adsDoc.exists && Array.isArray(adsDoc.data().ads)) ? adsDoc.data().ads : [];
+                // 最新上架的放最上面
+                adsArr = adsArr.slice().reverse();
 
                 // 搜尋欄與類別導航只建立一次
                 let adsNavWrap = document.getElementById('adsNavWrap');
