@@ -1474,9 +1474,9 @@ snap.forEach(doc => {
                 // 非vip：只顯示 WhatsApp 申請vip連結
                 const a = document.createElement('a');
                 a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-                a.textContent = '成為vip啟動系統，(每次交易，我們將收取1元手續費)';
+                a.textContent = '成為vip啟動系統，(每次交易或發出消費劵，我們將收取1元服務費)';
                 a.target = '_blank';
-                a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#bfa046;text-align:center;';
+                a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#000000;text-align:center;';
                 qrDiv.appendChild(a);
               }
             }
@@ -1491,7 +1491,7 @@ snap.forEach(doc => {
             var siteData = doc.exists ? doc.data() : {};
             let html = renderSiteInfo(siteData);
             html += `<button id="loginBtn">限時加入聯盟，使用全港唯一可收加密幣、可幫你搵客、支付、留客，全包辦既商戶支付系統!!</button><br>
-            <a href="about.html" target="_blank" >關於我們</a>
+            <a class="Shop頁加入btn" href="about.html" target="_blank" >了解我們</a>
             
             `;
             document.getElementById('main').innerHTML = html;

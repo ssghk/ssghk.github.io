@@ -2,12 +2,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>街坊聯盟支付系統</title>
+    <title>街坊聯盟</title>
 
     <link rel="icon" href="https://i.meee.com.tw/22tSagT.png" type="image/png">
 
     <style>
-        :root {--gold: #D4AF37;--dark-gold: #B8860B;--white: #FFFFFF;--off-white: #f8f8f8;--dark-text: #333333;--light-text: #555555;--shadow: 0 4px 15px rgba(0, 0, 0, 0.08);}
+        :root {--gold: #C0C0C0;--dark-gold: #f9ce41;--white: #FFFFFF;--off-white: #f8f8f8;--dark-text: #333333;--light-text: #555555;--shadow: 0 4px 15px rgba(0, 0, 0, 0.08);}
 
 * {margin: 0;padding: 0;box-sizing: border-box;}
 
@@ -103,6 +103,208 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
 
 .cta-button:hover {background-color: var(--dark-text);color: var(--white);transform: scale(1.05);}
 
+
+
+
+
+/* 常見問題 */
+            .faq-section {background: #fff; padding: 3rem 1.5rem;}
+            .faq-list {max-width: 700px; margin: 0 auto;}
+            .faq-item {margin-bottom: 1.5rem; border-bottom: 1px solid #eee;}
+            .faq-question {width: 100%; text-align: left; background: var(--dark-gold); color: #ffffff; border: none; font-size: 1.1rem; font-weight: 700; padding: 1rem; cursor: pointer; border-radius: 8px; transition: background 0.2s;}
+            .faq-question:hover {background: var(--gold);}
+            .faq-answer {padding: 1rem; color: #555; background: #f8f8f8; border-radius: 8px; margin-top: 0.5rem;}
+            @media (max-width: 600px) {
+                .faq-section {padding: 2rem 0.5rem;}
+                .faq-question {font-size: 1rem; padding: 0.8rem;}
+                .faq-answer {padding: 0.8rem;}
+            }
+
+
+
+
+
+
+
+        
+        /* 成功案例區域 */
+        .success-stories {
+            padding: 4rem 0;
+            background-color: var(--off-white);
+        }
+        
+        .stories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .story-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .story-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .story-content {
+            padding: 1.5rem;
+        }
+        
+        .story-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .story-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+            background-color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .story-stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(192, 192, 192, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark-gold);
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        /* 分步指南區域 */
+        .steps-guide {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        }
+        
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        .steps-container::after {
+            content: "";
+            position: absolute;
+            width: 4px;
+            background-color: var(--gold);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+        
+        .step {
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            width: 45%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step:nth-child(odd) {
+            align-self: flex-start;
+        }
+        
+        .step:nth-child(even) {
+            align-self: flex-end;
+        }
+        
+        .step-number {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: var(--dark-gold);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step:nth-child(odd) .step-number {
+            right: -55px;
+            top: 15px;
+        }
+        
+        .step:nth-child(even) .step-number {
+            left: -55px;
+            top: 15px;
+        }
+        
+        .step-content {
+            margin-left: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .steps-container::after {
+                left: 30px;
+            }
+            
+            .step {
+                width: 85%;
+                margin-left: 40px;
+            }
+            
+            .step:nth-child(odd),
+            .step:nth-child(even) {
+                align-self: flex-start;
+            }
+            
+            .step:nth-child(odd) .step-number,
+            .step:nth-child(even) .step-number {
+                left: -55px;
+                right: auto;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 /* Footer */
 .footer {background-color: #333;color: #ccc;text-align: center;padding: 1.5rem 0;font-size: 0.9rem;}
 
@@ -137,85 +339,425 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
 <p id="translate"></p>
     <header class="header">
         <div class="container">
-            <img src="https://i.meee.com.tw/22tSagT.png" alt="街坊聯盟支付系統 Logo" class="logo">
-            <h1>街坊聯盟支付系統</h1>
+            <img src="https://i.meee.com.tw/22tSagT.png" alt="街坊聯盟 Logo" class="logo">
+            <h1>街坊聯盟</h1>
+            <p>加入街坊聯盟!生意唔會頭痕!</p>
         </div>
     </header>
 
     <main>
         <section class="hero">
             <div class="container">
-                <h2>全港唯一選擇</h2>
-                <p class="subtitle">我們免費送比你，一個前所未有嘅強大商戶支付系統。</p>
+                <h2>全宇宙唯一!!</h2>
+                <p class="subtitle">
+                    幫你宣傳、帶客、收錢、返客、優化工作流及盈利模型!
+                </p>
+                <br>
+                <p class="subtitle">
+                    <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="cta-button">加入街坊聯盟!全方位提升你賺錢能力!</a>
+                </p>
             </div>
         </section>
 
         <section class="features">
             <div class="container">
+
+
                 <div class="feature-card">
-                    <i class="fa fa-btc" alt="可收加密幣" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>可收加密幣</h3>
-                    <p>全港唯一（暫時係）可收加密幣、香港穩定幣既商戶支付系統。</p>
+                    <i class="fa fa-bullhorn" alt="宣傳" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>宣傳</h3>
+                    <p>我地搵埋KOL幫你做探店宣傳，一次拍攝，百萬觀看。派傳單既成本，上電視既效果!</p>
                 </div>
+
                 <div class="feature-card">
-                    <i class="fa fa-hand-lizard-o" alt="最低手續費" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>最低手續費</h3>
-                    <p>全港唯一（絕對係）最低手續費既商戶支付系統。</p>
+                    <i class="fa fa-user-plus" alt="帶客" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>帶客</h3>
+                    <p>我地既消費劵平臺擁有本地過萬間商戶，客戶去到你既地區，立即顯示你店舖既優惠及地址，直接幫你引流到店!</p>
                 </div>
+
                 <div class="feature-card">
-                    <i class="fa fa-fighter-jet" alt="即秒到帳" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>即秒到帳</h3>
-                    <p>全港唯一（絕對係）可即秒到帳既商戶支付系統。</p>
+                    <i class="fa fa-btc" alt="收錢" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>收錢</h3>
+                    <p>唯一可收加密幣、香港穩定幣、最低服務費、可即秒到帳既商戶支付系統!</p>
                 </div>
+
                 <div class="feature-card">
-                    <i class="fa fa-bullhorn" alt="KOL免費宣傳" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>KOL免費宣傳</h3>
-                    <p>全港唯一（絕對係）搵埋KOL免費幫你做探店宣傳既商戶支付系統。</p>
+                    <i class="fa fa-refresh" alt="返客" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>返客</h3>
+                    <p>客戶支付後，手機會立即收到貴店的消費券。激發下次再消費慾望!</p>
                 </div>
+
                 <div class="feature-card">
-                    <i class="fa fa-eye" alt="全港消費劵平台" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>全港消費劵平台</h3>
-                    <p>全港唯一（絕對係）擁有本地過萬間商戶優惠消費劵平台既商戶支付系統。</p>
+                    <i class="fa fa-link" alt="優化工作流" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>優化工作流</h3>
+                    <p>我地有一系列既營商科技支援!自動促銷、自動客服、自動預約、自動採購、庫存管理、網店系統!全方位包辦!</p>
                 </div>
+
                 <div class="feature-card">
-                    <i class="fa fa-thumbs-up" alt="全方位服務" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>全方位服務</h3>
-                    <p>全港唯一（絕對係）可幫你搵客、支付、留客、賦能全包辦既商戶支付系統。</p>
+                    <i class="fa fa-line-chart" alt="優化盈利模型" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>優化盈利模型</h3>
+                    <p>如何發展特許經營、如何申請政府資助、如何開源節流、如何用金融思維安全又輕鬆的賺更多錢，我地既專業顧問會為你一對一指導!。</p>
                 </div>
+
+
             </div>
         </section>
 
-        <section class="payments">
-            <div class="container">
-                <h2>支持多種支付方式</h2>
-                <p>網店、實體店均可使用</p>
-                <p>WeChat Pay HK、AlipayHK、支付寶、微信支付、轉數快、Payme、PayPal、Bitcoin、Eth、USDT、BNB、香港穩定幣</p>
-                <div class="payment-logos">
-  <i class="fab fa-weixin" title="微信支付"></i>
-  <i class="fab fa-alipay" title="支付寶"></i>
-  <i class="fab fa-cc-paypal" title="PayPal"></i>
-  <i class="fab fa-bitcoin" title="Bitcoin"></i>
-  <i class="fab fa-ethereum" title="Ethereum"></i>
-</div>
+
+
+
+        <section id="about" class="cta steps-guide">
+            <div class="container" style="color: #000;">
+                <h2>街坊聯盟是甚麼?</h2>
+                <p>我地既目標係:
+                    <br>支持本地消費 振興香港經濟
+                    <br>用創新金融思維、以科技作為手段，
+                    <br>提升聯盟成員賺錢能力、協助市民享受消費便利、
+                    <br>促進香港經濟內循環、並使我們聯盟賺錢，達到四方共贏!
+                </p>
+
             </div>
         </section>
+
+
+
+    <!-- 新增成功案例區域 -->
+    <section class="success-stories">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 1rem;">成功案例</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
+                看看已經加入街坊聯盟的商家如何實現業務增長
+            </p>
+            
+
+            
+            <div class="stories-container">
+
+
+                <div class="story-card">
+                    <div class="story-content">
+                        <div class="story-header">
+                            <div class="story-avatar">車</div>
+                            <div>
+                                <h3>汽車維修</h3>
+                                <p>服務業 · 加入2個月</p>
+                            </div>
+                        </div>
+                        <p>"以前要同五六間公司周旋，而家一個街坊聯盟搞掂曬！終於可以專心做好維修同保養，生意自然愈做愈好。"</p>
+                        <div class="story-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">50%</div>
+                                <div class="stat-label">管理時間節省</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">80%</div>
+                                <div class="stat-label">推廣成本降低</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-content">
+                        <div class="story-header">
+                            <div class="story-avatar">茶</div>
+                            <div>
+                                <h3>茶記冰室</h3>
+                                <p>餐飲業 · 加入3個月</p>
+                            </div>
+                        </div>
+                        <p>"加入街坊聯盟後，我們的客流量增加了40%，特別是晚市時段，多虧了聯盟的消費券推廣！"</p>
+                        <div class="story-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">40%</div>
+                                <div class="stat-label">客流增長</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">25%</div>
+                                <div class="stat-label">營業額提升</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <div class="story-content">
+                        <div class="story-header">
+                            <div class="story-avatar">飾</div>
+                            <div>
+                                <h3>時尚服飾店</h3>
+                                <p>零售業 · 加入5個月</p>
+                            </div>
+                        </div>
+                        <p>"聯盟的KOL探店宣傳效果出乎意料，一條影片帶來超過300名新客戶，業績增長驚人！"</p>
+                        <div class="story-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">65%</div>
+                                <div class="stat-label">新客增長</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">35%</div>
+                                <div class="stat-label">營業額提升</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+
+                <div class="story-card">
+                    <div class="story-content">
+                        <div class="story-header">
+                            <div class="story-avatar">美</div>
+                            <div>
+                                <h3>美甲沙龍</h3>
+                                <p>美容業 · 加入4個月</p>
+                            </div>
+                        </div>
+                        <p>"消費券返客系統讓回頭客增加了50%，客戶黏性大大提升，現在預約都要提前一週呢！"</p>
+                        <div class="story-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">50%</div>
+                                <div class="stat-label">回頭客增長</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">80%</div>
+                                <div class="stat-label">預約率</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-content">
+                        <div class="story-header">
+                            <div class="story-avatar">健</div>
+                            <div>
+                                <h3>健身中心</h3>
+                                <p>健美業 · 加入4個月</p>
+                            </div>
+                        </div>
+                        <p>"街坊聯盟唔單止幫我吸引新客，仲幫我地聯繫埋營養產品售賣機，生意提升唔錯！"</p>
+                        <div class="story-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">70%</div>
+                                <div class="stat-label">新客增長</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">40%</div>
+                                <div class="stat-label">盈利提升</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-content">
+                        <div class="story-header">
+                            <div class="story-avatar">寵</div>
+                            <div>
+                                <h3>寵物護理</h3>
+                                <p>寵物業 · 加入6個月</p>
+                            </div>
+                        </div>
+                        <p>"寵物主人最緊張就係毛孩嘅情況，以前成日要接電話彙報進度。而家個自動客服系統自動發送照片同更新寵物情況，客人安心我又省時，仲可以吸引到更多年輕寵物主人，真正雙贏！"</p>
+                        <div class="story-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">55%</div>
+                                <div class="stat-label">半年客戶增長</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">50%</div>
+                                <div class="stat-label">管理時間節省</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 新增分步指南區域 -->
+    <section class="steps-guide">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 1rem;">簡單四步，輕鬆加入</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
+                從申請到全面運營，我們提供全程指導和支持
+            </p>
+            
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>聯絡申請</h3>
+                        <p>通過WhatsApp聯絡我們，提供基本商家資訊，預繳最少100元服務費開通帳戶。</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>設定服務</h3>
+                        <p>我們的專員會協助您設定支付系統、創建消費券和規劃宣傳策略。</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>培訓上線</h3>
+                        <p>接受簡單系統操作培訓，獲得專屬支付二維碼和宣傳材料，開始運營。</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>持續優化</h3>
+                        <p>根據營運數據，我們提供持續優化建議，幫助您不斷提升業績。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="cta-button">立即開始</a>
+            </div>
+        </div>
+    </section>
+
+
+
+            <!-- 常見問題區塊 FAQ -->
+            <section id="faq" class="faq-section">
+                <div class="container">
+                    <h2 style="text-align:center;margin-bottom:2rem;">常見問題</h2>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFaq(this)">街坊聯盟是什麼？</button>
+                            <p class="faq-answer" style="display:none;">街坊聯盟是一個結合創新金融與科技的本地商戶聯盟，幫助店主宣傳、帶客、收錢、返客、優化工作流及盈利模型。
+                                <br><br>
+                                從而提升聯盟成員賺錢能力、協助市民享受更便利的消費體驗。</p>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFaq(this)">如何加入街坊聯盟？</button>
+                            <p class="faq-answer" style="display:none;">只需點擊頁面上的「立即申請」按鈕，聯絡我們的 WhatsApp。
+                                <br><br>並預繳最少100元服務費(服務費會於使用服務時扣除)。即可免費開通商戶帳號。</p>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFaq(this)">有什麼費用？</button>
+                            <p class="faq-answer" style="display:none;">
+                                無月費、無手續費、無最低消費。
+                                <br><br>KOL探店:商戶只需送產品或服務作交換，此外無任何費用。
+                                <br><br>上架消費券:每天每張1元服務費。
+                                <br><br>每次交易:收取1元服務費，
+                                <br>發出消費劵:收取1元服務費。
+                                <br>(如同時交易並發出消費劵只會收取共1元服務費。)
+                                <br><br>優化工作流:每個程式一千元月費。
+                                <br><br>優化盈利模型:簡單諮詢免費。專業顧問一對一指導收費另議。
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFaq(this)">客戶如何使用？</button>
+                            <p class="faq-answer" style="display:none;">客戶只需用手機掃描店舖的支付碼，無需下載程式，一分鐘即可完成支付並享受優惠。</p>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </section>
+
+
+
+        <section id="cost" class="cta">
+            <div class="container">
+                <h2>成本低、收益高</h2>
+
+
+                <div class="feature-card">
+                    <i class="fa fa-university" alt="店主" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>店主</h3>
+                    <p>每個流程，專業顧問一對一指導。</p>
+                    <p>系統簡單易用，無需下載程式。</p>
+                    <p>無需安裝其他設備，一部手機即可使用。</p>
+                    <p>可與舊支付系統並行使用。</p>
+                    <p>無月費、無手續費、無最低消費。</p>
+                    <p>每次交易，不論金額大小，只收取1元。</p>
+                    <p>上架消費券，每張每天只收取1元。</p>
+                </div>
+
+                <br>
+                <div class="feature-card">
+                    <i class="fa fa-users" alt="客戶" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>客戶</h3>
+                    <p>系統簡單易用，無需下載程式。</p>
+                <p>只要識用微信，一分鍾就可支付並或享受消費優惠。</p>
+                </div>
+
+
+            </div>
+        </section>
+
+
+
+
+
+            <section class="faq-section">
+                <div class="container">
+
+                
+                    <h2 style="text-align:center;margin-bottom:2rem;">掃碼查看示範</h2>
+                        <div style="width:100%;text-align:center;margin:24px 0;">
+                            <img src="https://i.meee.com.tw/QZjAcFi.png" alt="示範" style="max-width:320px;width:80%;height:auto;display:inline-block;">
+                        </div>
+            </div>
+        </section>
+
+
+
+
+
+
+
+
 
         <section class="cta">
             <div class="container">
                 <h2>準備好提升你嘅生意？</h2>
                 <p>立即聯絡我哋，免費開通你嘅商戶帳號！</p>
-                <a href="https://wa.me/85264071181/?text=/莫生我要查詢街坊聯盟支付系統" target="_blank" class="cta-button">立即申請</a>
+                <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="cta-button">立即申請</a>
             </div>
-            <a href="/."><h2>商戶登入</h2></a>
+            <a href="/."><h2>成員登入</h2></a>
 
-            <hr>
-            <h3>示範</h3>
-                        <div style="width:100%;text-align:center;margin:24px 0;">
-                            <img src="https://i.meee.com.tw/mA1GRIv.png" alt="示範" style="max-width:320px;width:80%;height:auto;display:inline-block;">
-                        </div>
+
 
         </section>
+
+
+
+
+
+
+
+
+
+
+
+
     </main>
+
+
+
+
+
+
+
+
+
+
+
 
     <footer class="footer">
         <div class="container">
@@ -302,6 +844,18 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
             }
         `;
         document.head.appendChild(style);
+
+
+            function toggleFaq(btn) {
+                var answer = btn.nextElementSibling;
+                if (answer.style.display === "none" || answer.style.display === "") {
+                    answer.style.display = "block";
+                } else {
+                    answer.style.display = "none";
+                }
+            }
+
+
 
     </script>
 </body>
