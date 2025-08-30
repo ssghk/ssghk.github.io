@@ -753,6 +753,7 @@ snap.forEach(doc => {
                 <div>聯絡方式：<input type="text" value="${ad.contact||''}" data-idx="${i}" class="ad-contact-admin"></div>
                 <div>條款：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1-admin"></div>
                 <div>地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2-admin"></div>
+                <div>廣告主ID：<input type="text" value="${ad.owner||''}" data-idx="${i}" class="ad-owner-admin" style="width:120px;"></div>
                 <button class="removeAdBtn" data-idx="${i}">移除</button>
               `;
               adsListAdmin.appendChild(adDiv);
@@ -780,6 +781,7 @@ snap.forEach(doc => {
               // 多選地區
               const regionSel = adsListAdmin.querySelector(`.ad-region-admin[data-idx="${i}"]`);
               const regions = regionSel ? Array.from(regionSel.selectedOptions).map(opt=>opt.value) : ['全香港'];
+              const ownerInput = adsListAdmin.querySelector(`.ad-owner-admin[data-idx="${i}"]`);
               return {
                 img: imgInput.value,
                 title: adsListAdmin.querySelector(`.ad-title-admin[data-idx="${i}"]`).value,
@@ -787,7 +789,8 @@ snap.forEach(doc => {
                 contact: adsListAdmin.querySelector(`.ad-contact-admin[data-idx="${i}"]`)?.value || '',
                 desc1: adsListAdmin.querySelector(`.ad-desc1-admin[data-idx="${i}"]`).value,
                 desc2: adsListAdmin.querySelector(`.ad-desc2-admin[data-idx="${i}"]`).value,
-                regions: regions.length ? regions : ['全香港']
+                regions: regions.length ? regions : ['全香港'],
+                owner: ownerInput ? ownerInput.value.trim() : ''
               };
             });
             await db.collection('ads').doc('main').set({ ads: adsArr });
@@ -978,8 +981,16 @@ snap.forEach(doc => {
               const categories = catSnap.docs.map(doc => doc.data().name);
               db.collection('ads').doc('main').get().then(adsDoc => {
                 let adsArr = (adsDoc.exists && Array.isArray(adsDoc.data().ads)) ? adsDoc.data().ads : [];
-                // 最新上架的放最上面
-                adsArr = adsArr.slice().reverse();
+                // shop page url 如有廣告主id，廣告主的廣告優先（原順序），其他廣告最新在前
+                const urlParams = new URLSearchParams(window.location.search);
+                const adOwnerId = urlParams.get('adOwner') || urlParams.get('owner') || urlParams.get('adowner') || urlParams.get('user');
+                if (adOwnerId) {
+                  const ownerAds = adsArr.filter(ad => ad.owner === adOwnerId);
+                  const otherAds = adsArr.filter(ad => ad.owner !== adOwnerId).slice().reverse();
+                  adsArr = [...ownerAds, ...otherAds];
+                } else {
+                  adsArr = adsArr.slice().reverse();
+                }
 
                 // 搜尋欄與類別導航只建立一次
                 let adsNavWrap = document.getElementById('adsNavWrap');
@@ -1033,7 +1044,15 @@ snap.forEach(doc => {
                 const regionSelect = document.getElementById('adRegionSelect');
                 let lastShowAds = [];
                 function renderAdsArea(filterCat, keyword, resetCount, filterRegion) {
-                  let showAds = adsArr;
+                  const urlParams = new URLSearchParams(window.location.search);
+                  const adOwnerId = urlParams.get('adOwner') || urlParams.get('owner') || urlParams.get('adowner') || urlParams.get('user');
+                  let ownerAds = [];
+                  let otherAds = adsArr;
+                  if (adOwnerId) {
+                    ownerAds = adsArr.filter(ad => ad.owner === adOwnerId);
+                    otherAds = adsArr.filter(ad => ad.owner !== adOwnerId);
+                  }
+                  let showAds = otherAds;
                   if (filterCat) showAds = showAds.filter(ad=>ad.category===filterCat);
                   if (keyword && keyword.trim()) {
                     const kw = keyword.trim().toLowerCase();
@@ -1049,10 +1068,28 @@ snap.forEach(doc => {
                     showAds = showAds.filter(ad => (ad.regions||['全香港']).includes(filterRegion));
                   }
                   if (resetCount) adsDisplayCount = adsDisplayStep;
-                  lastShowAds = showAds;
+                  lastShowAds = [...ownerAds, ...showAds];
                   let adsHtml = '';
                   // 新增：顯示廣告總數
                   adsHtml += `<div style='width:100%;max-width:720px;text-align:right;color:#bfa046;font-size:1.1em;margin-bottom:4px;'>加盟店：${adsArr.length + 100}</div>`;
+                  // 最上方獨立顯示廣告主ID的廣告
+                  if (ownerAds.length) {
+                    adsHtml += `<div id="ownerAdsArea" style="display:flex;flex-direction:column;align-items:center;margin-top:12px;">`;
+                    ownerAds.forEach((ad, idx) => {
+                      adsHtml += `<div class="coupon-card owner-ad" data-idx="owner${idx}" style="height:200px;width:100%;max-width:720px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;cursor:pointer;background:linear-gradient(90deg,#ffe082 0%,#fffbe6 100%);border:2px solid #bfa046;margin-bottom:12px;box-shadow:0 2px 8px #bbb;">`;
+                      adsHtml += `<img src="${ad.img||''}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.85;">`;
+                      adsHtml += `<div style="position:absolute;top:8px;left:12px;z-index:2;color:#1e3a5c;font-size:24px;font-weight:900;padding:6px 18px;border-radius:12px;letter-spacing:1px;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 20%,rgba(255,255,255,0.95) 80%,rgba(255,255,255,0) 100%);">${ad.title||''}</div>`;
+                      adsHtml += `<div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:flex-end;z-index:2;color:#fff;font-size:38px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;background:transparent;">`;
+                      adsHtml += `<span style="text-align:right;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.5) 60%,rgba(0,0,0,0) 100%);padding:6px 18px;border-radius:12px;">${ad.desc1||''}</span>`;
+                      adsHtml += `</div>`;
+                      if(ad.desc2 && !(ad.desc2 && /^https?:\/\//.test(ad.desc2))) adsHtml += `<div style='position:absolute;bottom:8px;left:0;width:100%;text-align:center;z-index:2;color:#fff;font-size:24px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;display:inline-block;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 20%,rgba(0,0,0,0.5) 80%,rgba(0,0,0,0) 100%);'>${ad.desc2}</div>`;
+                      adsHtml += `</div>`;
+                      // 顯示地區
+                      if(ad.regions) adsHtml += `<div style='position:fixed;bottom:8px;right:8px;color:#1e3a5c;font-size:0.95em;background:#fffbe6;padding:2px 10px;border-radius:8px;z-index:2;'>地區：${ad.regions.join(', ')}</div>`;
+                    });
+                    adsHtml += `</div>`;
+                  }
+                  // 其他廣告
                   if (showAds.length) {
                     adsHtml += `<div id="publicAdsArea" style="display:flex;flex-direction:column;align-items:center;margin-top:12px;">`;
                     showAds.slice(0, adsDisplayCount).forEach((ad, idx) => {
