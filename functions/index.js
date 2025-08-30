@@ -111,26 +111,30 @@ exports.updateAdList = functions.https.onCall(async (data, context) => {
 
 
 
+// 比錢版 9s 月/最少 $0.62 USD
 // pay.html 專用計數器，每次打開 pay.html?uid= 時 month+1, total+1, usageCount-1
-exports.payIncrementCount = functions.https.onCall(async (data, context) => {
-  const uid = data.uid;
-  if (!uid) throw new functions.https.HttpsError('invalid-argument', 'Missing uid');
-  const userRef = admin.firestore().collection('users').doc(uid);
-  const doc = await userRef.get();
-  if (!doc.exists) throw new functions.https.HttpsError('not-found', 'User not found');
-  const userData = doc.data();
-  const now = new Date();
-  const monthKey = now.getFullYear() + '-' + (now.getMonth() + 1);
-  let month = userData.month || 0;
-  let total = userData.total || 0;
-  if (userData.monthKey !== monthKey) month = 0;
-  month++;
-  total++;
-  let usageCount = (userData.usageCount || 0) - 1;
-  let lastGetDate = now.toISOString();
-  await userRef.update({ month, total, monthKey, usageCount, lastGetDate });
-  return { success: true };
-});
+  exports.payIncrementCount = functions
+    .runWith({ minInstances: 1 })
+    .https
+    .onCall(async (data, context) => {
+    const uid = data.uid;
+    if (!uid) throw new functions.https.HttpsError('invalid-argument', 'Missing uid');
+    const userRef = admin.firestore().collection('users').doc(uid);
+    const doc = await userRef.get();
+    if (!doc.exists) throw new functions.https.HttpsError('not-found', 'User not found');
+    const userData = doc.data();
+    const now = new Date();
+    const monthKey = now.getFullYear() + '-' + (now.getMonth() + 1);
+    let month = userData.month || 0;
+    let total = userData.total || 0;
+    if (userData.monthKey !== monthKey) month = 0;
+    month++;
+    total++;
+    let usageCount = (userData.usageCount || 0) - 1;
+    let lastGetDate = now.toISOString();
+    await userRef.update({ month, total, monthKey, usageCount, lastGetDate });
+    return { success: true };
+  });
 
 
 
