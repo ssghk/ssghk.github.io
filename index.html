@@ -1044,6 +1044,28 @@ snap.forEach(doc => {
                 const regionSelect = document.getElementById('adRegionSelect');
                 let lastShowAds = [];
                 function renderAdsArea(filterCat, keyword, resetCount, filterRegion) {
+                  // 綁定 ownerAdsArea 內 coupon-card 點擊事件
+                  setTimeout(function() {
+                    const ownerCards = document.querySelectorAll('#ownerAdsArea .coupon-card');
+                    ownerCards.forEach((card, idx) => {
+                      card.onclick = function(e) {
+                        const ad = ownerAds[idx];
+                        let content = `<img src='${ad.img||''}' style='max-width:90vw;max-height:40vh;display:block;margin:0 auto 18px auto;border-radius:12px;box-shadow:0 2px 8px #bbb;'>`;
+                        content += `<div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;text-align:center;'>${ad.title||''}</div>`;
+                        content += `<div style='font-size:1.2em;color:#bfa046;margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
+                        if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:#bfa046;font-size:1.1em;'>類別：${ad.category}</div>`;
+                        if(ad.regions) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>地區：${ad.regions.join(', ')}</div>`;
+                        if(ad.contact) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div>`;
+                        if(ad.desc2 && /^https?:\/\//.test(ad.desc2)) {
+                          content += `<div style='text-align:center;margin-bottom:8px;'><a href='${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>查詢</a></div>`;
+                        } else if(ad.desc2) {
+                          content += `<div style='text-align:center;margin-bottom:8px;color:#222;font-size:1.1em;'><a href='https://www.google.com/maps/search/${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>${ad.desc2}</a></div>`;
+                        }
+                        document.getElementById('adInfoContent').innerHTML = content;
+                        document.getElementById('adInfoModal').style.display = 'flex';
+                      };
+                    });
+                  }, 0);
                   const urlParams = new URLSearchParams(window.location.search);
                   const adOwnerId = urlParams.get('adOwner') || urlParams.get('owner') || urlParams.get('adowner') || urlParams.get('user');
                   let ownerAds = [];
