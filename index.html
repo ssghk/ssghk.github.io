@@ -1131,7 +1131,7 @@ snap.forEach(doc => {
                       if(ad.desc2 && /^https?:\/\//.test(ad.desc2)) {
                         content += `<div style='text-align:center;margin-bottom:8px;'><a href='${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>查詢</a></div>`;
                       } else if(ad.desc2) {
-                        content += `<div style='text-align:center;margin-bottom:8px;color:#222;font-size:1.1em;'>${ad.desc2}</div>`;
+                        content += `<div style='text-align:center;margin-bottom:8px;color:#222;font-size:1.1em;'><a href='https://www.google.com/maps/search/${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>${ad.desc2}</a></div>`;
                       }
                       document.getElementById('adInfoContent').innerHTML = content;
                       document.getElementById('adInfoModal').style.display = 'flex';
@@ -1237,7 +1237,7 @@ snap.forEach(doc => {
               document.getElementById('infoContent').innerHTML = `
                 <div style='font-size:2em;font-weight:bold;color:#bfa046;margin-bottom:8px;'>${data.name||''}</div>
                 <div>${data.phone||''}</div>
-                <div>${data.address||''}</div>
+                <div>${`<a href='https://www.google.com/maps/search/${data.address}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>${data.address}</a>`||''}</div>
                 <div>${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
                 <div>本月發出消費劵數：${data.month||0}</div>
                 <div>累計發出消費劵數：${data.total||0}</div>
