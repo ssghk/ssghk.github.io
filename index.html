@@ -1323,7 +1323,7 @@ function autoSelectRegion() {
                 <div>${site.logo?`<img src='${site.logo}' style='max-width:120px;'>`:''}</div>
                 <div>${site.desc||''}</div>
                 <br>
-                <a href="about.html" target="_blank" class="Shop頁加入btn">限時加入聯盟，使用全港唯一可收加密幣、可幫你搵客、支付、留客，全包辦既商戶支付系統!!</a>
+                <a href="about.html" target="_blank" class="Shop頁加入btn">限時加入街坊聯盟!全方位提升你既賺錢能力!!</a>
               `;
               document.getElementById('infoModal').style.display = 'flex';
             };
@@ -1547,7 +1547,9 @@ function autoSelectRegion() {
               };
               siteLogoBox.onclick = function() {
                 document.getElementById('infoContentMember').innerHTML = `
-                  <div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;'>${siteData.name||''}</div>
+
+
+                <a href='about.html' target='_blank' ><div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;'>${siteData.name||''}</div></a>
                   <div>${siteData.phone||''}</div>
                   <div>${siteData.address||''}</div>
                   <div>${siteData.logo?`<img src='${siteData.logo}' style='max-width:120px;'>`:''}</div>
@@ -1598,8 +1600,8 @@ function autoSelectRegion() {
           db.collection('site').doc('main').get().then(doc => {
             var siteData = doc.exists ? doc.data() : {};
             let html = renderSiteInfo(siteData);
-            html += `<button id="loginBtn">限時加入聯盟，使用全港唯一可收加密幣、可幫你搵客、支付、留客，全包辦既商戶支付系統!!</button><br>
-            <a class="Shop頁加入btn" href="about.html" target="_blank" >了解我們</a>
+            html += `<button id="loginBtn">限時加入街坊聯盟!全方位提升你既賺錢能力!!</button><br>
+            <a class="Shop頁加入btn" href="about.html" target="_blank" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" >了解我們</a>
             
             `;
             document.getElementById('main').innerHTML = html;
