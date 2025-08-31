@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -903,6 +904,52 @@ snap.forEach(doc => {
 #+#    #+#      #+#    #+#      #+#    #+#      #+#
 ########       ###    ###       ########       ###
 */
+
+// 依座標判斷香港18區
+        function getHKRegionByLocation(lat, lng) {
+            // 精確化的區域邊界定義
+            if (lat > 22.28 && lat < 22.32 && lng > 114.14 && lng < 114.19) return '中西區';
+            if (lat > 22.24 && lat < 22.28 && lng > 114.14 && lng < 114.23) return '南區';
+            if (lat > 22.27 && lat < 22.29 && lng > 114.16 && lng < 114.19) return '灣仔區';
+            if (lat > 22.27 && lat < 22.31 && lng > 114.19 && lng < 114.23) return '東區';
+            if (lat > 22.30 && lat < 22.33 && lng > 114.16 && lng < 114.19) return '油尖旺區';
+            if (lat > 22.32 && lat < 22.35 && lng > 114.14 && lng < 114.18) return '深水埗區';
+            if (lat > 22.31 && lat < 22.34 && lng > 114.18 && lng < 114.20) return '九龍城區';
+            if (lat > 22.33 && lat < 22.36 && lng > 114.19 && lng < 114.22) return '黃大仙區';
+            if (lat > 22.31 && lat < 22.35 && lng > 114.21 && lng < 114.24) return '觀塘區';
+            if (lat > 22.34 && lat < 22.38 && lng > 114.10 && lng < 114.14) return '葵青區';
+            if (lat > 22.36 && lat < 22.40 && lng > 114.10 && lng < 114.14) return '荃灣區';
+            if (lat > 22.38 && lat < 22.42 && lng > 113.95 && lng < 114.05) return '屯門區';
+            if (lat > 22.42 && lat < 22.46 && lng > 114.00 && lng < 114.07) return '元朗區';
+            if (lat > 22.50 && lat < 22.55 && lng > 114.12 && lng < 114.18) return '北區';
+            if (lat > 22.43 && lat < 22.48 && lng > 114.15 && lng < 114.20) return '大埔區';
+            if (lat > 22.35 && lat < 22.40 && lng > 114.18 && lng < 114.22) return '沙田區';
+            if (lat > 22.30 && lat < 22.40 && lng > 114.25 && lng < 114.30) return '西貢區';
+            if (lat > 22.25 && lat < 22.30 && lng > 113.85 && lng < 114.15) return '離島區';
+            return '未知區域';
+        }
+// shop page 載入時自動定位並選擇地區
+function autoSelectRegion() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    const region = getHKRegionByLocation(lat, lng);
+    if (region) {
+      const regionSelect = document.getElementById('adRegionSelect');
+      if (regionSelect) {
+        for (let i = 0; i < regionSelect.options.length; i++) {
+          if (regionSelect.options[i].value === region) {
+            regionSelect.selectedIndex = i;
+            regionSelect.dispatchEvent(new Event('change'));
+            break;
+          }
+        }
+      }
+    }
+  });
+}
+
     // 商家頁流程
     function renderPublicPage() {
       // 彈窗遮罩點擊可關閉（點內容不關閉）
@@ -991,6 +1038,8 @@ snap.forEach(doc => {
                 } else {
                   adsArr = adsArr.slice().reverse();
                 }
+                // shop page自動定位選區
+                autoSelectRegion();
 
                 // 搜尋欄與類別導航只建立一次
                 let adsNavWrap = document.getElementById('adsNavWrap');
