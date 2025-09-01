@@ -197,8 +197,7 @@
 
 
                 #qr位 a{ margin-top: 18px; text-align: center; }
-
-
+                .delete-btn{color:#fff;background:#e587a1;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;}
 
                 #payQrcodeCanvas_ { width:100% !important; height:100% !important; display:block; }
                 #showPrivacyBtn { background: #1e3a5c; color: #fff; border: none; }
@@ -755,6 +754,7 @@ snap.forEach(doc => {
                 <div>條款：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1-admin"></div>
                 <div>地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2-admin"></div>
                 <div>廣告主ID：<input type="text" value="${ad.owner||''}" data-idx="${i}" class="ad-owner-admin" style="width:120px;"></div>
+                <div>下架時間：<input type="date" value="${ad.expireDate||''}" data-idx="${i}" class="ad-expire-admin" style="width:140px;"></div>
                 <button class="removeAdBtn" data-idx="${i}">移除</button>
               `;
               adsListAdmin.appendChild(adDiv);
@@ -783,6 +783,7 @@ snap.forEach(doc => {
               const regionSel = adsListAdmin.querySelector(`.ad-region-admin[data-idx="${i}"]`);
               const regions = regionSel ? Array.from(regionSel.selectedOptions).map(opt=>opt.value) : ['全香港'];
               const ownerInput = adsListAdmin.querySelector(`.ad-owner-admin[data-idx="${i}"]`);
+              const expireInput = adsListAdmin.querySelector(`.ad-expire-admin[data-idx="${i}"]`);
               return {
                 img: imgInput.value,
                 title: adsListAdmin.querySelector(`.ad-title-admin[data-idx="${i}"]`).value,
@@ -791,7 +792,8 @@ snap.forEach(doc => {
                 desc1: adsListAdmin.querySelector(`.ad-desc1-admin[data-idx="${i}"]`).value,
                 desc2: adsListAdmin.querySelector(`.ad-desc2-admin[data-idx="${i}"]`).value,
                 regions: regions.length ? regions : ['全香港'],
-                owner: ownerInput ? ownerInput.value.trim() : ''
+                owner: ownerInput ? ownerInput.value.trim() : '',
+                expireDate: expireInput ? expireInput.value : ''
               };
             });
             await db.collection('ads').doc('main').set({ ads: adsArr });
@@ -1028,6 +1030,13 @@ function autoSelectRegion() {
               const categories = catSnap.docs.map(doc => doc.data().name);
               db.collection('ads').doc('main').get().then(adsDoc => {
                 let adsArr = (adsDoc.exists && Array.isArray(adsDoc.data().ads)) ? adsDoc.data().ads : [];
+                // 過濾下架時間
+                const nowDate = new Date();
+                adsArr = adsArr.filter(ad => {
+                  if (!ad.expireDate) return true;
+                  const expire = new Date(ad.expireDate + 'T00:00:00');
+                  return expire > nowDate;
+                });
                 // shop page url 如有廣告主id，廣告主的廣告優先（原順序），其他廣告最新在前
                 const urlParams = new URLSearchParams(window.location.search);
                 const adOwnerId = urlParams.get('adOwner') || urlParams.get('owner') || urlParams.get('adowner') || urlParams.get('user');
@@ -1408,6 +1417,40 @@ function autoSelectRegion() {
                     <div>商家地址：<input id="address" type="text"></div>
                     <div><a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input id="logo" type="text" style="width:60%"><span id="logoPreview"></span></div>
                     <div id="付款方式位"></div>
+
+
+
+                    <div style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: rgb(255, 251, 230); box-shadow: rgb(187, 187, 187) 0px 2px 8px;">
+                        <h2>消費券上架</h2>
+                        
+                        <div id="voucher-container">
+                            <!-- 第一组输入框 -->
+                            <div class="voucher-group" id="group-1">
+                                <hr>
+                                
+                                <h3>消費券 1 <button class="delete-btn" onclick="deleteGroup(1)">刪除</button></h3>
+                                <input type="text" placeholder="消費劵圖片網址" class="input1">
+                                <input type="text" placeholder="消費劵名稱" class="input2">
+                                <input type="text" placeholder="消費劵使用條款" class="input3">
+                                <input type="text" placeholder="消費劵使用地址或詳細說明網址" class="input4">
+                                <br>
+                                <span class="date-label">上架日期</span>
+                                <input type="date" class="input5" onchange="calculateDays(1)">
+                                <span class="date-label">下架日期</span>
+                                <input type="date" class="input6" onchange="calculateDays(1)">
+                                <br>
+                                <span class="days-label">總上架天數</span>
+                                <input type="text" class="input7" readonly>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <button id="add-group"> + </button>
+                            <button id="generate">發送給管理員</button>
+                        </div>
+                    </div>
+
+
                     <div id="adsList">已轉公用廣告</div>
                     <div>VIP：<span id="vip"></span></div>
                     <div style="display:none">獨立網址：<span id="url"></span></div>
@@ -1476,8 +1519,14 @@ function autoSelectRegion() {
               const saveProfileBtn = document.getElementById('saveProfileBtn');
               const data = doc.data();
 
+              //消費券上架資訊生成器
+              const addGroupBtn = document.getElementById('add-group');
+              const generateBtn = document.getElementById('generate');
 
-
+              if (addGroupBtn && generateBtn) {
+                  addGroupBtn.addEventListener('click', addGroup);
+                  generateBtn.addEventListener('click', generateLink);
+              }
 
               nameInput.value = data.name || '';
               phoneInput.value = data.phone || '';
@@ -1618,7 +1667,7 @@ function autoSelectRegion() {
     
     // 付款方式管理
     function renderPaymentMethods(user, wrap) {
-      wrap.innerHTML = '<h4>付款方式管理</h4>';
+      wrap.innerHTML = '<h2>付款方式管理</h2>';
       let methods = Array.isArray(user.paymentMethods) ? user.paymentMethods : [];
       methods.forEach((pm, idx) => {
         const div = document.createElement('div');
@@ -1627,7 +1676,7 @@ function autoSelectRegion() {
           <input type='text' value='${pm.name||''}' placeholder='付款方式名' style='width:60%;padding:4px 8px;border-radius:6px;border:1px solid #ccc;'>
           <input type='text' value='${pm.img||''}' placeholder='圖片網址' style='width:30%;padding:4px 8px;border-radius:6px;border:1px solid #ccc;'>
           <img src='${pm.img||''}' style='height:32px;width:32px;object-fit:contain;border-radius:6px;border:1px solid #eee;background:#fff;' onerror="this.style.display='none'">
-          <button class='delPayBtn' data-idx='${idx}' style='color:#fff;background:#bfa046;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;'>刪除</button>
+          <button class='delPayBtn delete-btn' data-idx='${idx}' >刪除</button>
         `;
         wrap.appendChild(div);
       });
@@ -1688,13 +1737,146 @@ function injectPaymentMethodsUI(uid, Box位) {
 
 
 
+//消費券上架功能
+        // 全局变量
+        let groupCount = 1;
+        
+        // 计算上架天数
+        function calculateDays(groupId) {
+            const group = document.getElementById(`group-${groupId}`);
+            if (!group) return; // 确保组存在
+            
+            const startDateInput = group.querySelector('.input5');
+            const endDateInput = group.querySelector('.input6');
+            const daysInput = group.querySelector('.input7');
+            
+            if (startDateInput && endDateInput && daysInput && 
+                startDateInput.value && endDateInput.value) {
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(endDateInput.value);
+                
+                // 计算天数差
+                const timeDiff = endDate.getTime() - startDate.getTime();
+                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // 加1是因为包含开始日期
+                
+                daysInput.value = `${daysDiff} 天`;
+            } else if (daysInput) {
+                daysInput.value = '';
+            }
+        }
 
-
-
-
-
-
-
+        // 添加一组新的输入框
+        function addGroup() {
+            groupCount++;
+            const newGroup = document.createElement('div');
+            newGroup.className = 'voucher-group';
+            newGroup.id = `group-${groupCount}`;
+            newGroup.innerHTML = `
+                <hr>
+                
+                <h3>消費券 ${groupCount} <button class="delete-btn" onclick="deleteGroup(${groupCount})">刪除</button></h3>
+                <input type="text" placeholder="消費劵圖片網址" class="input1">
+                <input type="text" placeholder="消費劵名稱" class="input2">
+                <input type="text" placeholder="消費劵使用條款" class="input3">
+                <input type="text" placeholder="消費劵使用地址或詳細說明網址" class="input4">
+                <br>
+                <span class="date-label">上架日期</span>
+                <input type="date" class="input5">
+                <span class="date-label">下架日期</span>
+                <input type="date" class="input6">
+                <br>
+                <span class="days-label">總上架天數</span>
+                <input type="text" class="input7" readonly>
+            `;
+            
+            // 添加事件监听器到新创建的日期输入框
+            const startDateInput = newGroup.querySelector('.input5');
+            const endDateInput = newGroup.querySelector('.input6');
+            
+            if (startDateInput && endDateInput) {
+                startDateInput.addEventListener('change', () => calculateDays(groupCount));
+                endDateInput.addEventListener('change', () => calculateDays(groupCount));
+            }
+            
+            document.getElementById('voucher-container').appendChild(newGroup);
+        }
+        
+        // 生成整合链接
+        function generateLink() {
+            const groups = document.querySelectorAll('.voucher-group');
+            let message = "莫生我要上架消費劵%0D%0A";
+            
+            groups.forEach((group, index) => {
+                const inputs = group.querySelectorAll('input');
+                const groupNumber = index + 1;
+                
+                // 添加组标题
+                if (groupNumber === 1) {
+                    message += "一:%0D%0A";
+                } else if (groupNumber === 2) {
+                    message += "---%0D%0A二:%0D%0A";
+                } else if (groupNumber === 3) {
+                    message += "---%0D%0A三:%0D%0A";
+                } else {
+                    message += `---%0D%0A${groupNumber}:%0D%0A`;
+                }
+                
+                // 添加输入框值
+                inputs.forEach(input => {
+                    message += `${input.value}%0D%0A`;
+                });
+            });
+            
+            const whatsappUrl = `https://wa.me/85264071181/?text=${message}`;
+            // 设置链接
+            document.getElementById('wa-link').href = whatsappUrl;
+            // 直接在新标签页中打开WhatsApp
+            window.open(whatsappUrl, '_blank');
+            // 显示成功消息
+            document.getElementById('success-message').style.display = 'block';
+        }
+        
+        // 删除组函数
+        function deleteGroup(id) {
+            const groups = document.querySelectorAll('.voucher-group');
+            if (groups.length > 1) {
+                const groupToDelete = document.getElementById(`group-${id}`);
+                if (groupToDelete) {
+                    groupToDelete.parentNode.removeChild(groupToDelete);
+                    
+                    // 重新编号剩余的组
+                    const remainingGroups = document.querySelectorAll('.voucher-group');
+                    remainingGroups.forEach((group, index) => {
+                        const title = group.querySelector('h3');
+                        if (title) {
+                            title.textContent = `消費券資訊 ${index + 1}`;
+                        }
+                    });
+                    
+                    // 更新组计数
+                    groupCount = remainingGroups.length;
+                }
+            } else {
+                alert('至少需要保留一組消費券資訊！');
+            }
+        }
+        
+        // 页面加载完成后绑定事件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为初始组的日期输入框添加事件监听器
+            const startDateInput1 = document.querySelector('#group-1 .input5');
+            const endDateInput1 = document.querySelector('#group-1 .input6');
+            
+            if (startDateInput1 && endDateInput1) {
+                startDateInput1.addEventListener('change', () => calculateDays(1));
+                endDateInput1.addEventListener('change', () => calculateDays(1));
+            }
+            
+            // 绑定按钮事件
+            document.getElementById('add-group').addEventListener('click', addGroup);
+            document.getElementById('generate').addEventListener('click', generateLink);
+        });
+ 
 
 
 
