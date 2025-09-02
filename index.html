@@ -209,7 +209,26 @@
 
 
 
-
+        .video-wrapper {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding-top: 480px; /* 9:16 纵横比 (适合Shorts) */
+            margin: 0 auto;
+            max-width: 720px; /* 限制最大宽度 */
+            border-radius: 12px;
+            background: #000;
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
 
 
 
@@ -1651,7 +1670,13 @@ function autoSelectRegion() {
             let html = renderSiteInfo(siteData);
             html += `<button id="loginBtn">限時加入街坊聯盟!全方位提升你既賺錢能力!!</button><br>
             <a class="Shop頁加入btn" href="about.html" target="_blank" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" >了解我們</a>
-            
+            <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/baRytpBBDr0" 
+                            title="YouTube Shorts 视频" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
             `;
             document.getElementById('main').innerHTML = html;
             callTranslate();
