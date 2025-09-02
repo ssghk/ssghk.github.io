@@ -3,12 +3,15 @@
 <html lang="zh-Hant">
 <head>
   <style>
+    :root {--gold: #C0C0C0;--dark-gold: #a4ced7;--3-gold: #f1f1f1;}
+
+    .scroll-top{background: var(--dark-gold);}
     /* 類別下拉美化 */
     #main select.ad-category-admin,#main select.ad-region-admin {
       font-size: 1.1em;
       padding: 6px 12px;
       border-radius: 8px;
-      border: 1.5px solid #bfa046;
+      border: 1.5px solid var(--dark-gold);
       background: #fffbe6;
       color: #1e3a5c;
       margin: 4px 0 8px 0;
@@ -31,7 +34,7 @@
       padding: 16px 40px;
       border-radius: 12px;
       border: none;
-      background: linear-gradient(90deg,#1e3a5c 0%,#bfa046 100%);
+      background: linear-gradient(90deg,var(--gold) 0%,var(--dark-gold) 100%);
       color: #fff;
       font-weight: bold;
       box-shadow: 0 2px 12px #bbb;
@@ -39,7 +42,7 @@
       transition: background 0.2s, color 0.2s;
     }
     body:not([data-login]) #main > button#loginBtn:active,#qr位 a:active,.Shop頁加入btn:active {
-      background: #bfa046;
+      background: var(--dark-gold);
       color: #fff;
     }
     body:not([data-login]) #main > #siteInfo {
@@ -79,7 +82,7 @@
     /* 管理員界面美化 */
               .admin-nav { display:flex;gap:12px;margin-bottom:18px; }
               .admin-nav-btn { font-size:1.1em;padding:8px 18px;border-radius:8px;border:none;background:#e6e8ea;color:#1e3a5c;font-weight:bold;cursor:pointer;transition:background 0.2s; }
-              .admin-nav-btn.active { background:#bfa046;color:#fff; }
+              .admin-nav-btn.active { background:var(--dark-gold);color:#fff; }
               .admin-section { display:none;background:linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border-radius:16px;box-shadow:0 2px 12px #bbb;padding:18px 12px 12px 12px;margin-bottom:18px; }
               .admin-section.active { display:block; }
     #main h3 {
@@ -102,7 +105,7 @@
       font-size: 1.1em;
       padding: 6px 10px;
       border-radius: 8px;
-      border: 1.5px solid #bfa046;
+      border: 1.5px solid var(--dark-gold);
       background: #fff;
       margin: 4px 0 8px 0;
       width: 70%;
@@ -121,7 +124,7 @@
       padding: 8px 18px;
       border-radius: 8px;
       border: none;
-      background: linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%);
+      background: linear-gradient(90deg,var(--dark-gold) 0%,#e6e8ea 100%);
       color: #222;
       font-weight: bold;
       margin: 6px 4px 0 0;
@@ -134,22 +137,22 @@
     #main .addAdBtn:active,
     #main .removeAdBtn:active,
     #main #saveSiteBtn:active {
-      background: #bfa046;
+      background: var(--dark-gold);
       color: #fff;
     }
     #main .addAdBtn {
-      background: linear-gradient(90deg,#1e3a5c 0%,#bfa046 100%);
+      background: linear-gradient(90deg,#1e3a5c 0%,var(--dark-gold) 100%);
       color: #fff;
       margin-top: 8px;
     }
     #main .removeAdBtn {
       background: #fff;
-      color: #bfa046;
-      border: 1.5px solid #bfa046;
+      color: var(--dark-gold);
+      border: 1.5px solid var(--dark-gold);
       margin-left: 8px;
     }
     #main .removeAdBtn:active {
-      background: #bfa046;
+      background: var(--dark-gold);
       color: #fff;
     }
     #main a {
@@ -184,15 +187,15 @@
     
 
     /* 會員界面美化 */
-                #memberMainWrap { max-width: 720px; margin: 0 auto; background: #fffbe6; border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
+                #memberMainWrap { max-width: 720px; margin: 0 auto; background: var(--3-gold); border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
                 #userPanel { margin-top: 12px; }
                 #商家私隱 > div { margin-bottom: 10px; font-size: 1.1em; }
-                #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid #bfa046; background: #fff; margin-left: 4px; }
-                #商家私隱 button, #userPanel button, #loginBtn { font-size: 1.1em; padding: 8px 18px; border-radius: 8px; border: none; background: linear-gradient(90deg,#bfa046 0%,#e6e8ea 100%); color: #222; font-weight: bold; margin: 6px 4px 0 0; box-shadow: 0 2px 8px #eee; cursor: pointer; }
-                #商家私隱 button:active, #userPanel button:active, #loginBtn:active { background: #bfa046; color: #fff; }
+                #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--dark-gold); background: #fff; margin-left: 4px; }
+                #商家私隱 button, #userPanel button, #loginBtn { font-size: 1.1em; padding: 8px 18px; border-radius: 8px; border: none; background: linear-gradient(90deg,var(--dark-gold) 0%,#e6e8ea 100%); color: #222; font-weight: bold; margin: 6px 4px 0 0; box-shadow: 0 2px 8px #eee; cursor: pointer; }
+                #商家私隱 button:active, #userPanel button:active, #loginBtn:active { background: var(--dark-gold); color: #fff; }
                 #商家私隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
-                #logoPreview img { border-radius: 8px; border: 1px solid #bfa046; margin-left: 8px; }
-                #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid #bfa046; margin: 8px 0; padding: 8px; }
+                #logoPreview img { border-radius: 8px; border: 1px solid var(--dark-gold); margin-left: 8px; }
+                #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid var(--dark-gold); margin: 8px 0; padding: 8px; }
 
 
 
@@ -201,7 +204,7 @@
 
                 #payQrcodeCanvas_ { width:100% !important; height:100% !important; display:block; }
                 #showPrivacyBtn { background: #1e3a5c; color: #fff; border: none; }
-                #showPrivacyBtn:active { background: #bfa046; color: #fff; }
+                #showPrivacyBtn:active { background: var(--dark-gold); color: #fff; }
                 #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
                 #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
                 #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
@@ -299,7 +302,7 @@
 #########       ########       #########       ###
  -->
   <div id="adInfoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
-    <div id="adInfoContent" style="background:#fffbe6;border:3px solid #bfa046;padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
+    <div id="adInfoContent" style="background:#fffbe6;border:3px solid var(--dark-gold);padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
   </div>
 <p id="translate"></p>
   <div id="main"></div>
@@ -310,7 +313,7 @@
     <div class="copyright">
         <p class="mokJsApi_copyright">版權</p>
     </div>
-    <div class="scroll-top" id="scrollTop" style="background: gold;bottom: 40%;" onclick="scrollToTop()">↑</div>
+    <div class="scroll-top" id="scrollTop" style="background: var(--gold);bottom: 40%;" onclick="scrollToTop()">↑</div>
 
 
 
@@ -489,12 +492,12 @@
     function handleGet() {
       const uid = getParam;
       // 顯示 loading 畫面
-      document.getElementById('main').innerHTML = '<div style="text-align:center;margin:60px 0;font-size:1.3em;color:#bfa046;"><div class="loader" style="margin-bottom:18px;"></div>產生消費劵連結中，請稍候...</div>';
+      document.getElementById('main').innerHTML = '<div style="text-align:center;margin:60px 0;font-size:1.3em;color:var(--dark-gold);"><div class="loader" style="margin-bottom:18px;"></div>產生消費劵連結中，請稍候...</div>';
       // 加入簡單 loading 動畫
       if (!document.getElementById('loadingStyle')) {
         const style = document.createElement('style');
         style.id = 'loadingStyle';
-        style.innerHTML = '.loader{border:8px solid #f3f3f3;border-top:8px solid #bfa046;border-radius:50%;width:48px;height:48px;animation:spin 1s linear infinite;}@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}';
+        style.innerHTML = '.loader{border:8px solid #f3f3f3;border-top:8px solid var(--dark-gold);border-radius:50%;width:48px;height:48px;animation:spin 1s linear infinite;}@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}';
         document.head.appendChild(style);
       }
 
@@ -623,11 +626,11 @@ async function addRegionsToFirestore() {
             </div>
             <div id="adminSectionAds" class="admin-section">
               <h3>公用廣告管理</h3>
-              <div id="categoryAdminWrap" style="border:1px solid #bfa046;margin:8px 0 18px 0;padding:8px 8px 8px 12px;border-radius:10px;background:#f5f6fa;">
+              <div id="categoryAdminWrap" style="border:1px solid var(--dark-gold);margin:8px 0 18px 0;padding:8px 8px 8px 12px;border-radius:10px;background:#f5f6fa;">
                 <b>類別管理：</b>
                 <div id="categoryListAdmin" style="margin-bottom:8px;"></div>
-                <input type="text" id="newCategoryInput" placeholder="新增類別名稱" style="padding:4px 8px;border-radius:6px;border:1px solid #bfa046;">
-                <button id="addCategoryBtn" style="padding:4px 12px;border-radius:6px;background:#bfa046;color:#fff;font-weight:bold;border:none;">新增類別</button>
+                <input type="text" id="newCategoryInput" placeholder="新增類別名稱" style="padding:4px 8px;border-radius:6px;border:1px solid var(--dark-gold);">
+                <button id="addCategoryBtn" style="padding:4px 12px;border-radius:6px;background:var(--dark-gold);color:#fff;font-weight:bold;border:none;">新增類別</button>
               </div>
               <div style="border:1px solid #888;margin:8px 0 18px 0;padding:4px;" id="adsAdminWrap">
                 <div id="adsListAdmin"></div>
@@ -654,7 +657,7 @@ async function addRegionsToFirestore() {
               商家地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"><br>
               <a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
               <div id="付款方式_${doc.id}"></div>
-              <span style='color:#bfa046;font-weight:bold;'>本月使用數：${d.month||0}　累計使用數：${d.total||0}</span><br>
+              <span style='color:var(--dark-gold);font-weight:bold;'>本月使用數：${d.month||0}　累計使用數：${d.total||0}</span><br>
                 <span style='color:#1e3a5c;'>💰：<input type="number" class="usageCount" data-uid="${doc.id}" value="${typeof d.usageCount === 'number' ? d.usageCount : 0}" style="width:80px;"></span><br>
               <span style='color:#1e3a5c;'>上次使用時間：${formatHKTime(d.lastGetDate)||''}</span><br>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
@@ -720,7 +723,7 @@ snap.forEach(doc => {
             categories.forEach(cat => {
               const div = document.createElement('div');
               div.style = 'display:flex;align-items:center;margin-bottom:4px;';
-              div.innerHTML = `<input type="text" value="${cat.name}" data-id="${cat.id}" class="cat-name-edit" style="padding:2px 6px;border-radius:4px;border:1px solid #bfa046;width:120px;"> <button class="cat-del-btn" data-id="${cat.id}" style="margin-left:4px;padding:2px 8px;border-radius:4px;background:#fff;color:#bfa046;border:1px solid #bfa046;">刪除</button>`;
+              div.innerHTML = `<input type="text" value="${cat.name}" data-id="${cat.id}" class="cat-name-edit" style="padding:2px 6px;border-radius:4px;border:1px solid var(--dark-gold);width:120px;"> <button class="cat-del-btn" data-id="${cat.id}" style="margin-left:4px;padding:2px 8px;border-radius:4px;background:#fff;color:var(--dark-gold);border:1px solid var(--dark-gold);">刪除</button>`;
               list.appendChild(div);
             });
             // 綁定儲存/刪除
@@ -1039,7 +1042,7 @@ function autoSelectRegion() {
             }
             // 顯示過期時間（如有）
             if (expireAt) {
-              html += `<div style='color:#bfa046;font-size:1.1em;text-align:center;margin:18px 0;'>本消費劵有效期至：${formatHKTime(expireAt.toISOString())}</div>`;
+              html += `<div style='color:var(--dark-gold);font-size:1.1em;text-align:center;margin:18px 0;'>本消費劵有效期至：${formatHKTime(expireAt.toISOString())}</div>`;
             }
             // ...原本內容...
             // 商家專屬消費劵區塊已移除
@@ -1088,12 +1091,12 @@ function autoSelectRegion() {
                   kwInput.id = 'adKeywordInput';
                   kwInput.type = 'text';
                   kwInput.placeholder = '輸入關鍵字搜尋';
-                  kwInput.style = 'font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;width:100%;';
+                  kwInput.style = 'font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid var(--dark-gold);background:#fffbe6;color:#1e3a5c;width:100%;';
                   searchDiv.appendChild(kwInput);
                   topDiv.appendChild(searchDiv);
 
                   // 新增地區選單
-                  let regionSelHtml = `<select id='adRegionSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;width:48%;margin:1%'><option value=''>全部地區</option>`;
+                  let regionSelHtml = `<select id='adRegionSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid var(--dark-gold);background:#fffbe6;color:#1e3a5c;width:48%;margin:1%'><option value=''>全部地區</option>`;
                   REGIONS.forEach(r => { regionSelHtml += `<option value='${r}'>${r}</option>`; });
                   regionSelHtml += `</select>`;
                   topDiv.insertAdjacentHTML('beforeend', regionSelHtml);
@@ -1102,7 +1105,7 @@ function autoSelectRegion() {
                   // 類別導航
                   let catSelHtml = '';
                   if(categories.length) {
-                    catSelHtml += `<select id='adCatSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid #bfa046;background:#fffbe6;color:#1e3a5c;width:48%;margin:1%'>`;
+                    catSelHtml += `<select id='adCatSelect' style='font-size:1.1em;padding:6px 12px;border-radius:8px;border:1.5px solid var(--dark-gold);background:#fffbe6;color:#1e3a5c;width:48%;margin:1%'>`;
                     catSelHtml += `<option value=''>全部類別</option>`;
                     categories.forEach(cat => {
                       catSelHtml += `<option value='${cat}'>${cat}</option>`;
@@ -1129,8 +1132,8 @@ function autoSelectRegion() {
                         const ad = ownerAds[idx];
                         let content = `<img src='${ad.img||''}' style='max-width:90vw;max-height:40vh;display:block;margin:0 auto 18px auto;border-radius:12px;box-shadow:0 2px 8px #bbb;'>`;
                         content += `<div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;text-align:center;'>${ad.title||''}</div>`;
-                        content += `<div style='font-size:1.2em;color:#bfa046;margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
-                        if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:#bfa046;font-size:1.1em;'>類別：${ad.category}</div>`;
+                        content += `<div style='font-size:1.2em;color:var(--dark-gold);margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
+                        if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:var(--dark-gold);font-size:1.1em;'>類別：${ad.category}</div>`;
                         if(ad.regions) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>地區：${ad.regions.join(', ')}</div>`;
                         if(ad.contact) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div>`;
                         if(ad.desc2 && /^https?:\/\//.test(ad.desc2)) {
@@ -1170,12 +1173,12 @@ function autoSelectRegion() {
                   lastShowAds = [...ownerAds, ...showAds];
                   let adsHtml = '';
                   // 新增：顯示廣告總數
-                  adsHtml += `<div style='width:100%;max-width:720px;text-align:right;color:#bfa046;font-size:1.1em;margin-bottom:4px;'>加盟店：${adsArr.length + 100}</div>`;
+                  adsHtml += `<div style='width:100%;max-width:720px;text-align:right;color:var(--dark-gold);font-size:1.1em;margin-bottom:4px;'>加盟店：${adsArr.length + 100}</div>`;
                   // 最上方獨立顯示廣告主ID的廣告
                   if (ownerAds.length) {
                     adsHtml += `<div id="ownerAdsArea" style="display:flex;flex-direction:column;align-items:center;margin-top:12px;">`;
                     ownerAds.forEach((ad, idx) => {
-                      adsHtml += `<div class="coupon-card owner-ad" data-idx="owner${idx}" style="height:200px;width:100%;max-width:720px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;cursor:pointer;background:linear-gradient(90deg,#ffe082 0%,#fffbe6 100%);border:2px solid #bfa046;margin-bottom:12px;box-shadow:0 2px 8px #bbb;">`;
+                      adsHtml += `<div class="coupon-card owner-ad" data-idx="owner${idx}" style="height:200px;width:100%;max-width:720px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;cursor:pointer;background:linear-gradient(90deg,#ffe082 0%,#fffbe6 100%);border:2px solid var(--dark-gold);margin-bottom:12px;box-shadow:0 2px 8px #bbb;">`;
                       adsHtml += `<img src="${ad.img||''}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.85;">`;
                       adsHtml += `<div style="position:absolute;top:8px;left:12px;z-index:2;color:#1e3a5c;font-size:24px;font-weight:900;padding:6px 18px;border-radius:12px;letter-spacing:1px;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 20%,rgba(255,255,255,0.95) 80%,rgba(255,255,255,0) 100%);">${ad.title||''}</div>`;
                       adsHtml += `<div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:flex-end;z-index:2;color:#fff;font-size:38px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;background:transparent;">`;
@@ -1192,7 +1195,7 @@ function autoSelectRegion() {
                   if (showAds.length) {
                     adsHtml += `<div id="publicAdsArea" style="display:flex;flex-direction:column;align-items:center;margin-top:12px;">`;
                     showAds.slice(0, adsDisplayCount).forEach((ad, idx) => {
-                      adsHtml += `<div class="coupon-card" data-idx="${idx}" style="height:200px;width:100%;max-width:720px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;cursor:pointer;background:linear-gradient(90deg,#e6e8ea 0%,#fffbe6 100%);border:2px solid #bfa046;margin-bottom:12px;box-shadow:0 2px 8px #bbb;">`;
+                      adsHtml += `<div class="coupon-card" data-idx="${idx}" style="height:200px;width:100%;max-width:720px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;cursor:pointer;background:linear-gradient(90deg,#e6e8ea 0%,#fffbe6 100%);border:2px solid var(--dark-gold);margin-bottom:12px;box-shadow:0 2px 8px #bbb;">`;
                       adsHtml += `<img src="${ad.img||''}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:0.85;">`;
                       adsHtml += `<div style="position:absolute;top:8px;left:12px;z-index:2;color:#1e3a5c;font-size:24px;font-weight:900;padding:6px 18px;border-radius:12px;letter-spacing:1px;background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.95) 20%,rgba(255,255,255,0.95) 80%,rgba(255,255,255,0) 100%);">${ad.title||''}</div>`;
                       adsHtml += `<div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:flex-end;z-index:2;color:#fff;font-size:38px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;background:transparent;">`;
@@ -1204,7 +1207,7 @@ function autoSelectRegion() {
                       if(ad.regions) adsHtml += `<div style='position:fixed;bottom:8px;right:8px;color:#1e3a5c;font-size:0.95em;background:#fffbe6;padding:2px 10px;border-radius:8px;z-index:2;'>地區：${ad.regions.join(', ')}</div>`;
                     });
                     if (showAds.length > adsDisplayCount) {
-                      adsHtml += `<div id="adsLoading" style="color:#bfa046;margin:16px 0 24px 0;">繼續下拉顯示更多...</div>`;
+                      adsHtml += `<div id="adsLoading" style="color:var(--dark-gold);margin:16px 0 24px 0;">繼續下拉顯示更多...</div>`;
                     }
                     adsHtml += `</div>`;
                   }
@@ -1223,8 +1226,8 @@ function autoSelectRegion() {
                       const ad = showAds[idx];
                       let content = `<img src='${ad.img||''}' style='max-width:90vw;max-height:40vh;display:block;margin:0 auto 18px auto;border-radius:12px;box-shadow:0 2px 8px #bbb;'>`;
                       content += `<div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;text-align:center;'>${ad.title||''}</div>`;
-                      content += `<div style='font-size:1.2em;color:#bfa046;margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
-                      if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:#bfa046;font-size:1.1em;'>類別：${ad.category}</div>`;
+                      content += `<div style='font-size:1.2em;color:var(--dark-gold);margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
+                      if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:var(--dark-gold);font-size:1.1em;'>類別：${ad.category}</div>`;
                       if(ad.regions) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>地區：${ad.regions.join(', ')}</div>`;
                       if(ad.contact) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div>`;
                       if(ad.desc2 && /^https?:\/\//.test(ad.desc2)) {
@@ -1288,7 +1291,7 @@ function autoSelectRegion() {
                 ${data.logo?`<img src='${data.logo}' style='max-height:80px;max-width:90%;object-fit:contain;'>`:''}
               </div>
               <div style="flex:1 1 0;display:flex;justify-content:center;align-items:center;height:100%;min-width:0;">
-                <button id="addToHomeBtn" style="padding:8px 18px;font-size:1.1em;border-radius:8px;border:none;background:#bfa046;color:#fff;font-weight:bold;box-shadow:0 2px 8px #bbb;cursor:pointer;">加入主畫面</button>
+                <button id="addToHomeBtn" style="padding:8px 18px;font-size:1.1em;border-radius:8px;border:none;background:var(--dark-gold);color:#fff;font-weight:bold;box-shadow:0 2px 8px #bbb;cursor:pointer;">加入主畫面</button>
               </div>
               <div id="siteLogoBox" style="flex:1 1 0;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer;min-width:0;" onclick="showSiteInfo()">
                 ${site.logo?`<img src='${site.logo}' style='max-height:80px;max-width:90%;object-fit:contain;'>`:''}
@@ -1315,12 +1318,12 @@ function autoSelectRegion() {
             }, 0);
             // 彈窗顯示商家/網站資料
             html += `<div id="infoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
-              <div id="infoContent" style="background:#fffbe6;border:3px solid #bfa046;padding:24px 32px;border-radius:16px;width:90%;max-width:720px;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
-              <button onclick=\"document.getElementById('infoModal').style.display='none'\" style='position:absolute;top:12px;right:24px;font-size:32px;background:none;border:none;color:#bfa046;cursor:pointer;'>×</button>
+              <div id="infoContent" style="background:#fffbe6;border:3px solid var(--dark-gold);padding:24px 32px;border-radius:16px;width:90%;max-width:720px;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
+              <button onclick=\"document.getElementById('infoModal').style.display='none'\" style='position:absolute;top:12px;right:24px;font-size:32px;background:none;border:none;color:var(--dark-gold);cursor:pointer;'>×</button>
             </div>`;
             html += `<style>
               body { background: #f5f6fa; }
-              #couponsArea .coupon-card:hover { box-shadow:0 4px 16px #bfa046; border-color:#1e3a5c; }
+              #couponsArea .coupon-card:hover { box-shadow:0 4px 16px var(--dark-gold); border-color:#1e3a5c; }
             </style>`;
             document.getElementById('main').innerHTML = html;
             callTranslate();
@@ -1334,7 +1337,7 @@ function autoSelectRegion() {
             // 彈窗顯示資料 function
             window.showShopInfo = function() {
               document.getElementById('infoContent').innerHTML = `
-                <div style='font-size:2em;font-weight:bold;color:#bfa046;margin-bottom:8px;'>${data.name||''}</div>
+                <div style='font-size:2em;font-weight:bold;color:var(--dark-gold);margin-bottom:8px;'>${data.name||''}</div>
                 <div>${data.phone||''}</div>
                 <div>${`<a href='https://www.google.com/maps/search/${data.address}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>${data.address}</a>`||''}</div>
                 <div>${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
@@ -1439,8 +1442,8 @@ function autoSelectRegion() {
 
 
 
-                    <div style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: rgb(255, 251, 230); box-shadow: rgb(187, 187, 187) 0px 2px 8px;">
-                        <h2>消費券上架</h2>
+                    <div style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: var(--3-gold); box-shadow: rgb(187, 187, 187) 0px 2px 8px;">
+                        <h2>消費券上架</h2><span style="color:var(--dark-gold);font-size:2em;">消費券上架每1天=1元</span>
                         
                         <div id="voucher-container">
                             <!-- 第一组输入框 -->
@@ -1448,7 +1451,7 @@ function autoSelectRegion() {
                                 <hr>
                                 
                                 <h3>消費券 1 <button class="delete-btn" onclick="deleteGroup(1)">刪除</button></h3>
-                                <input type="text" placeholder="消費劵圖片網址" class="input1">
+                                <a href="https://meee.com.tw/" target="_blank" >消費劵圖片網址</a>:<input type="text" placeholder="消費劵圖片網址" class="input1">
                                 <input type="text" placeholder="消費劵名稱" class="input2">
                                 <input type="text" placeholder="消費劵使用條款" class="input3">
                                 <input type="text" placeholder="消費劵使用地址或詳細說明網址" class="input4">
@@ -1476,7 +1479,7 @@ function autoSelectRegion() {
                     <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
                     <div>本月使用次數：<span id="month"></span></div>
                     <div>累計使用次數：<span id="total"></span></div>
-                    <div style="color:#bfa046;font-size:2em;">每次掃qr，店主將消費1元</div>
+                    <div style="color:var(--dark-gold);font-size:2em;">每次掃qr，店主將消費1元</div>
                     <button id="saveProfileBtn">儲存商家資料</button>
                     <button id="logoutBtn">登出</button>
                   </div>
@@ -1487,8 +1490,8 @@ function autoSelectRegion() {
                   <div id="siteLogoBoxMember"></div>
                 </div>
                 <div id="infoModalMember" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
-                  <div id="infoContentMember" style="background:#fffbe6;border:3px solid #bfa046;padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
-                  <button onclick=\"document.getElementById('infoModalMember').style.display='none'\" style='position:absolute;top:12px;right:24px;font-size:32px;background:none;border:none;color:#bfa046;cursor:pointer;'>×</button>
+                  <div id="infoContentMember" style="background:#fffbe6;border:3px solid var(--dark-gold);padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
+                  <button onclick=\"document.getElementById('infoModalMember').style.display='none'\" style='position:absolute;top:12px;right:24px;font-size:32px;background:none;border:none;color:var(--dark-gold);cursor:pointer;'>×</button>
                 </div>
               </div>
             `;
@@ -1606,7 +1609,7 @@ function autoSelectRegion() {
               // 點擊顯示彈窗
               memberLogoBox.onclick = function() {
                 document.getElementById('infoContentMember').innerHTML = `
-                  <div style='font-size:2em;font-weight:bold;color:#bfa046;margin-bottom:8px;'>${data.name||''}</div>
+                  <div style='font-size:2em;font-weight:bold;color:var(--dark-gold);margin-bottom:8px;'>${data.name||''}</div>
                   <div>電話：${data.phone||''}</div>
                   <div>地址：${data.address||''}</div>
                   <div>${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
@@ -1654,7 +1657,7 @@ function autoSelectRegion() {
                 a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
                 a.textContent = '成為vip啟動系統，(每次交易或發出消費劵，我們將收取1元服務費)';
                 a.target = '_blank';
-                a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#000000;text-align:center;';
+                a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#fff;text-align:center;';
                 qrDiv.appendChild(a);
               }
             }
@@ -1708,7 +1711,7 @@ function autoSelectRegion() {
       // 新增按鈕
       const addBtn = document.createElement('button');
       addBtn.textContent = '+';
-      addBtn.style = 'margin-top:8px;color:#fff;background:#bfa046;border:none;border-radius:6px;padding:6px 18px;cursor:pointer;font-size:1em;';
+      addBtn.style = 'margin-top:8px;color:#fff;background:var(--dark-gold);border:none;border-radius:6px;padding:6px 18px;cursor:pointer;font-size:1em;';
       addBtn.onclick = function(){
         methods.push({name:'',img:''});
         user.paymentMethods = methods;
@@ -1747,11 +1750,11 @@ function injectPaymentMethodsUI(uid, Box位) {
   if (!pmWrap) {
     pmWrap = document.createElement('div');
     pmWrap.id = 'paymentMethodsWrap_' + uid;
-    pmWrap.style = 'margin:18px 0 12px 0;padding:12px;border-radius:12px;background:#fffbe6;box-shadow:0 2px 8px #bbb;';
+    pmWrap.style = 'margin:18px 0 12px 0;padding:12px;border-radius:12px;background:var(--3-gold);box-shadow:0 2px 8px #bbb;';
     privDiv.appendChild(pmWrap);
     const title = document.createElement('div');
     title.textContent = '付款方式管理';
-    title.style = 'font-size:1.2em;font-weight:bold;color:#bfa046;margin-bottom:8px;';
+    title.style = 'font-size:1.2em;font-weight:bold;color:var(--dark-gold);margin-bottom:8px;';
     pmWrap.appendChild(title);
   }
   db.collection('users').doc(uid).get().then(doc => {
