@@ -7,7 +7,10 @@
     <link rel="icon" href="https://i.meee.com.tw/22tSagT.png" type="image/png">
 
     <style>
-        :root {--gold: #C0C0C0;--dark-gold: #a4ced7;--white: #FFFFFF;--off-white: #f8f8f8;--dark-text: #333333;--light-text: #555555;--shadow: 0 4px 15px rgba(0, 0, 0, 0.08);}
+        :root {--gold: #C0C0C0;--dark-gold: #debf56;--light-gold: #f1f1f1;--white: #FFFFFF;--off-white: #f8f8f8;--dark-text: #333333;--light-text: #555555;--shadow: 0 4px 15px rgba(0, 0, 0, 0.08);}
+
+
+
 
 * {margin: 0;padding: 0;box-sizing: border-box;}
 
@@ -39,7 +42,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
 .header h1 {color: var(--dark-text);font-size: 1.8rem;font-weight: 700;}
 
 /* Hero Section */
-.hero {background: linear-gradient(135deg, var(--gold), var(--dark-gold));color: var(--white);text-align: center;padding: 4rem 1.5rem;}
+.hero {background: linear-gradient(135deg, var(--gold), var(--light-gold));color: var(--white);text-align: center;padding: 4rem 1.5rem;}
 
 .hero h2 {font-size: 2.5rem;font-weight: 700;margin-bottom: 1rem;text-shadow: 1px 1px 3px rgba(0,0,0,0.2);}
 
@@ -56,7 +59,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
 
 .feature-icon {width: 60px;height: 60px;margin-bottom: 1rem;}
 
-.feature-card h3 {color: var(--dark-gold);font-size: 1.5rem;margin-bottom: 0.5rem;}
+.feature-card h3 {color: var(--gold);font-size: 1.5rem;margin-bottom: 0.5rem;}
 
 .feature-card p {color: var(--light-text);font-size: 1rem;}
 
@@ -93,7 +96,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
 }
 
 /* CTA Section */
-.cta {background: linear-gradient(135deg, var(--gold), var(--dark-gold));color: var(--white);padding: 4rem 1.5rem;text-align: center;}
+.cta {background: linear-gradient(135deg, var(--gold), var(--light-gold));color: var(--white);padding: 4rem 1.5rem;text-align: center;}
 
 .cta h2 {font-size: 2rem;margin-bottom: 1rem;}
 
@@ -106,23 +109,49 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
 
 
 .Shop頁加入btn {
-      display: block;
-      margin: 40px auto 0 auto;
-      font-size: 1.3em;
-      padding: 16px 40px;
-      border-radius: 12px;
-      border: none;
-      background: linear-gradient(90deg,var(--dark-gold) 0%,var(--gold) 100%);
-      color: #fff;
-      font-weight: bold;
-      box-shadow: 0 2px 12px #bbb;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-.Shop頁加入btn:active {
-      background: #bfa046;
-      color: #fff;
-    }
+            display: block;
+            margin: 40px auto 0 auto;
+            font-size: 1.3em;
+            padding: 16px 40px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+/* 添加第二種金屬效果 */
+        .metallic-shine-2 {
+            background: linear-gradient(
+                125deg,
+                var(--dark-gold) 0%,
+                #f9e8a1 25%,
+                var(--dark-gold) 50%,
+                #f9e8a1 75%,
+                var(--dark-gold) 100%
+            );
+            background-size: 200% 200%;
+            animation: gradient-shift 4s infinite;
+        }
+        /* 懸停效果 */
+        .Shop頁加入btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 16px rgba(187, 187, 187, 0.8);
+        }
+
+        .Shop頁加入btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 6px rgba(187, 187, 187, 0.6);
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
 
 
@@ -130,8 +159,8 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
             .faq-section {background: #fff; padding: 3rem 1.5rem;}
             .faq-list {max-width: 700px; margin: 0 auto;}
             .faq-item {margin-bottom: 1.5rem; border-bottom: 1px solid #eee;}
-            .faq-question {width: 100%; text-align: left; background: var(--dark-gold); color: #ffffff; border: none; font-size: 1.1rem; font-weight: 700; padding: 1rem; cursor: pointer; border-radius: 8px; transition: background 0.2s;}
-            .faq-question:hover {background: var(--gold);}
+            .faq-question {width: 100%; text-align: left; background: var(--gold); color: #ffffff; border: none; font-size: 1.1rem; font-weight: 700; padding: 1rem; cursor: pointer; border-radius: 8px; transition: background 0.2s;}
+            .faq-question:hover {background: var(--dark-gold);}
             .faq-answer {padding: 1rem; color: #555; background: #f8f8f8; border-radius: 8px; margin-top: 0.5rem;}
             @media (max-width: 600px) {
                 .faq-section {padding: 2rem 0.5rem;}
@@ -223,7 +252,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
         /* 分步指南區域 */
         .steps-guide {
             padding: 4rem 0;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            background: linear-gradient(135deg, var(--gold), var(--light-gold));
         }
         
         .steps-container {
@@ -386,14 +415,14 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
 
     <main>
         <section class="hero">
-            <div class="container">
+            <div class="container ">
                 <h2>全宇宙唯一!!</h2>
                 <p class="subtitle">
                     幫你宣傳、帶客、收錢、返客、優化工作流及盈利模型!
                 </p>
                 <br>
-                <p class="subtitle">
-                    <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="Shop頁加入btn">加入街坊聯盟!<br>全方位提升你既賺錢能力!</a>
+                <p class="subtitle metallic-shine-2">
+                    <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="Shop頁加入btn metallic-shine-2 ">加入街坊聯盟!<br>全方位提升你既賺錢能力!</a>
                 </p>
             </div>
         </section>
@@ -422,7 +451,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
                 <div class="feature-card">
                     <i class="fa fa-user-plus" alt="帶客" style="font-size: 2em;" aria-hidden="true"></i>
                     <h3>帶客</h3>
-                    <p>我地既消費劵平臺擁有本地過萬間商戶，客戶去到你既地區，立即顯示你店舖既優惠及地址，直接幫你引流到店!</p>
+                    <p>我地既消費劵雷達擁有本地過萬間商戶，客戶去到你既地區，立即顯示你店舖既優惠及地址，直接幫你引流到店!</p>
                 </div>
 
                 <div class="feature-card">
@@ -672,7 +701,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
             </div>
             
             <div style="text-align: center; margin-top: 2rem;">
-                <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="cta-button">立即開始</a>
+                <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="Shop頁加入btn metallic-shine-2">立即開始</a>
             </div>
         </div>
     </section>
@@ -777,7 +806,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
             <div class="container">
                 <h2>準備好提升你嘅生意？</h2>
                 <p>立即聯絡我哋，免費開通你嘅商戶帳號！</p>
-                <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="cta-button">立即申請</a>
+                <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="Shop頁加入btn metallic-shine-2">立即申請</a>
             </div>
             <a href="/."><h2>成員登入</h2></a>
 

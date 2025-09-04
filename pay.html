@@ -3,44 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>付款方式@街坊聯盟支付系統</title>
+  <title>付款方式@街坊聯盟</title>
   <link rel="icon" href="https://i.meee.com.tw/22tSagT.png" type="image/png">
   <style>
-    :root {--gold: #C0C0C0;--dark-gold: #a4ced7;--3-gold: #f1f1f1;}
+    :root {--gold: #C0C0C0;--dark-gold: #debf56;--light-gold: #f1f1f1;}
     body { background: #f8f8f8; color: #222; font-family: 'Noto Sans TC', sans-serif; }
     .main { max-width: 720px; margin: 32px auto; background: var(--3-gold); border-radius: 16px; box-shadow: 0 2px 12px #bbb; padding: 24px; }
-    h2 { color: var(--dark-gold); text-align: center; margin-bottom: 18px; }
+    h2 { color: var(--gold); text-align: center; margin-bottom: 18px; }
     .pay-list { display: flex; flex-direction: column; gap: 18px; }
     .pay-item { gap: 16px; background: #fff; border-radius: 10px; box-shadow: 0 1px 6px #eee; padding: 12px; }
     .pay-img { width: 100%; height: auto; object-fit: contain; border-radius: 8px; border: 1px solid #eee; background: #fff; }
-    .pay-name { font-size: 3em; color: var(--dark-gold); font-weight: bold; }
+    .pay-name { font-size: 3em; color: var(--gold); font-weight: bold; }
 
-
-    #消費劵鍵 a{
+.Shop頁加入btn {
             display: block;
-      margin: 40px auto 0 auto;
-      font-size: 1.3em;
-      padding: 16px 40px;
-      border-radius: 12px;
-      border: none;
-      background: linear-gradient(90deg,var(--gold) 0%,var(--3-gold) 100%);
-      color: #fff;
-      font-weight: bold;
-      box-shadow: 0 2px 12px #bbb;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-       /* 去除下划线 */
-  text-decoration: none;
-  /* 文字水平居中 */
-  text-align: center;
-    }
+            margin: 40px auto 0 auto;
+            font-size: 1.3em;
+            padding: 16px 40px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+/* 添加第二種金屬效果 */
+        .metallic-shine-2 {
+            background: linear-gradient(
+                125deg,
+                var(--dark-gold) 0%,
+                #f9e8a1 25%,
+                var(--dark-gold) 50%,
+                #f9e8a1 75%,
+                var(--dark-gold) 100%
+            );
+            background-size: 200% 200%;
+            animation: gradient-shift 4s infinite;
+        }
+        /* 懸停效果 */
+        .Shop頁加入btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 16px rgba(187, 187, 187, 0.8);
+        }
 
-    #消費劵鍵 a:active{
-            background: var(--dark-gold);
-      color: #fff;
-    }
-
-
+        .Shop頁加入btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 6px rgba(187, 187, 187, 0.6);
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
 
     </style>
@@ -228,7 +246,7 @@
                 <img class="pay-img" src="${pm.img||''}" alt="${pm.name||''}" onerror="this.style.display='none'">
               </div>
             `).join('');
-            消費劵鍵.innerHTML = `<a href="index.html?user=${uid}" target="_blank">街坊聯盟消費劵</a>`;
+            消費劵鍵.innerHTML = `<a href="index.html?user=${uid}" target="_blank" class="Shop頁加入btn metallic-shine-2 ">街坊聯盟消費劵</a>`;
           }).catch(e => {
             //payList.innerHTML = '<div style="color:red;text-align:center;">查詢失敗</div>';
             //payTitle.textContent = '查詢失敗';

@@ -3,7 +3,52 @@
 <html lang="zh-Hant">
 <head>
   <style>
-    :root {--gold: #C0C0C0;--dark-gold: #a4ced7;--3-gold: #f1f1f1;}
+            :root {--gold: #C0C0C0;--dark-gold: #debf56;--light-gold: #f1f1f1;}
+
+.Shop頁加入btn {
+            display: block;
+            margin: 40px auto 0 auto;
+            font-size: 1.3em;
+            padding: 16px 40px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+/* 添加第二種金屬效果 */
+        .metallic-shine-2 {
+            background: linear-gradient(
+                125deg,
+                var(--dark-gold) 0%,
+                #f9e8a1 25%,
+                var(--dark-gold) 50%,
+                #f9e8a1 75%,
+                var(--dark-gold) 100%
+            );
+            background-size: 200% 200%;
+            animation: gradient-shift 4s infinite;
+        }
+        /* 懸停效果 */
+        .Shop頁加入btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 16px rgba(187, 187, 187, 0.8);
+        }
+
+        .Shop頁加入btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 6px rgba(187, 187, 187, 0.6);
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
     .scroll-top{background: var(--dark-gold);}
     /* 類別下拉美化 */
@@ -27,23 +72,19 @@
       background: #fff;
     }
     /* 未登入界面美化 */
-    body:not([data-login]) #main > button#loginBtn,#qr位 a,.Shop頁加入btn {
+    body:not([data-login]) #main > button,#qr位 a {
       display: block;
       margin: 40px auto 0 auto;
       font-size: 1.3em;
       padding: 16px 40px;
       border-radius: 12px;
       border: none;
-      background: linear-gradient(90deg,var(--gold) 0%,var(--dark-gold) 100%);
+
       color: #fff;
       font-weight: bold;
       box-shadow: 0 2px 12px #bbb;
       cursor: pointer;
       transition: background 0.2s, color 0.2s;
-    }
-    body:not([data-login]) #main > button#loginBtn:active,#qr位 a:active,.Shop頁加入btn:active {
-      background: var(--dark-gold);
-      color: #fff;
     }
     body:not([data-login]) #main > #siteInfo {
       max-width: 420px;
@@ -72,7 +113,7 @@
         padding: 16px 4px 12px 4px;
         font-size: 1em;
       }
-      body:not([data-login]) #main > button#loginBtn {
+      body:not([data-login]) #main > button {
         font-size: 1.1em;
         padding: 12px 18px;
       }
@@ -191,8 +232,7 @@
                 #userPanel { margin-top: 12px; }
                 #商家私隱 > div { margin-bottom: 10px; font-size: 1.1em; }
                 #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--dark-gold); background: #fff; margin-left: 4px; }
-                #商家私隱 button, #userPanel button, #loginBtn { font-size: 1.1em; padding: 8px 18px; border-radius: 8px; border: none; background: linear-gradient(90deg,var(--dark-gold) 0%,#e6e8ea 100%); color: #222; font-weight: bold; margin: 6px 4px 0 0; box-shadow: 0 2px 8px #eee; cursor: pointer; }
-                #商家私隱 button:active, #userPanel button:active, #loginBtn:active { background: var(--dark-gold); color: #fff; }
+                #商家私隱 button, #userPanel button, 
                 #商家私隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
                 #logoPreview img { border-radius: 8px; border: 1px solid var(--dark-gold); margin-left: 8px; }
                 #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid var(--dark-gold); margin: 8px 0; padding: 8px; }
@@ -203,8 +243,8 @@
                 .delete-btn{color:#fff;background:#e587a1;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;}
 
                 #payQrcodeCanvas_ { width:100% !important; height:100% !important; display:block; }
-                #showPrivacyBtn { background: #1e3a5c; color: #fff; border: none; }
-                #showPrivacyBtn:active { background: var(--dark-gold); color: #fff; }
+                #showPrivacyBtn { background: var(--dark-gold); color: #fff; border: none; }
+                #showPrivacyBtn:active { background: var(--gold); color: #fff; }
                 #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
                 #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
                 #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
@@ -240,7 +280,7 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title id="dynamicTitle">街坊聯盟支付系統</title>
+  <title id="dynamicTitle">街坊聯盟</title>
   <link id="dynamicFavicon" rel="icon" type="image/png" href="">
   <meta id="dynamicDesc" name="description" content="">
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -1354,7 +1394,7 @@ function autoSelectRegion() {
                 <div>${site.logo?`<img src='${site.logo}' style='max-width:120px;'>`:''}</div>
                 <div>${site.desc||''}</div>
                 <br>
-                <a href="about.html" target="_blank" class="Shop頁加入btn">限時加入街坊聯盟!全方位提升你既賺錢能力!!</a>
+                <a href="about.html" target="_blank" class="Shop頁加入btn metallic-shine-2 ">限時加入街坊聯盟!全方位提升你既賺錢能力!!</a>
               `;
               document.getElementById('infoModal').style.display = 'flex';
             };
@@ -1443,7 +1483,7 @@ function autoSelectRegion() {
 
 
                     <div style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: var(--3-gold); box-shadow: rgb(187, 187, 187) 0px 2px 8px;">
-                        <h2>消費券上架</h2><span style="color:var(--dark-gold);font-size:2em;">消費券上架每1天=1元</span>
+                        <h2>消費券上架</h2><span style="color:var(--dark-gold);font-size:2em;">消費券上架每張每天=1元</span>
                         
                         <div id="voucher-container">
                             <!-- 第一组输入框 -->
@@ -1483,14 +1523,14 @@ function autoSelectRegion() {
                     <button id="saveProfileBtn">儲存商家資料</button>
                     <button id="logoutBtn">登出</button>
                   </div>
-                  <div id="qr位"><canvas id="qrcode"></canvas></div>
+                  <div id="qr位" ><canvas id="qrcode" class="Shop頁加入btn metallic-shine-2 "></canvas></div>
                 </div>
                 <div id="logoAreaMember">
                   <div id="memberLogoBox"></div>
                   <div id="siteLogoBoxMember"></div>
                 </div>
                 <div id="infoModalMember" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
-                  <div id="infoContentMember" style="background:#fffbe6;border:3px solid var(--dark-gold);padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
+                  <div id="infoContentMember" style="background:#ffffff;border:3px solid var(--dark-gold);padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
                   <button onclick=\"document.getElementById('infoModalMember').style.display='none'\" style='position:absolute;top:12px;right:24px;font-size:32px;background:none;border:none;color:var(--dark-gold);cursor:pointer;'>×</button>
                 </div>
               </div>
@@ -1531,7 +1571,6 @@ function autoSelectRegion() {
               userPanel.style.display = '';
               loginBtn.style.display = 'none';
               privacyPanel.style.display = 'none';
-              showPrivacyBtn.style.display = '';
               const nameInput = document.getElementById('name');
               const phoneInput = document.getElementById('phone');
               const addressInput = document.getElementById('address');
@@ -1658,6 +1697,7 @@ function autoSelectRegion() {
                 a.textContent = '成為vip啟動系統，(每次交易或發出消費劵，我們將收取1元服務費)';
                 a.target = '_blank';
                 a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#fff;text-align:center;';
+                a.className = 'Shop頁加入btn metallic-shine-2'; // 添加class
                 qrDiv.appendChild(a);
               }
             }
@@ -1671,8 +1711,8 @@ function autoSelectRegion() {
           db.collection('site').doc('main').get().then(doc => {
             var siteData = doc.exists ? doc.data() : {};
             let html = renderSiteInfo(siteData);
-            html += `<button id="loginBtn">限時加入街坊聯盟!全方位提升你既賺錢能力!!</button><br>
-            <a class="Shop頁加入btn" href="about.html" target="_blank" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" >了解我們</a>
+            html += `<button id="loginBtn" class="Shop頁加入btn metallic-shine-2 ">限時加入街坊聯盟!全方位提升你既賺錢能力!!</button><br>
+            <a class="Shop頁加入btn metallic-shine-2 " href="about.html" target="_blank" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" >了解我們</a>
             <div class="video-wrapper">
                     <iframe src="https://www.youtube.com/embed/baRytpBBDr0" 
                             title="YouTube Shorts 视频" 
@@ -1703,7 +1743,7 @@ function autoSelectRegion() {
         div.innerHTML = `
           <input type='text' value='${pm.name||''}' placeholder='付款方式名' style='width:60%;padding:4px 8px;border-radius:6px;border:1px solid #ccc;'>
           <input type='text' value='${pm.img||''}' placeholder='圖片網址' style='width:30%;padding:4px 8px;border-radius:6px;border:1px solid #ccc;'>
-          <img src='${pm.img||''}' style='height:32px;width:32px;object-fit:contain;border-radius:6px;border:1px solid #eee;background:#fff;' onerror="this.style.display='none'">
+          <img src='${pm.img||''}' style='height:32px;width:32px;object-fit:contain;border-radius:6px;border:1px solid #eee;' onerror="this.style.display='none'">
           <button class='delPayBtn delete-btn' data-idx='${idx}' >刪除</button>
         `;
         wrap.appendChild(div);
@@ -1711,7 +1751,7 @@ function autoSelectRegion() {
       // 新增按鈕
       const addBtn = document.createElement('button');
       addBtn.textContent = '+';
-      addBtn.style = 'margin-top:8px;color:#fff;background:var(--dark-gold);border:none;border-radius:6px;padding:6px 18px;cursor:pointer;font-size:1em;';
+      addBtn.style = 'margin-top:8px;color:#fff;background:var(--gold);border:none;border-radius:6px;padding:6px 18px;cursor:pointer;font-size:1em;';
       addBtn.onclick = function(){
         methods.push({name:'',img:''});
         user.paymentMethods = methods;
