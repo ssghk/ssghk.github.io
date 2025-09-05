@@ -350,9 +350,9 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
             position: relative;
             overflow: hidden;
             width: 100%;
-            padding-top: 480px; /* 9:16 纵横比 (适合Shorts) */
+            padding-top: 480px; /* 9:16 縱橫比 (適合Shorts) */
             margin: 0 auto;
-            max-width: 720px; /* 限制最大宽度 */
+            max-width: 720px; /* 限制最大寬度 */
             border-radius: 12px;
             background: #000;
         }
@@ -366,6 +366,95 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
             border: none;
             border-radius: 12px;
         }
+
+
+
+
+
+
+/* 成本低、收益高 - 使用前後的鮮明對比 */
+.comparison-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+    .comparison-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.comparison-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.comparison-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.comparison-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+
+
+.comparison-header {color: var(--gold);}
+
+.before, .after {
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.before {
+    background-color: var(--light-gold);
+    border-left: 4px solid var(--gold);
+}
+
+.after {
+    background-color: var(--light-gold);
+    border-left: 4px solid var(--dark-gold);
+}
+
+.before h4, .after h4 {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.before h4 {
+    color: var(--gold);
+}
+
+.after h4 {
+    color: var(--dark-gold);
+}
+
+.before ul, .after ul {
+    padding-left: 1.2rem;
+}
+
+.before li, .after li {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.before li {
+    color: var(--gold);
+}
+
+.after li {
+    color: var(--dark-gold);
+}
 
 
 
@@ -422,7 +511,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
                 </p>
                 <br>
                 <p class="subtitle metallic-shine-2">
-                    <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="Shop頁加入btn metallic-shine-2 ">加入街坊聯盟!<br>全方位提升你既賺錢能力!</a>
+                    <a href="./" target="_blank" class="Shop頁加入btn metallic-shine-2 ">加入街坊聯盟!<br>全方位提升你既賺錢能力!</a>
                 </p>
             </div>
         </section>
@@ -431,72 +520,11 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
         <br><br><br>
         <div class="video-wrapper">
                     <iframe src="https://www.youtube.com/embed/baRytpBBDr0" 
-                            title="YouTube Shorts 视频" 
+                            title="YouTube Shorts 視頻" 
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen>
                     </iframe>
                 </div>
-
-
-        <section class="features">
-            <div class="container">
-
-
-                <div class="feature-card">
-                    <i class="fa fa-bullhorn" alt="宣傳" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>宣傳</h3>
-                    <p>我地搵埋KOL幫你做探店宣傳，一次拍攝，百萬觀看。派傳單既成本，上電視既效果!</p>
-                </div>
-
-                <div class="feature-card">
-                    <i class="fa fa-user-plus" alt="帶客" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>帶客</h3>
-                    <p>我地既消費劵雷達擁有本地過萬間商戶，客戶去到你既地區，立即顯示你店舖既優惠及地址，直接幫你引流到店!</p>
-                </div>
-
-                <div class="feature-card">
-                    <i class="fa fa-btc" alt="收錢" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>收錢</h3>
-                    <p>唯一可收加密幣、香港穩定幣、最低服務費、可即秒到帳既商戶支付系統!</p>
-                </div>
-
-                <div class="feature-card">
-                    <i class="fa fa-refresh" alt="返客" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>返客</h3>
-                    <p>客戶支付後，手機會立即收到貴店的消費券。激發下次再消費慾望!</p>
-                </div>
-
-                <div class="feature-card">
-                    <i class="fa fa-link" alt="優化工作流" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>優化工作流</h3>
-                    <p>我地有一系列既營商科技支援!自動促銷、自動客服、自動預約、自動採購、庫存管理、網店系統!全方位包辦!</p>
-                </div>
-
-                <div class="feature-card">
-                    <i class="fa fa-line-chart" alt="優化盈利模型" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>優化盈利模型</h3>
-                    <p>如何發展特許經營、如何申請政府資助、如何開源節流、如何用金融思維安全又輕鬆的賺更多錢，我地既專業顧問會為你一對一指導!。</p>
-                </div>
-
-
-            </div>
-        </section>
-
-
-
-
-        <section id="about" class="cta steps-guide">
-            <div class="container" style="color: #000;">
-                <h2>街坊聯盟是甚麼?</h2>
-                <p>我地既目標係:
-                    <br>支持本地消費 振興香港經濟
-                    <br>用創新金融思維、以科技作為手段，
-                    <br>提升聯盟成員賺錢能力、協助市民享受消費便利、
-                    <br>促進香港經濟內循環、並使我們聯盟賺錢，達到四方共贏!
-                </p>
-
-            </div>
-        </section>
 
 
 
@@ -658,6 +686,73 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
     </section>
 
 
+
+
+
+
+        <section id="about" class="cta steps-guide">
+            <div class="container" style="color: #000;">
+                <h2>街坊聯盟是甚麼?</h2>
+                <p>我地既目標係:
+                    <br>支持本地消費 振興香港經濟
+                    <br>用創新金融思維、以科技作為手段，
+                    <br>提升聯盟成員賺錢能力、協助市民享受消費便利、
+                    <br>促進香港經濟內循環、並使我們聯盟賺錢，達到四方共贏!
+                </p>
+
+            </div>
+        </section>
+
+
+    <!-- 六大功能 -->
+        <section class="features">
+            <div class="container">
+
+
+                <div class="feature-card">
+                    <i class="fa fa-bullhorn" alt="宣傳" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>宣傳</h3>
+                    <p>我地搵埋KOL幫你做探店宣傳，一次拍攝，百萬觀看。派傳單既成本，上電視既效果!</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fa fa-user-plus" alt="帶客" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>帶客</h3>
+                    <p>我地既消費劵雷達擁有本地過萬間商戶，客戶去到你既地區，立即顯示你店舖既優惠及地址，直接幫你引流到店!</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fa fa-btc" alt="收錢" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>收錢</h3>
+                    <p>唯一可收加密幣、香港穩定幣、最低服務費、可即秒到帳既商戶支付系統!</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fa fa-refresh" alt="返客" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>返客</h3>
+                    <p>客戶支付後，手機會立即收到貴店的消費券。激發下次再消費慾望!</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fa fa-link" alt="優化工作流" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>優化工作流</h3>
+                    <p>我地有一系列既營商科技支援!自動促銷、自動客服、自動預約、自動採購、庫存管理、網店系統!全方位包辦!</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fa fa-line-chart" alt="優化盈利模型" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>優化盈利模型</h3>
+                    <p>如何發展特許經營、如何申請政府資助、如何開源節流、如何用金融思維安全又輕鬆的賺更多錢，我地既專業顧問會為你一對一指導!。</p>
+                </div>
+
+
+            </div>
+        </section>
+
+
+
+
+
     <!-- 新增分步指南區域 -->
     <section class="steps-guide">
         <div class="container">
@@ -670,38 +765,40 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
                 <div class="step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3>聯絡申請</h3>
-                        <p>通過WhatsApp聯絡我們，提供基本商家資訊，預繳最少100元服務費開通帳戶。</p>
+                        <a href="./" target="_blank">
+                        <h3>登入系統</h3>
+                        <p>點擊此處免費登入系統</p>
+                        </a>
                     </div>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h3>設定服務</h3>
-                        <p>我們的專員會協助您設定支付系統、創建消費券和規劃宣傳策略。</p>
+                        <h3>填寫商家資料</h3>
+                        <p>填寫並儲存您的商家資料。</p>
                     </div>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3>培訓上線</h3>
-                        <p>接受簡單系統操作培訓，獲得專屬支付二維碼和宣傳材料，開始運營。</p>
+                        <h3>預繳服務費</h3>
+                        <p>預繳最少100元服務費。(服務費會於使用服務時扣除)</p>
                     </div>
                 </div>
                 
                 <div class="step">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h3>持續優化</h3>
-                        <p>根據營運數據，我們提供持續優化建議，幫助您不斷提升業績。</p>
+                        <h3>聯絡管理員啟動系統</h3>
+                        <p>預繳後，聯絡管理員啟動系統。</p>
                     </div>
                 </div>
             </div>
             
             <div style="text-align: center; margin-top: 2rem;">
-                <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="Shop頁加入btn metallic-shine-2">立即開始</a>
+                <a href="./" target="_blank" class="Shop頁加入btn metallic-shine-2">立即開始</a>
             </div>
         </div>
     </section>
@@ -721,7 +818,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
                         </div>
                         <div class="faq-item">
                             <button class="faq-question" onclick="toggleFaq(this)">如何加入街坊聯盟？</button>
-                            <p class="faq-answer" style="display:none;">只需點擊頁面上的「立即申請」按鈕，聯絡我們的 WhatsApp。
+                            <p class="faq-answer" style="display:none;">只需點擊頁面上的「立即加盟」按鈕，聯絡我們的 WhatsApp。
                                 <br><br>並預繳最少100元服務費(服務費會於使用服務時扣除)。即可免費開通商戶帳號。</p>
                         </div>
                         <div class="faq-item">
@@ -750,34 +847,97 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
 
 
 
-        <section id="cost" class="cta">
-            <div class="container">
-                <h2>成本低、收益高</h2>
+
+            
 
 
-                <div class="feature-card">
+
+
+
+
+<section id="cost" class="cta">
+    <div class="container">
+        <h2>成本低、收益高</h2>
+        
+        <div class="comparison-container">
+            <!-- 店主對比 -->
+            <div class="comparison-card">
+                <div class="comparison-header">
                     <i class="fa fa-university" alt="店主" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>店主</h3>
-                    <p>每個流程，專業顧問一對一指導。</p>
-                    <p>系統簡單易用，無需下載程式。</p>
-                    <p>無需安裝其他設備，一部手機即可使用。</p>
-                    <p>可與舊支付系統並行使用。</p>
-                    <p>無月費、無手續費、無最低消費。</p>
-                    <p>每次交易，不論金額大小，只收取1元。</p>
-                    <p>上架消費券，每張每天只收取1元。</p>
+                    <h3>店主使用前後對比</h3>
                 </div>
-
-                <br>
-                <div class="feature-card">
-                    <i class="fa fa-users" alt="客戶" style="font-size: 2em;" aria-hidden="true"></i>
-                    <h3>客戶</h3>
-                    <p>系統簡單易用，無需下載程式。</p>
-                <p>只要識用微信，一分鍾就可支付並或享受消費優惠。</p>
+                
+                <div class="comparison-content">
+                    <div class="before">
+                        <h4>😟 未加入街坊聯盟</h4>
+                        <ul>
+                            <li>宣傳成本高，效果難以追蹤</li>
+                            <li>客流增長緩慢，依賴地理位置</li>
+                            <li>支付手續費高昂，小額交易不划算</li>
+                            <li>客戶回頭率低，缺乏有效留存手段</li>
+                            <li>業務流程繁瑣，效率低下</li>
+                            <li>盈利模式單一，增長遇到瓶頸</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="after">
+                        <h4>🥳 加入街坊聯盟後</h4>
+                        <ul>
+                            <li>KOL探店宣傳，低成本高曝光</li>
+                            <li>消費券雷達直接引流客戶到店</li>
+                            <li>每次交易只收1元，無其他費用</li>
+                            <li>消費券返客系統，回頭客增加50%+</li>
+                            <li>自動化工作流，節省管理時間</li>
+                            <li>專業顧問指導，優化盈利模式</li>
+                        </ul>
+                    </div>
                 </div>
-
-
             </div>
-        </section>
+            
+            <!-- 客戶對比 -->
+            <div class="comparison-card">
+                <div class="comparison-header">
+                    <i class="fa fa-users" alt="客戶" style="font-size: 2em;" aria-hidden="true"></i>
+                    <h3>客戶體驗對比</h3>
+                </div>
+                
+                <div class="comparison-content">
+                    <div class="before">
+                        <h4>😟 傳統消費體驗</h4>
+                        <ul>
+                            <li>支付方式有限，可能需攜帶現金</li>
+                            <li>優惠信息分散，難以發現好deal</li>
+                            <li>消費後無額外福利，缺乏驚喜感</li>
+                            <li>需要下載多個APP，佔用手機空間</li>
+                            <li>支付流程複雜，耗時較長</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="after">
+                        <h4>🥳 街坊聯盟消費體驗</h4>
+                        <ul>
+                            <li>多種支付方式，包括加密貨幣</li>
+                            <li>消費券雷達一鍵發現附近優惠</li>
+                            <li>支付後即時獲消費券，下次可用</li>
+                            <li>無需下載APP，掃碼即可使用</li>
+                            <li>一分鐘完成支付，簡單快捷</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -806,9 +966,9 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
             <div class="container">
                 <h2>準備好提升你嘅生意？</h2>
                 <p>立即聯絡我哋，免費開通你嘅商戶帳號！</p>
-                <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟" target="_blank" class="Shop頁加入btn metallic-shine-2">立即申請</a>
+                <a href="./" target="_blank" class="Shop頁加入btn metallic-shine-2">立即加盟</a>
             </div>
-            <a href="/."><h2>成員登入</h2></a>
+            <a href="https://wa.me/85264071181/?text=/莫生我要加入街坊聯盟"><h2>查詢</h2></a>
 
 
 

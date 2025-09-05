@@ -240,11 +240,11 @@
 
 
                 #qr位 a{ margin-top: 18px; text-align: center; }
+
+.add-Btn{margin-top:8px;color:#fff;background:var(--gold);border:none;border-radius:6px;padding:6px 18px;cursor:pointer;font-size:5em;}
                 .delete-btn{color:#fff;background:#e587a1;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;}
 
                 #payQrcodeCanvas_ { width:100% !important; height:100% !important; display:block; }
-                #showPrivacyBtn { background: var(--dark-gold); color: #fff; border: none; }
-                #showPrivacyBtn:active { background: var(--gold); color: #fff; }
                 #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
                 #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
                 #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
@@ -1474,6 +1474,10 @@ function autoSelectRegion() {
                 <div id="userPanel" style="display:none">
                   <button id="showPrivacyBtn">💰</button>
                   <div id="商家私隱" style="display:none">
+
+
+                    <div id="商家Gmail"></div>
+
                     <div>商家名字：<input id="name" type="text"></div>
                     <div>商家電話：<input id="phone" type="text"></div>
                     <div>商家地址：<input id="address" type="text"></div>
@@ -1507,7 +1511,7 @@ function autoSelectRegion() {
                         </div>
                         
                         <div>
-                            <button id="add-group"> + </button>
+                            <button id="add-group" class="add-Btn"> + </button>
                             <button id="generate">發送給管理員</button>
                         </div>
                     </div>
@@ -1521,7 +1525,9 @@ function autoSelectRegion() {
                     <div>累計使用次數：<span id="total"></span></div>
                     <div style="color:var(--dark-gold);font-size:2em;">每次掃qr，店主將消費1元</div>
                     <button id="saveProfileBtn">儲存商家資料</button>
+                    <div id=登出Box_FowNew>
                     <button id="logoutBtn">登出</button>
+                    </div>
                   </div>
                   <div id="qr位" ><canvas id="qrcode" class="Shop頁加入btn metallic-shine-2 "></canvas></div>
                 </div>
@@ -1571,6 +1577,8 @@ function autoSelectRegion() {
               userPanel.style.display = '';
               loginBtn.style.display = 'none';
               privacyPanel.style.display = 'none';
+
+              const 商家Gmail = document.getElementById('商家Gmail');
               const nameInput = document.getElementById('name');
               const phoneInput = document.getElementById('phone');
               const addressInput = document.getElementById('address');
@@ -1589,6 +1597,7 @@ function autoSelectRegion() {
                   generateBtn.addEventListener('click', generateLink);
               }
 
+              商家Gmail.innerHTML = data.email || '';
               nameInput.value = data.name || '';
               phoneInput.value = data.phone || '';
               addressInput.value = data.address || '';
@@ -1692,9 +1701,46 @@ function autoSelectRegion() {
                 }, 0);
               } else {
                 // 非vip：只顯示 WhatsApp 申請vip連結
+                For_newCss = `display: block;
+            margin: 40px auto 0 auto;
+            font-size: 1.3em;
+            padding: 16px 40px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(
+                125deg,
+                var(--dark-gold) 0%,
+                #f9e8a1 25%,
+                var(--dark-gold) 50%,
+                #f9e8a1 75%,
+                var(--dark-gold) 100%
+            );
+            background-size: 200% 200%;
+            animation: gradient-shift 4s infinite;`
+
+                showPrivacyBtn.textContent = '1 填寫您的商家資料'
+                saveProfileBtn.textContent = '2 並儲存您的商家資料'
+
+                showPrivacyBtn.style = For_newCss
+                saveProfileBtn.style = For_newCss
+
+                const 登出Box_FowNew = document.getElementById('登出Box_FowNew');
+                登出Box_FowNew.innerHTML = '<a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank" style="color:#fff;font-size:1.2em;text-align: center;margin: 24px 20%;text-decoration: none;" >3 預繳最少100元服務費</a>'
+
+
+
+
                 const a = document.createElement('a');
-                a.href = 'https://wa.me/85264071181/?text=莫生我要vip3';
-                a.textContent = '成為vip啟動系統，(每次交易或發出消費劵，我們將收取1元服務費)';
+                a.href = `https://wa.me/85264071181/?text=莫生我要加盟街坊聯盟[${data.email}]，預繳收據:`;
+                a.textContent = '4 預繳後，聯絡管理員啟動系統，(每次交易或發出消費劵，我們將收取1元服務費)';
                 a.target = '_blank';
                 a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#fff;text-align:center;';
                 a.className = 'Shop頁加入btn metallic-shine-2'; // 添加class
@@ -1751,7 +1797,7 @@ function autoSelectRegion() {
       // 新增按鈕
       const addBtn = document.createElement('button');
       addBtn.textContent = '+';
-      addBtn.style = 'margin-top:8px;color:#fff;background:var(--gold);border:none;border-radius:6px;padding:6px 18px;cursor:pointer;font-size:1em;';
+      addBtn.className  = 'add-Btn';
       addBtn.onclick = function(){
         methods.push({name:'',img:''});
         user.paymentMethods = methods;
@@ -1896,8 +1942,6 @@ function injectPaymentMethodsUI(uid, Box位) {
             });
             
             const whatsappUrl = `https://wa.me/85264071181/?text=${message}`;
-            // 设置链接
-            document.getElementById('wa-link').href = whatsappUrl;
             // 直接在新标签页中打开WhatsApp
             window.open(whatsappUrl, '_blank');
             // 显示成功消息
