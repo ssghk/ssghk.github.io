@@ -1623,7 +1623,7 @@ function autoSelectRegion() {
                 usageDiv.id = 'usageInfo';
                 document.getElementById('商家私隱').appendChild(usageDiv);
               }
-              usageDiv.innerHTML = `<div style='color:#1e3a5c;'>💰：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div><div style='color:#1e3a5c;'>上次發出時間：${formatHKTime(data.lastGetDate)||''}</div>`;
+              usageDiv.innerHTML = `<div style='color:#1e3a5c;'>剩餘使用次數：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div><div style='color:#1e3a5c;'>上次使用時間：${formatHKTime(data.lastGetDate)||''}</div>`;
 
               logoInput.oninput = () => {
                 logoPreview.innerHTML = logoInput.value ? `<img src='${logoInput.value}' style='max-width:60px;'>` : '';
