@@ -1917,8 +1917,9 @@ function injectPaymentMethodsUI(uid, Box位) {
         
         // 生成整合链接
         function generateLink() {
+            const 商戶Gmail2 = document.getElementById('商家Gmail').textContent;
             const groups = document.querySelectorAll('.voucher-group');
-            let message = "莫生我要上架消費劵%0D%0A";
+            let message = `莫生我[${商戶Gmail2}]要上架消費劵%0D%0A`;
             
             groups.forEach((group, index) => {
                 const inputs = group.querySelectorAll('input');

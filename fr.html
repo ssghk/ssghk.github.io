@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>网址转二维码</title>
+    <!-- 引入QRCode.js库用于生成二维码 -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+</head>
+<body>
+    <!-- 输入框用于输入网址 -->
+    <input type="text" id="input1" placeholder="请输入网址">
+    
+    <!-- 转换按钮 -->
+    <button onclick="generateQRCode()">生成二维码</button>
+    
+    <!-- 用于显示二维码的区域 -->
+    <div id="qrcode"></div>
+
+    <script>
+        // 生成二维码的函数
+        function generateQRCode() {
+            // 获取输入框元素
+            const input = document.getElementById('input1');
+            // 获取输入的网址
+            const url = input.value.trim();
+            
+            // 简单验证输入是否为空
+            if (!url) {
+                alert('请输入网址');
+                return;
+            }
+            
+            // 获取二维码显示区域
+            const qrcodeContainer = document.getElementById('qrcode');
+            // 清空之前的二维码
+            qrcodeContainer.innerHTML = '';
+            
+            // 生成二维码为Data URL
+            QRCode.toDataURL(url, function(error, dataUrl) {
+                if (error) {
+                    console.error(error);
+                    alert('生成二维码失败: ' + error.message);
+                    return;
+                }
+                
+                // 创建img元素来显示二维码
+                const img = document.createElement('img');
+                img.src = dataUrl;
+                img.alt = '二维码图片';
+                
+                // 添加点击事件用于下载
+                img.onclick = function() {
+                    // 创建一个a标签用于下载
+                    const a = document.createElement('a');
+                    // 设置下载的文件名
+                    a.download = 'qrcode.png';
+                    // 设置图片源
+                    a.href = dataUrl;
+                    // 触发下载
+                    a.click();
+                };
+                
+                // 将图片添加到显示区域
+                qrcodeContainer.appendChild(img);
+            });
+        }
+    </script>
+</body>
+</html>
+    
