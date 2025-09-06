@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>街坊聯盟 - 消費券雷達三贏引流術</title>
+    <link rel="icon" href="https://i.meee.com.tw/22tSagT.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #0F2B5B;     /* 深藍色 - 信任 */
+            --color-primary-light: #2563EB; /* 亮藍色 - 科技 */
+            --color-accent: #D4AF37;      /* 金屬金色 */
+            --color-background: #FFFFFF;
+            --color-surface: #F5F7FA;
+            --color-text: #333333;
+            --color-text-light: #666666;
+            --color-border: #E1E5EB;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --gradient-gold: linear-gradient(145deg, #f9e076, #e5b824, #b38728);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 導航欄樣式 */
+        header {
+            background: var(--color-primary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            color: var(--color-accent);
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        /* 英雄區域樣式 */
+        .hero {
+            background: linear-gradient(rgba(15, 43, 91, 0.9), rgba(15, 43, 91, 0.8)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--gradient-gold);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        /* 主要內容區域樣式 */
+        .section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--color-primary);
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--color-accent);
+            border-radius: 2px;
+        }
+        
+        /* 卡片樣式 */
+        .card {
+            background: var(--color-background);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 2rem;
+            border: 1px solid var(--color-border);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .card-header {
+            background: var(--color-primary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        /* 網格佈局 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        /* 特色區域樣式 */
+        .feature {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .feature i {
+            font-size: 3rem;
+            color: var(--color-accent);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* 計算器樣式 */
+        .calculator {
+            background: var(--color-surface);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .calculator h3 {
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .calc-result {
+            background: var(--color-primary-light);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 1.5rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        /* 頁腳樣式 */
+        footer {
+            background: var(--color-primary);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-logo i {
+            color: var(--color-accent);
+            margin-right: 10px;
+        }
+        
+        .footer-links {
+            display: flex;
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links li {
+            margin: 0 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 1.5rem;
+            }
+            
+            .nav-links li {
+                margin: 0 0.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.net/translate.js/3.1.7/translate.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://64071181.github.io/mokJsapi/a.js">//琪琪修改</script>
+
+</head>
+<body>
+    <p id="translate"></p>
+    <!-- 導航欄 -->
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <i class="fas fa-radar"></i>
+                <span>街坊聯盟</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="./">首頁</a></li>
+                <li><a href="./about.html#輕鬆加入">如何運作</a></li>
+                <li><a href="./?user=109EjNOTmkh2CRuLghiIuwTDzl02">消費券雷達</a></li>
+                <li><a href="./about.html">關於我們</a></li></ul>
+                <ul class="nav-links"><li><a href="https://wa.me/85264071181/?text=莫生我要了解消費券雷達" class="btn">立即諮詢</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 英雄區域 -->
+    <section class="hero">
+        <div class="container">
+            <h1>消費券雷達 · 三贏引流術</h1>
+            <p>不降價，也能客似雲來——我們教你用別人的優惠，做自己的生意！</p>
+            <a href="./about.html#輕鬆加入" class="btn">立即開啟引流計劃</a>
+        </div>
+    </section>
+
+    <!-- 介紹部分 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>全新的商業模式</h2>
+                <p>讓您的生意實現指數級增長</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    假如我對你說：
+                </div>
+                <div class="card-body">
+                    <p>"每帶來一個消費滿$100的客人，你只需付$5引流費，你願不願意？"</p>
+                    <p>你可能猶豫。</p>
+                    <p>那如果換一種方式：</p>
+                    <p>"我不要$5，你只需拿出價值$5的啤酒——送給那個客人。"</p>
+                    <p>你是否更願意嘗試？</p>
+                    <p class="highlight">這就是「街坊聯盟」正在發起的<strong>跨業引流革命</strong>。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 運作方式 -->
+    <section class="section" style="background-color: var(--color-surface);">
+        <div class="container">
+            <div class="section-title">
+                <h2>我們如何運作？</h2>
+                <p>我們是"優惠的橋樑"，也是"客流的引擎"</p>
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-utensils"></i> 對您（食店）而言
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>您提供<strong>價值$5的啤酒</strong>作為引流禮品（成本可控，不傷利潤）</li>
+                            <li>我們將它包裝成 <strong>"1000支啤酒待領取"</strong> 的視覺優惠</li>
+                            <li>客人每消費滿$100，即送1支，滿$200送2支，以此類推</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-car"></i> 對非食店合作伙伴而言
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>我們對他們說："你的客人每消費滿$50，我們就送他'1000支啤酒'優惠"</li>
+                            <li>當客人在A、B洗車店之間選擇時，<strong>同樣價格，A店多送"千啤優惠"</strong></li>
+                            <li>吸引力瞬間提升，帶來更多客流量</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-users"></i> 對客人而言
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>洗個車、買件衫，意外獲得"啤酒優惠"</li>
+                            <li>自然會想："不如去合作食店喝一杯？"</li>
+                            <li>同樣的消費，<strong>獲得加倍快樂</strong>，何樂而不為？</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 三贏模式 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>"三贏"的流量循環</h2>
+                <p>讓所有參與者都受益的創新模式</p>
+            </div>
+            
+            <div class="grid">
+                <div class="feature">
+                    <i class="fas fa-store"></i>
+                    <h3>您的店鋪</h3>
+                    <p>用"啤酒"換來了"洗車店、服裝店甚至全港千行萬業的客流"</p>
+                </div>
+                
+                <div class="feature">
+                    <i class="fas fa-handshake"></i>
+                    <h3>合作伙伴</h3>
+                    <p>用"您的優惠"提升了他們自己的吸引力，增加銷售額</p>
+                </div>
+                
+                <div class="feature">
+                    <i class="fas fa-gift"></i>
+                    <h3>客人</h3>
+                    <p>因為多重優惠，更願意消費，獲得更多價值</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 收益計算 -->
+    <section class="section" style="background-color: var(--color-surface);">
+        <div class="container">
+            <div class="section-title">
+                <h2>算一筆您絕不會虧的賬</h2>
+                <p>讓數據告訴您真相</p>
+            </div>
+            
+            <div class="calculator">
+                <h3>收益計算器</h3>
+                <p>我們通過系統，<strong>每天向精準人群發放您的優惠</strong>。</p>
+                <p>假設轉化率僅為<strong>0.1%</strong>（每1000人看到，只有1人來消費）：</p>
+                <ul>
+                    <li>我們每天為您推送<strong>30萬次曝光</strong> → 即為帶來<strong>300個客人</strong></li>
+                    <li>只要其中10人消費滿$100，您送出10支啤酒（成本$50），卻獲得$1000營業額</li>
+                </ul>
+                
+                <div class="calc-result">
+                    投入$50，獲得$1000營業額，回報率高達1900%
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <p>您的店鋪只有10個座位？</p>
+                    <ul>
+                        <li>一天滿座翻檯<strong>最多接待340客</strong>，理論日收益可達$3.4萬</li>
+                        <li>我們為您額外帶來<strong>300客流</strong>，您願不願意？</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 價值主張 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>加入街坊聯盟的價值</h2>
+                <p>您得到的不只是工具，而是一整套"客流解決方案"</p>
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-tag"></i> 不降價、不傷利潤
+                    </div>
+                    <div class="card-body">
+                        <p>用精準贈送替代盲目打折，保持品牌價值的同時增加客流量</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-network-wired"></i> 客流共享、異業共贏
+                    </div>
+                    <div class="card-body">
+                        <p>一鍵接入全港合作網絡，讓別人的客戶成為您的客人</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-cog"></i> 系統自動化派券、核銷
+                    </div>
+                    <div class="card-body">
+                        <p>您只需專注出品，引流我們負責，節省時間和人力成本</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <p class="tagline"><strong>您負責做好味道，我們負責讓全城都知道。</strong></p>
+                <a href="./about.html#輕鬆加入" class="btn" style="margin-top: 1.5rem;">立即使用消費券雷達</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 行動號召 -->
+    <section class="section" style="background-color: var(--color-primary); color: white;">
+        <div class="container" style="text-align: center;">
+            <h2 style="margin-bottom: 1.5rem;">立即聯繫我們，啟動您的"千啤引流計劃"！</h2>
+            <p style="margin-bottom: 2rem; opacity: 0.9;">（名額有限，只接待認真想增長的商家。）</p>
+            <a href="./about.html#輕鬆加入" class="btn">立即啟動消費券雷達</a>
+        </div>
+    </section>
+
+    <!-- 頁腳 -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-radar"></i>
+                <span>街坊聯盟</span>
+            </div>
+            
+            <ul class="footer-links">
+                <li><a href="./">首頁</a></li>
+                <li><a href="./about.html#輕鬆加入">如何運作</a></li>
+                <li><a href="./?user=109EjNOTmkh2CRuLghiIuwTDzl02">消費券雷達</a></li>
+                <li><a href="./about.html">關於我們</a></li>
+            </ul>
+            
+        <div class="container">
+            <div id="ContactAKI" class="ContactAKI"><!-- JS _顯示聯莫 --></div>
+            <p class="mokJsApi_copyright">版權</p>
+            <div class="scroll-top" id="scrollTop" style="background: var(--gold);bottom: 40%;" onclick="scrollToTop()">↑</div>
+
+
+        </div>
+        </div>
+    </footer>
+
+    <script>
+
+/*
+          :::        :::    :::       :::::::::::
+       :+: :+:      :+:   :+:            :+:
+     +:+   +:+     +:+  +:+             +:+
+   +#++:++#++:    +#++:++              +#+
+  +#+     +#+    +#+  +#+             +#+
+ #+#     #+#    #+#   #+#            #+#
+###     ###    ###    ###       ###########
+*/
+
+        // 動態內容自動翻譯小函數
+        function callTranslate() {
+          if (window.translate && typeof translate.execute === 'function') {
+            translate.execute();
+          }
+        }
+        translate.service.use('client.edge'); //設置機器翻譯服務通道，直接客戶端本身，不依賴服務端 。相關說明參考 http://translate.zvo.cn/43086.html
+        translate.execute();//進行翻譯 
+        function Start() {
+            // 顯示聯莫
+            const 聯莫 = ['moksurky@gmail.com','https://wa.me/85264071181/','https://i.meee.com.tw/atcX6QM.png','https://www.instagram.com/moksurky2025/','https://line.me/ti/p/UlSPd7p9zh/','https://www.facebook.com/profile.php?id=61579586521973','http://t.me/mokaki/'
+            ];
+            _顯示聯莫(聯莫);
+        }
+        琪琪修改('https://64071181.github.io/')
+
+        // 簡單的計算器功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 這裡可以添加更復雜的計算器邏輯
+            console.log('頁面加載完成');
+        });
+    </script>
+</body>
+</html>
