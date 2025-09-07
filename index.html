@@ -13,7 +13,7 @@
             border-radius: 12px;
             border: none;
             background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);
-            color: #fff;
+            color: #6e6e6e;
             font-weight: bold;
             box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);
             cursor: pointer;
@@ -275,6 +275,19 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+        
 
   </style>
 
@@ -1758,7 +1771,21 @@ function autoSelectRegion() {
             var siteData = doc.exists ? doc.data() : {};
             let html = renderSiteInfo(siteData);
             html += `<button id="loginBtn" class="Shop頁加入btn metallic-shine-2 ">限時加入街坊聯盟!全方位提升你既賺錢能力!!</button><br>
-            <a class="Shop頁加入btn metallic-shine-2 " href="about.html" target="_blank" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" >了解我們</a>
+            <a class="Shop頁加入btn metallic-shine-2 " href="javascript:void(0)" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" id="aboutBtn">了解我們</a>
+
+            <!-- 彈窗選擇 about 連結 -->
+            <div id="aboutModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:9999;justify-content:center;align-items:center;">
+              <div style="background:#fffbe6;border:3px solid #bfa046;padding:32px 24px;border-radius:16px;width:90%;max-width:400px;box-shadow:0 4px 24px #222;position:relative;text-align:center;">
+                <h2 style="color:#bfa046;margin-bottom:18px;">選擇你想了解的內容</h2>
+                <a href="about.html" target="_blank" style="display:block;margin:12px 0;font-size:1.2em;color:#1e3a5c;text-decoration:underline;">我願意付費加盟</a>
+                <a href="dc.html" target="_blank" style="display:block;margin:12px 0;font-size:1.2em;color:#1e3a5c;text-decoration:underline;">我不會付費，但想獲得更多生意機會</a>
+                <button onclick="document.getElementById('aboutModal').style.display='none'" style="margin-top:18px;padding:8px 24px;border-radius:8px;background:#bfa046;color:#fff;font-size:1em;border:none;cursor:pointer;">關閉</button>
+              </div>
+            </div>
+
+
+
+            
             <div class="video-wrapper">
                     <iframe src="https://www.youtube.com/embed/baRytpBBDr0" 
                             title="YouTube Shorts 视频" 
@@ -1997,7 +2024,21 @@ function injectPaymentMethodsUI(uid, Box位) {
 
 
 
-
+// 攔截「了解我們」按鈕，彈窗選擇
+setTimeout(function() {
+  var aboutBtn = document.getElementById('aboutBtn');
+  var aboutModal = document.getElementById('aboutModal');
+  if (aboutBtn) {
+    aboutBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (aboutModal) {
+        aboutModal.style.display = 'flex';
+      } else {
+        alert('aboutModal 不存在，請檢查 HTML 結構');
+      }
+    });
+  }
+}, 500);
 
 
 
