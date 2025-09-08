@@ -772,7 +772,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
                 從申請到全面運營，我們提供全程指導和支持
             </p>
             
-            <div class="steps-container">
+            <div id="just" class="steps-container">
                 <div class="step">
                     <div class="step-number">1</div>
                     <div class="step-content">
@@ -791,7 +791,6 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
                     </div>
                 </div>
                 
-                <div id="just">
                     <div class="step">
                         <div class="step-number">3</div>
                         <div class="step-content">
@@ -807,7 +806,7 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
                             <p>預繳後，聯絡管理員啟動系統。</p>
                         </div>
                     </div>
-                </div>
+                
             </div>
             
             <div style="text-align: center; margin-top: 2rem;">
@@ -1165,14 +1164,33 @@ body {font-family: 'Noto Sans TC', sans-serif;background-color: var(--off-white)
     if (urlParams.has('just')) {
                 // 更新ID为asd的元素内容
                 asdElement.innerHTML  = `
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h3>消費券上架</h3>
-                            <p>填寫消費券上架申請表，提交審核後，即可上架至街坊聯盟，讓別人的數十萬客戶成為您的客人。</p>
-                        </div>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <a href="./" target="_blank">
+                        <h3>登入系統</h3>
+                        <p>點擊此處免費登入系統</p>
+                        </a>
                     </div>
-                `;
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>填寫商家資料</h3>
+                        <p>填寫並儲存您的商家資料。</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>消費券上架</h3>
+                        <p>填寫消費券上架申請表，提交審核後，即可上架至街坊聯盟，讓別人的數十萬客戶成為您的客人。</p>
+                    </div>
+                </div>
+            </div>`;
             }
         }
 
