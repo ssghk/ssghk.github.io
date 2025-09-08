@@ -1116,8 +1116,11 @@ function autoSelectRegion() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const adOwnerId = urlParams.get('adOwner') || urlParams.get('owner') || urlParams.get('adowner') || urlParams.get('user');
                 if (adOwnerId) {
-                  const ownerAds = adsArr.filter(ad => ad.owner === adOwnerId);
+                  // 1. 筛选广告主的广告 → 反转（让广告主的最后一条数据在最上）
+                  const ownerAds = adsArr.filter(ad => ad.owner === adOwnerId).slice().reverse();
+                  // 2. 筛选非广告主的广告 → 反转（让非广告主的最后一条数据在最上）
                   const otherAds = adsArr.filter(ad => ad.owner !== adOwnerId).slice().reverse();
+                  // 3. 组合：广告主广告（已反转）在前，非广告主广告（已反转）在后
                   adsArr = [...ownerAds, ...otherAds];
                 } else {
                   adsArr = adsArr.slice().reverse();
