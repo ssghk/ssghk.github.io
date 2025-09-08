@@ -442,7 +442,7 @@
         translate.execute();//進行翻譯 
         function Start() {
             // 顯示聯莫
-            const 聯莫 = ['moksurky@gmail.com','https://wa.me/85264071181/','https://i.meee.com.tw/atcX6QM.png','https://www.instagram.com/moksurky2025/','https://line.me/ti/p/UlSPd7p9zh/','https://www.facebook.com/profile.php?id=61579586521973','http://t.me/mokaki/'
+            const 聯莫 = ['moksurky@gmail.com','https://wa.me/85264071181/','https://i.meee.com.tw/atcX6QM.png','https://www.instagram.com/get300customersmonthforfree?igsh=cmtqeWlhYzJ4OTEy','https://line.me/ti/p/UlSPd7p9zh/','https://www.facebook.com/profile.php?id=61579586521973','http://t.me/mokaki/'
             ];
             _顯示聯莫(聯莫);
         }
@@ -1777,8 +1777,12 @@ function autoSelectRegion() {
             <div id="aboutModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:9999;justify-content:center;align-items:center;">
               <div style="background:#fffbe6;border:3px solid #bfa046;padding:32px 24px;border-radius:16px;width:90%;max-width:400px;box-shadow:0 4px 24px #222;position:relative;text-align:center;">
                 <h2 style="color:#bfa046;margin-bottom:18px;">選擇你想了解的內容</h2>
-                <a href="about.html" target="_blank" style="display:block;margin:12px 0;font-size:1.2em;color:#1e3a5c;text-decoration:underline;">我願意付費加盟</a>
-                <a href="dc.html" target="_blank" style="display:block;margin:12px 0;font-size:1.2em;color:#1e3a5c;text-decoration:underline;">我不會付費，但想獲得更多生意機會</a>
+                <a href="about.html" target="_blank" class="Shop頁加入btn metallic-shine-2">我願意付費加盟</a>
+                <a href="dc.html" target="_blank" class="Shop頁加入btn metallic-shine-2">我不會付費，但想獲得更多生意機會</a>
+                
+                <a href="https://chat.whatsapp.com/B8dUWTImpdaLf2LCIBRKZI" target="_blank" class="Shop頁加入btn metallic-shine-2">whatsapp 查詢</a>
+
+
                 <button onclick="document.getElementById('aboutModal').style.display='none'" style="margin-top:18px;padding:8px 24px;border-radius:8px;background:#bfa046;color:#fff;font-size:1em;border:none;cursor:pointer;">關閉</button>
               </div>
             </div>
@@ -1800,6 +1804,23 @@ function autoSelectRegion() {
               const provider = new firebase.auth.GoogleAuthProvider();
               auth.signInWithPopup(provider);
             };
+
+            // 攔截「了解我們」按鈕，彈窗選擇
+            setTimeout(function() {
+              var aboutBtn = document.getElementById('aboutBtn');
+              var aboutModal = document.getElementById('aboutModal');
+              if (aboutBtn) {
+                aboutBtn.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  if (aboutModal) {
+                    aboutModal.style.display = 'flex';
+                  } else {
+                    alert('aboutModal 不存在，請檢查 HTML 結構');
+                  }
+                });
+              }
+            }, 500);
+
           });
         }
       });
@@ -2024,21 +2045,7 @@ function injectPaymentMethodsUI(uid, Box位) {
 
 
 
-// 攔截「了解我們」按鈕，彈窗選擇
-setTimeout(function() {
-  var aboutBtn = document.getElementById('aboutBtn');
-  var aboutModal = document.getElementById('aboutModal');
-  if (aboutBtn) {
-    aboutBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      if (aboutModal) {
-        aboutModal.style.display = 'flex';
-      } else {
-        alert('aboutModal 不存在，請檢查 HTML 結構');
-      }
-    });
-  }
-}, 500);
+
 
 
 
