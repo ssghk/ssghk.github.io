@@ -37,7 +37,7 @@ exports.createUserDocument = functions.auth.user().onCreate(async (user) => {
   await admin.firestore().collection('users').doc(uid).set({
     name,
     email: user.email || '',
-    vip: false,
+    vip: true,
     url,
     geturl,
     localUrl,
@@ -100,11 +100,12 @@ exports.updateAdList = functions.https.onCall(async (data, context) => {
   if (context.auth?.uid !== adminUid) {
     throw new functions.https.HttpsError('permission-denied', '只有管理員可操作');
   }
-  // data.ads: 陣列，每個物件有 img, title, desc1, desc2
+  // data.ads: 陣列，每個物件有 img, title, desc1, desc2, owner
   if (!Array.isArray(data.ads)) {
     throw new functions.https.HttpsError('invalid-argument', 'ads 必須為陣列');
   }
-  await admin.firestore().collection('ads').doc('main').set({ ads: data.ads });
+  // 新增 owner 欄位
+  await admin.firestore().collection('ads').doc('main').set({ ads: data.ads, owner: data.owner || null });
   return { success: true };
 });
 
