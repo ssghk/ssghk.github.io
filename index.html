@@ -1027,6 +1027,11 @@ function autoSelectRegion() {
   });
 }
 
+
+
+
+
+
     // 商家頁流程
     function renderPublicPage() {
       // 彈窗遮罩點擊可關閉（點內容不關閉）
@@ -1242,8 +1247,6 @@ function autoSelectRegion() {
                       adsHtml += `</div>`;
                       if(ad.desc2 && !(ad.desc2 && /^https?:\/\//.test(ad.desc2))) adsHtml += `<div style='position:absolute;bottom:8px;left:0;width:100%;text-align:center;z-index:2;color:#fff;font-size:24px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;display:inline-block;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 20%,rgba(0,0,0,0.5) 80%,rgba(0,0,0,0) 100%);'>${ad.desc2}</div>`;
                       adsHtml += `</div>`;
-                      // 顯示地區
-                      if(ad.regions) adsHtml += `<div style='position:fixed;bottom:8px;right:8px;color:#1e3a5c;font-size:0.95em;background:#fffbe6;padding:2px 10px;border-radius:8px;z-index:2;'>地區：${ad.regions.join(', ')}</div>`;
                     });
                     adsHtml += `</div>`;
                   }
@@ -1503,7 +1506,7 @@ function autoSelectRegion() {
 
 
                     <div style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: var(--3-gold); box-shadow: rgb(187, 187, 187) 0px 2px 8px;">
-                        <h2>消費券上架</h2><span style="color:var(--dark-gold);font-size:2em;">消費券上架每張每天=1元</span>
+                        <h2>消費券上架</h2>
                         
                         <div id="voucher-container">
                             <!-- 第一组输入框 -->
@@ -1716,47 +1719,19 @@ function autoSelectRegion() {
                   QRCode.toCanvas(payQrCanvas, location.origin + '/pay.html?uid=' + uid);
                 }, 0);
               } else {
-                // 非vip：只顯示 WhatsApp 申請vip連結
-                For_newCss = `display: block;
-            margin: 40px auto 0 auto;
-            font-size: 1.3em;
-            padding: 16px 40px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);
-            color: #fff;
-            font-weight: bold;
-            box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(
-                125deg,
-                var(--dark-gold) 0%,
-                #f9e8a1 25%,
-                var(--dark-gold) 50%,
-                #f9e8a1 75%,
-                var(--dark-gold) 100%
-            );
-            background-size: 200% 200%;
-            animation: gradient-shift 4s infinite;`
+                // 剩餘使用次數不足 人手取消 vip：只顯示 WhatsApp 申請vip連結
 
-                showPrivacyBtn.textContent = '1 填寫您的商家資料'
-                saveProfileBtn.textContent = '2 並儲存您的商家資料'
-
-                showPrivacyBtn.style = For_newCss
-                saveProfileBtn.style = For_newCss
+                saveProfileBtn.style.display = 'none';
 
                 const 登出Box_FowNew = document.getElementById('登出Box_FowNew');
-                登出Box_FowNew.innerHTML = '<a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank" style="color:#fff;font-size:1.2em;text-align: center;margin: 24px 20%;text-decoration: none;" >3 預繳最少100元服務費</a>'
+                登出Box_FowNew.innerHTML = '<a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank" style="color:#fff;font-size:1.2em;text-align: center;margin: 24px 20%;text-decoration: none;" >剩餘使用次數不足，請先充值！</a>';
 
 
 
 
                 const a = document.createElement('a');
-                a.href = `https://wa.me/85264071181/?text=莫生我要加盟街坊聯盟[${data.email}]，預繳收據:`;
-                a.textContent = '4 預繳後，聯絡管理員啟動系統，(每次交易或發出消費劵，我們將收取1元服務費)';
+                a.href = `https://wa.me/85264071181/?text=莫生我已充值，[${data.email}]，充值收據:`;
+                a.textContent = '充值後，聯絡管理員啟動系統，(每次交易或發出消費劵，我們將收取1元服務費)';
                 a.target = '_blank';
                 a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#fff;text-align:center;';
                 a.className = 'Shop頁加入btn metallic-shine-2'; // 添加class
