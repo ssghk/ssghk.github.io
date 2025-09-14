@@ -69,7 +69,7 @@ exports.createUserDocument = functions.auth.user().onCreate(async (user) => {
   const userDoc = {
     name,
     email: user.email || '',
-    vip: true,
+    vip: false,
     url,
     geturl,
     localUrl,
@@ -80,6 +80,7 @@ exports.createUserDocument = functions.auth.user().onCreate(async (user) => {
     lastGetDate: ''
   };
   if (owner) userDoc.owner = owner;
+  if (owner) userDoc.vip = true; // 如有推薦人，vip = true;
   await admin.firestore().collection('users').doc(uid).set(userDoc, { merge: true });
 });
 
