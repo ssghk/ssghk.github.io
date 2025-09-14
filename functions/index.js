@@ -1,12 +1,35 @@
-
 /*
 cd C:\Users\mokaki\Desktop\金\ssghk.github.io
 firebase deploy --only functions
 */
-
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
+
+// 讓前端登入後直接寫入 owner 欄位，避免 race condition
+exports.registerWithOwner = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', '請先登入');
+  }
+  const uid = context.auth.uid;
+  const owner = data.owner;
+  if (!owner) {
+    throw new functions.https.HttpsError('invalid-argument', '缺少 owner');
+  }
+  // 僅首次建立時寫入 owner
+  const userRef = admin.firestore().collection('users').doc(uid);
+  const userDoc = await userRef.get();
+  if (userDoc.exists && userDoc.data().owner) {
+    // 已有 owner 不可覆蓋
+    return { success: false, message: 'owner 已存在' };
+  }
+  await userRef.set({ owner }, { merge: true });
+  return { success: true };
+});
+
+
+
+
 
 const { v4: uuidv4 } = require('uuid');
 // 產生一次性 token，30天有效
@@ -34,7 +57,16 @@ exports.createUserDocument = functions.auth.user().onCreate(async (user) => {
   const geturl = `https://ssghk.github.io/index.html?get=${uid}`;
   const localUrl = `http://127.0.0.1:5500/index.html?user=${uid}`;
   const localGeturl = `http://127.0.0.1:5500/index.html?get=${uid}`;
-  await admin.firestore().collection('users').doc(uid).set({
+
+  // 查 queue
+  let owner = '';
+  const signupDoc = await admin.firestore().collection('userSignups').doc(uid).get();
+  if (signupDoc.exists && signupDoc.data().owner) {
+    owner = signupDoc.data().owner;
+    // 寫完可選擇刪除 queue
+    await admin.firestore().collection('userSignups').doc(uid).delete();
+  }
+  const userDoc = {
     name,
     email: user.email || '',
     vip: true,
@@ -46,7 +78,9 @@ exports.createUserDocument = functions.auth.user().onCreate(async (user) => {
     total: 0,
     usageCount: 0,
     lastGetDate: ''
-  });
+  };
+  if (owner) userDoc.owner = owner;
+  await admin.firestore().collection('users').doc(uid).set(userDoc, { merge: true });
 });
 
 
