@@ -119,6 +119,7 @@
       }
     }
 
+    .警告訊息 {color:var(--dark-gold);font-size:1.3em;margin:40px auto;text-align:center;}
 
     /* 管理員界面美化 */
               .admin-nav { display:flex;gap:12px;margin-bottom:18px; }
@@ -1052,30 +1053,33 @@ function autoSelectRegion() {
       const params = new URLSearchParams(location.search);
       const tokenParam = params.get('token');
       const uid = userParam;
+      const 無效提示 = document.getElementById('main').innerHTML = '<div class="警告訊息">消費劵過期或無效，請重新掃描 QR code</div>';
+      
       db.collection('site').doc('main').get().then(siteDoc => {
         const site = siteDoc.exists ? siteDoc.data() : {};
         // 若網址帶有 token，需驗證有效性
         if (tokenParam) {
           db.collection('users').doc(uid).collection('tokens').doc(tokenParam).get().then(tokenDoc => {
             if (!tokenDoc.exists) {
-              document.getElementById('main').innerHTML = '<div style="color:red;font-size:1.3em;margin:40px auto;text-align:center;">消費劵過期或無效，請重新掃描 QR code</div>';
+              無效提示;
               return;
             }
             const tokenData = tokenDoc.data();
             const now = new Date();
             const expireAt = tokenData.expireAt ? new Date(tokenData.expireAt) : null;
             if (!expireAt || now > expireAt) {
-              document.getElementById('main').innerHTML = '<div style="color:red;font-size:1.3em;margin:40px auto;text-align:center;">消費劵過期，請重新掃描 QR code</div>';
+              無效提示;
               return;
             }
             // token 有效，顯示商家頁，並顯示過期時間
             renderShopPageWithExpiry(site, uid, expireAt);
           }).catch(e => {
-            document.getElementById('main').innerHTML = '<div style="color:red;font-size:1.3em;margin:40px auto;text-align:center;">消費劵驗證失敗，請稍後再試</div>';
+            無效提示;
           });
         } else {
           // 沒有 token 參數，直接顯示商家頁（舊流程，僅供兼容）
-          renderShopPageWithExpiry(site, uid, null);
+          //renderShopPageWithExpiry(site, uid, null);
+          無效提示;
         }
       });
 

@@ -236,17 +236,28 @@
             const data = doc.data();
             payTitle.textContent = (data.name ? data.name : '會員');
             const methods = Array.isArray(data.paymentMethods) ? data.paymentMethods : [];
-            if (!methods.length) { 
-              //此會員尚未設定付款方式
-              window.location.href = 'index.html?user='+uid;
-             }
+
+            // 產生 token 並帶入連結
+              const createTokenForUser = firebase.functions().httpsCallable('createTokenForUser');
+              createTokenForUser({ uid }).then(tokenResult => {
+                const token = tokenResult.data.token;
+
+                if (!methods.length) { 
+                  //此會員尚未設定付款方式
+                  window.location.href = `index.html?user=${uid}&token=${token}`;
+                }
+                消費劵鍵.innerHTML = `<a href="index.html?get=${uid}&token=${token}" target="_blank" class="Shop頁加入btn metallic-shine-2 ">街坊聯盟消費劵</a>`;
+              }).catch(e => {
+                消費劵鍵.innerHTML = '<div style="color:red;text-align:center;">產生消費劵失敗</div>';
+              });
+              // 顯示付款方式
             payList.innerHTML = methods.map(pm => `
               <div class="pay-item">
                 <span class="pay-name">${pm.name||''}</span>
                 <img class="pay-img" src="${pm.img||''}" alt="${pm.name||''}" onerror="this.style.display='none'">
               </div>
             `).join('');
-            消費劵鍵.innerHTML = `<a href="index.html?user=${uid}" target="_blank" class="Shop頁加入btn metallic-shine-2 ">街坊聯盟消費劵</a>`;
+
           }).catch(e => {
             //payList.innerHTML = '<div style="color:red;text-align:center;">查詢失敗</div>';
             //payTitle.textContent = '查詢失敗';
