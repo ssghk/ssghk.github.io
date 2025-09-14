@@ -1054,7 +1054,7 @@ function autoSelectRegion() {
       const tokenParam = params.get('token');
       const uid = userParam;
       const 無效提示 = document.getElementById('main').innerHTML = '<div class="警告訊息">消費劵過期或無效，請重新掃描 QR code</div>';
-      
+
       db.collection('site').doc('main').get().then(siteDoc => {
         const site = siteDoc.exists ? siteDoc.data() : {};
         // 若網址帶有 token，需驗證有效性
@@ -1417,7 +1417,7 @@ function autoSelectRegion() {
                 <div>${site.logo?`<img src='${site.logo}' style='max-width:120px;'>`:''}</div>
                 <div>${site.desc||''}</div>
                 <br>
-                <a href="about.html" target="_blank" class="Shop頁加入btn metallic-shine-2 ">限時加入街坊聯盟!全方位提升你既賺錢能力!!</a>
+                <a href="./?ow=${uid}" target="_blank" class="Shop頁加入btn metallic-shine-2 ">限時加入街坊聯盟!全方位提升你既賺錢能力!!</a>
               `;
               document.getElementById('infoModal').style.display = 'flex';
             };
@@ -1567,9 +1567,23 @@ function autoSelectRegion() {
             const loginBtn = document.getElementById('loginBtn');
             const logoutBtn = document.getElementById('logoutBtn');
             const userPanel = document.getElementById('userPanel');
-            loginBtn.onclick = () => {
+            loginBtn.onclick = async () => {
+              const urlParams = new URLSearchParams(window.location.search);
+              const owner = urlParams.get('ow');
               const provider = new firebase.auth.GoogleAuthProvider();
-              auth.signInWithPopup(provider);
+              try {
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+                if (owner && user && user.uid) {
+                  // 呼叫 Cloud Function 註冊 API，將 owner 一起傳給後端
+                  const registerWithOwner = firebase.functions().httpsCallable('registerWithOwner');
+                  console.log('registerWithOwner called', { uid, owner });
+                  
+                  await registerWithOwner({ owner });
+                }
+              } catch (e) {
+                alert('登入失敗: ' + (e.message || e));
+              }
             };
             logoutBtn.onclick = () => auth.signOut();
             // 商家私隱顯示按鈕
@@ -1747,7 +1761,8 @@ function autoSelectRegion() {
             // 付款方式編輯位
             injectPaymentMethodsUI(uid,'付款方式位');
           });
-        } else {
+        } 
+        else {
           // 未登入顯示網站資料+登入按鈕
           db.collection('site').doc('main').get().then(doc => {
             var siteData = doc.exists ? doc.data() : {};
@@ -1808,7 +1823,10 @@ function autoSelectRegion() {
       });
     }
 
+
     
+
+
     // 付款方式管理
     function renderPaymentMethods(user, wrap) {
       wrap.innerHTML = '<h2>付款方式管理</h2>';
@@ -2059,6 +2077,19 @@ function injectPaymentMethodsUI(uid, Box位) {
     } else if (userParam) {
       renderPublicPage();
     } else {
+      // 新用戶註冊時，若網址有 ?ow= 參數，僅寫入 queue，不再直接 set 到 users/{uid}
+      firebase.auth().onAuthStateChanged(async function(user) {
+        if (user && params.has('ow')) {
+          const owner = params.get('ow');
+          const uid = user.uid;
+          try {
+            await db.collection('userSignups').doc(uid).set({ owner });
+            // 不再 set 到 users/{uid}，owner 欄位交由 Cloud Function 寫入
+          } catch (e) {
+            console.error('寫入 owner queue 失敗', e);
+          }
+        }
+      });
       renderMemberPage();
     }
   </script>

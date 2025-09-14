@@ -2,6 +2,14 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+
+    match /userSignups/{uid} {
+      allow create, update: if request.auth != null && request.auth.uid == uid;
+      allow read: if false;
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+
     match /users/{uid}/tokens/{token} {
       allow read: if true;
     }
@@ -20,6 +28,9 @@ service cloud.firestore {
 
     match /users/{userId} {
       allow read: if true;
+
+      // 允許首次建立 owner 欄位
+      allow create: if request.auth != null && request.resource.data.keys().hasAny(['owner']);
 
       // 允許管理員更新任何字段（包括付款方式）
       allow update: if request.auth != null && (
