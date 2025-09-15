@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>推薦人@街坊聯盟</title>
+  <link rel="icon" href="https://i.meee.com.tw/22tSagT.png" type="image/png">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <style>
+    body { font-family: Arial, "Microsoft JhengHei", sans-serif; margin: 0; padding: 0; background: #f8f8f8; }
+    .main { max-width: 1200px; margin: 30px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px #bbb; padding: 24px; }
+    .tree ul { list-style: none; padding-left: 24px; }
+    .tree li { margin: 6px 0; }
+    .self { background: linear-gradient(135deg, #D4AF37 0%, #F9E076 100%);
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 600;}
+    .owner { color: #2563EB; }
+    .downline { color: #1e3a5c; }
+    .uid { color: #ffffff; font-size: 0.9em; }
+    #logoutBtn { margin-top: 18px; }
+  </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="https://cdn.staticfile.net/translate.js/3.1.7/translate.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://64071181.github.io/mokJsapi/a.js">//琪琪修改</script>
+</head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+  <p id="translate"></p>
+      <div class="main">
+        <h1>街坊聯盟導師計劃</h1>
+        <a href="./">返回街坊聯盟</a>
+    </div>
+
+
+  <div class="main">
+    <div id="authArea">
+      <button id="loginBtn">Google登入</button>
+    </div>
+    <div id="treeArea" style="display:none;"></div>
+    <button id="logoutBtn" style="display:none;">登出</button>
+  </div>
+
+
+  <div class="main">
+    <label class="card-header" for="card6">導師計劃</label>
+            <div class="card-content">
+                <div class="card-content-inner">
+                    <h3>所有同事，談成3店，即可成為導師:</h3>
+                    <ul>
+                        <li>可以培訓銷售員，您培訓的銷售員的店，所有利潤，您永久有佣金 = 20%</li>
+                    </ul>
+
+                    <h3>此計劃銷售和商戶都適用:</h3>
+                    <ul>
+                        <li>如果您名下的商戶有多間分店，或他介紹友店加盟(用他的碼加盟)，都算到您名下。</li>
+                        <li>您可以告訴您的商戶，介紹友店用他的碼加盟，他可以享有50%佣金。</li>
+                    </ul>
+
+
+                    <div class="highlight">
+                        <p>一位導師培訓出5個導師後 → 可申請成為合夥人(限5位)，享有全香港所有店佣金 = 5%</p>
+                    </div>
+                </div>
+            </div>
+  </div>
+              <div id="ContactAKI" class="ContactAKI"><!-- JS _顯示聯莫 --></div>
+            <p class="mokJsApi_copyright">版權</p>
+            <div class="scroll-top" id="scrollTop" style="background: #debf56;bottom: 40%;" onclick="scrollToTop()">↑</div>
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+
+/*
+          :::        :::    :::       :::::::::::
+       :+: :+:      :+:   :+:            :+:
+     +:+   +:+     +:+  +:+             +:+
+   +#++:++#++:    +#++:++              +#+
+  +#+     +#+    +#+  +#+             +#+
+ #+#     #+#    #+#   #+#            #+#
+###     ###    ###    ###       ###########
+*/
+
+        // 動態內容自動翻譯小函數
+        function callTranslate() {
+          if (window.translate && typeof translate.execute === 'function') {
+            translate.execute();
+          }
+        }
+        translate.service.use('client.edge'); //設置機器翻譯服務通道，直接客戶端本身，不依賴服務端 。相關說明參考 http://translate.zvo.cn/43086.html
+        translate.execute();//進行翻譯 
+        function Start() {
+            // 顯示聯莫
+            const 聯莫 = ['moksurky@gmail.com','https://wa.me/85264071181/','https://i.meee.com.tw/atcX6QM.png','https://www.instagram.com/get300customersmonthforfree?igsh=cmtqeWlhYzJ4OTEy','https://line.me/ti/p/UlSPd7p9zh/','https://www.facebook.com/profile.php?id=61579586521973','http://t.me/mokaki/'
+            ];
+            _顯示聯莫(聯莫);
+        }
+        琪琪修改('https://64071181.github.io/')
+
+
+    // 請填入你的 Firebase 配置
+    var firebaseConfig = {
+      apiKey: "AIzaSyAe9fiJ-awc_QcHaT_GjrcYnSSGhl-weLM",
+      authDomain: "ssg1111.firebaseapp.com",
+      projectId: "ssg1111",
+      storageBucket: "ssg1111.firebasestorage.app",
+      messagingSenderId: "645347114148",
+      appId: "1:645347114148:web:a380b5bf76f659c7e47a31",
+      measurementId: "G-EH0Z16872Q"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const authArea = document.getElementById('authArea');
+    const treeArea = document.getElementById('treeArea');
+
+    loginBtn.onclick = () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider);
+    };
+    logoutBtn.onclick = () => auth.signOut();
+
+    auth.onAuthStateChanged(async user => {
+      if (user) {
+        authArea.style.display = 'none';
+        logoutBtn.style.display = '';
+        treeArea.style.display = '';
+        treeArea.innerHTML = '<div>載入中...</div>';
+        const uid = user.uid;
+        // 查詢所有 users
+        const usersSnap = await db.collection('users').get();
+        const users = {};
+        usersSnap.forEach(doc => users[doc.id] = doc.data());
+        // 構建推薦樹
+        function buildTree(currentUid, users, maxDepth = 99, depth = 0, visited = new Set()) {
+          if (!users[currentUid] || depth > maxDepth || visited.has(currentUid)) return null;
+          visited.add(currentUid);
+          const node = {
+            uid: currentUid,
+            name: users[currentUid].name || '',
+            owner: users[currentUid].owner || '',
+            email: users[currentUid].email || '',
+            children: []
+          };
+          // 找下線
+          for (const [id, u] of Object.entries(users)) {
+            if (u.owner === currentUid) {
+              const child = buildTree(id, users, maxDepth, depth + 1, visited);
+              if (child) node.children.push(child);
+            }
+          }
+          return node;
+        }
+        // 找上線鏈
+        function getOwnerChain(uid, users) {
+          const chain = [];
+          let cur = uid;
+          const visited = new Set();
+          while (users[cur] && users[cur].owner) {
+            const ownerId = users[cur].owner;
+            if (!users[ownerId] || visited.has(ownerId)) break;
+            chain.push({ uid: ownerId, name: users[ownerId].name || '', email: users[ownerId].email || '' });
+            visited.add(ownerId);
+            cur = ownerId;
+            if (chain.length > 20) break; // 防止死循環
+          }
+          return chain;
+        }
+        // 畫樹
+        function renderTree(node, isSelf = false) {
+          if (!node) return '';
+          let html = `<li><span class="${isSelf ? 'self' : 'downline'}">${node.name || '(無名)'} <span class="uid">(${node.email})</span></span><br><br>`;
+          if (node.children.length) {
+            html += '<ul>' + node.children.map(child => renderTree(child)).join('') + '</ul>';
+          }
+          html += '</li>';
+          return html;
+        }
+        // 畫上線
+        function renderOwnerChain(chain, selfUid) {
+          if (!chain.length) return '<li>（無推薦人）</li>';
+          return chain.map((o, i) => `<li><span class="owner">${o.name || '(無名)'} <span class="uid">(${o.email})</span></span>${i === 0 ? ' ← 推薦人' : ''}</li>`).join('');
+        }
+        // 畫出
+        const selfNode = buildTree(uid, users);
+        const ownerChain = getOwnerChain(uid, users);
+        treeArea.innerHTML = `
+          <ul>${renderOwnerChain(ownerChain, uid)}</ul>
+          <ul class="tree">${renderTree(selfNode, true)}</ul>
+        `;
+      } else {
+        authArea.style.display = '';
+        logoutBtn.style.display = 'none';
+        treeArea.style.display = 'none';
+      }
+    });
+  </script>
+
+</html>
