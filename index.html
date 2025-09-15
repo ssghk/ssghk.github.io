@@ -1499,7 +1499,7 @@ function autoSelectRegion() {
                   <div id="商家私隱" style="display:none">
 
 
-                    <div id="商家Gmail"></div>
+                    <span id="vip"></span><span style="margin-left:10px;margin-right:10px;" id="商家Gmail"></span><a href="./ownertree.html" title="團隊樹">🌳</a>
 
                     <div>商家名字：<input id="name" type="text"></div>
                     <div>商家電話：<input id="phone" type="text"></div>
@@ -1541,7 +1541,7 @@ function autoSelectRegion() {
 
 
                     <div id="adsList">已轉公用廣告</div>
-                    <div>VIP：<span id="vip"></span></div>
+                    
                     <div style="display:none">獨立網址：<span id="url"></span></div>
                     <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
                     <div>本月使用次數：<span id="month"></span></div>
@@ -1552,8 +1552,14 @@ function autoSelectRegion() {
                     <button id="logoutBtn">登出</button>
                     </div>
                   </div>
+                  <h1 id="商家名" ></h1>
+                  <br>
                   <div id="qr位" ><canvas id="qrcode" class="Shop頁加入btn metallic-shine-2 "></canvas></div>
-                </div>
+                  <h1 id="商家WS" ></h1>
+
+
+
+                  </div>
                 <div id="logoAreaMember">
                   <div id="memberLogoBox"></div>
                   <div id="siteLogoBoxMember"></div>
@@ -1623,6 +1629,11 @@ function autoSelectRegion() {
               const logoPreview = document.getElementById('logoPreview');
               const adsList = document.getElementById('adsList');
               const saveProfileBtn = document.getElementById('saveProfileBtn');
+
+              const 商家名 = document.getElementById('商家名');
+              const 商家ws = document.getElementById('商家ws');
+
+
               const data = doc.data();
 
               //消費券上架資訊生成器
@@ -1639,6 +1650,11 @@ function autoSelectRegion() {
               phoneInput.value = data.phone || '';
               addressInput.value = data.address || '';
               logoInput.value = data.logo || '';
+
+              商家名.innerHTML = data.name || '';
+              商家WS.innerHTML = data.phone || '';
+
+
               logoPreview.innerHTML = data.logo ? `<img src='${data.logo}' style='max-width:60px;'>` : '';
               function renderAdsLoop(ads) {
                 renderAds(ads, adsList, function(idx) {
@@ -1650,7 +1666,7 @@ function autoSelectRegion() {
               renderAdsLoop(data.ads || []);
               document.getElementById('url').textContent = data.url || data.localUrl || '';
               document.getElementById('geturl').textContent = data.geturl || data.localGeturl || '';
-              document.getElementById('vip').textContent = data.vip ? '是' : '否';
+              document.getElementById('vip').textContent = data.vip ? '👑' : '';
               document.getElementById('month').textContent = data.month || 0;
               document.getElementById('total').textContent = data.total || 0;
               // 顯示 usageCount, lastGetDate
