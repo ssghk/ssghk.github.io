@@ -1676,7 +1676,9 @@ function autoSelectRegion() {
                 usageDiv.id = 'usageInfo';
                 document.getElementById('商家私隱').appendChild(usageDiv);
               }
-              usageDiv.innerHTML = `<div style='color:#1e3a5c;'>剩餘使用次數：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div><div style='color:#1e3a5c;'>上次使用時間：${formatHKTime(data.lastGetDate)||''}</div>`;
+              usageDiv.innerHTML = `<div style='color:#1e3a5c;'>剩餘使用次數：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div>
+              <div style='color:#1e3a5c;'>上次使用時間：${formatHKTime(data.lastGetDate)||''}</div>
+              <a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank">充值！</a>`;
 
               logoInput.oninput = () => {
                 logoPreview.innerHTML = logoInput.value ? `<img src='${logoInput.value}' style='max-width:60px;'>` : '';
