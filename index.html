@@ -1031,6 +1031,31 @@ function autoSelectRegion() {
 
 
 
+// select 後 3秒提示
+function showTempTip(msg) {
+  let tip = document.getElementById('tempTipMsg');
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.id = 'tempTipMsg';
+    tip.style.position = 'fixed';
+    tip.style.top = '20px';
+    tip.style.left = '50%';
+    tip.style.transform = 'translateX(-50%)';
+    tip.style.background = 'rgba(34,34,34,0.92)';
+    tip.style.color = '#fff';
+    tip.style.padding = '12px 32px';
+    tip.style.borderRadius = '8px';
+    tip.style.fontSize = '1.2em';
+    tip.style.zIndex = 9999;
+    document.body.appendChild(tip);
+  }
+  tip.textContent = msg;
+  tip.style.display = '';
+  clearTimeout(window._tempTipTimer);
+  window._tempTipTimer = setTimeout(() => { tip.style.display = 'none'; }, 3000);
+}
+
+
 
 
     // 商家頁流程
@@ -1308,6 +1333,7 @@ function autoSelectRegion() {
                     catSelect.onchange = function() {
                       currentCat = catSelect.value;
                       renderAdsArea(currentCat, currentKeyword, true, currentRegion);
+                      showTempTip('已選擇類別: ' + catSelect.value);
                     };
                   }
                   // 綁定地區選單
@@ -1315,6 +1341,7 @@ function autoSelectRegion() {
                     regionSelect.onchange = function() {
                       currentRegion = regionSelect.value;
                       renderAdsArea(currentCat, currentKeyword, true, currentRegion);
+                      showTempTip('已選擇地區: ' + regionSelect.value);
                     };
                   }
                 }
@@ -1328,6 +1355,7 @@ function autoSelectRegion() {
                   kwInput.oninput = function() {
                     currentKeyword = kwInput.value;
                     renderAdsArea(currentCat, currentKeyword, true, currentRegion);
+                    showTempTip('已搜尋: ' + kwInput.value);
                   };
                 }
                 renderAdsArea(currentCat, currentKeyword, true, currentRegion);
