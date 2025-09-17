@@ -1263,7 +1263,7 @@ function showTempTip(msg) {
                   lastShowAds = [...ownerAds, ...showAds];
                   let adsHtml = '';
                   // 新增：顯示廣告總數
-                  adsHtml += `<div style='width:100%;max-width:720px;text-align:right;color:var(--dark-gold);font-size:1.1em;margin-bottom:4px;'>加盟店：${adsArr.length + 100}</div>`;
+                  adsHtml += `<a href="#ContactAKI">↕️</a><div style='width:100%;max-width:720px;text-align:right;color:var(--dark-gold);font-size:1.1em;margin-bottom:4px;'>加盟店：${adsArr.length + 100}</div>`;
                   // 最上方獨立顯示廣告主ID的廣告
                   if (ownerAds.length) {
                     adsHtml += `<div id="ownerAdsArea" style="display:flex;flex-direction:column;align-items:center;margin-top:12px;">`;
