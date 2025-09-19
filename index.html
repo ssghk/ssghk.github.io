@@ -702,7 +702,8 @@ async function addRegionsToFirestore() {
           const snap = await db.collection('users').get();
           snap.forEach(doc => {
             const d = doc.data();
-            html += `<div style="border:1px solid #ccc;margin:8px 0;padding:4px;">
+            html += `
+            <div style="border:1px solid #ccc;margin:8px 0;padding:4px;">
               <a href="${d.url}" target="_blank">${doc.id}</a><br>
               <span style='color:#1e3a5c;font-size:1em;'>${d.email||''}</span><br>
               商家名稱: <input type="text" class="shopName" data-uid="${doc.id}" value="${d.name||''}"><br>
@@ -710,12 +711,14 @@ async function addRegionsToFirestore() {
               商家電話: <input type="text" class="phone" data-uid="${doc.id}" value="${d.phone||''}"><br>
               商家地址: <input type="text" class="address" data-uid="${doc.id}" value="${d.address||''}"><br>
               <a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input type="text" class="logo" data-uid="${doc.id}" value="${d.logo||''}"><br>
-              <div id="付款方式_${doc.id}"></div>
+              
+              
+              <div id="收款方式_${doc.id}"></div>
               <span style='color:var(--dark-gold);font-weight:bold;'>本月使用數：${d.month||0}　累計使用數：${d.total||0}</span><br>
                 <span style='color:#1e3a5c;'>💰：<input type="number" class="usageCount" data-uid="${doc.id}" value="${typeof d.usageCount === 'number' ? d.usageCount : 0}" style="width:80px;"></span><br>
               <span style='color:#1e3a5c;'>上次使用時間：${formatHKTime(d.lastGetDate)||''}</span><br>
               <button class="editUser" data-uid="${doc.id}">儲存</button>
-            </div>`;
+            </div><br><br><hr><br><br>`;
           });
 
           // 綁定使用次數儲存按鈕
@@ -741,7 +744,7 @@ async function addRegionsToFirestore() {
           document.getElementById('main').innerHTML = html;
 
 snap.forEach(doc => {
-  injectPaymentMethodsUI(doc.id, `付款方式_${doc.id}`);
+  injectPaymentMethodsUI(doc.id, `收款方式_${doc.id}`);
 });
 
           // 分頁導航切換事件
@@ -913,8 +916,8 @@ snap.forEach(doc => {
                 // 呼叫 Cloud Function 儲存 usageCount
                 const adminUpdateUserExtra = firebase.functions().httpsCallable('adminUpdateUserExtra');
                 await adminUpdateUserExtra({ uid, usageCount });
-                // 儲存付款方式
-                await savePaymentMethods(uid, `付款方式_${uid}`);
+                // 儲存收款方式
+                await savePaymentMethods(uid, `收款方式_${uid}`);
                 alert(`已更新[ ${name} ]的資料`);
               } catch(e) {
       alert(`儲存失敗: ${e.message || e}`);
@@ -1116,7 +1119,7 @@ function showTempTip(msg) {
             const data = doc.data();
             // 設定 title 為 data.name | 公司名
             if (data.name && site.name) {
-              document.title = data.name + ' | ' + site.name;
+              document.title = data.name + '@' + site.name;
             } else if (data.name) {
               document.title = data.name;
             } else if (site.name) {
@@ -1525,19 +1528,34 @@ function showTempTip(msg) {
                 <div id="userPanel" style="display:none">
                   <button id="showPrivacyBtn">💰</button>
                   <div id="商家私隱" style="display:none">
+  <div id="privacyTabs" style="display:flex;gap:8px;margin-bottom:8px;">
+    <button class="privacy-tab" data-tab="基本" style="flex:1">基本</button>
+    <button class="privacy-tab" data-tab="消費券上架" style="flex:1">消費券上架</button>
+    <button class="privacy-tab" data-tab="收款方式位" style="flex:1">收款方式</button>
+  </div>
 
 
-                    <span id="vip"></span><span style="margin-left:10px;margin-right:10px;" id="商家Gmail"></span><a href="./ownertree.html" title="團隊樹">🌳</a>
+                    <div id="基本" class="privacy-tab-content" style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: var(--3-gold); box-shadow: rgb(187, 187, 187) 0px 2px 8px;">
+                        <h2>基本</h2>
+                        <hr>
 
-                    <div>商家名字：<input id="name" type="text"></div>
-                    <div>商家電話：<input id="phone" type="text"></div>
-                    <div>商家地址：<input id="address" type="text"></div>
-                    <div><a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input id="logo" type="text" style="width:60%"><span id="logoPreview"></span></div>
-                    <div id="付款方式位"></div>
+                        <span id="vip"></span><span style="margin-left:10px;margin-right:10px;" id="商家Gmail"></span><a href="./ownertree.html" title="團隊樹">🌳</a>
+                        
+
+                        <div>商家名字：<input id="name" type="text"></div>
+                        <div>商家電話：<input id="phone" type="text"></div>
+                        <div>商家地址：<input id="address" type="text"></div>
+                        <div><a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input id="logo" type="text" style="width:60%"><span id="logoPreview"></span></div>
+                    </div>
+                        
+                        
+                        
+                        <div id="收款方式位" class="privacy-tab-content" style="display:none;"></div>
+
+                    
 
 
-
-                    <div style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: var(--3-gold); box-shadow: rgb(187, 187, 187) 0px 2px 8px;">
+                    <div id="消費券上架" class="privacy-tab-content" style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: var(--3-gold); box-shadow: rgb(187, 187, 187) 0px 2px 8px;display:none;">
                         <h2>消費券上架</h2>
                         
                         <div id="voucher-container">
@@ -1569,16 +1587,17 @@ function showTempTip(msg) {
 
 
                     <div id="adsList">已轉公用廣告</div>
-                    
                     <div style="display:none">獨立網址：<span id="url"></span></div>
                     <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
+
+
                     <div>本月使用次數：<span id="month"></span></div>
                     <div>累計使用次數：<span id="total"></span></div>
-                    <div style="color:var(--dark-gold);font-size:2em;">每次掃qr，店主將消費1元</div>
+                    <div style="color:var(--dark-gold);font-size:2em;">每次被掃qr，店主將消費1元</div>
                     <button id="saveProfileBtn">儲存商家資料</button>
-                    <div id=登出Box_FowNew>
-                    <button id="logoutBtn">登出</button>
-                    </div>
+                    <span id=登出Box_FowNew>
+                    <button id="logoutBtn" style="margin-left:16px;">登出</button>
+                    </span>
                   </div>
                   <h1 id="商家名" ></h1>
                   <br>
@@ -1630,6 +1649,32 @@ function showTempTip(msg) {
                 privacyPanel.style.display = 'none';
               }
             };
+
+            // 商家私隱分頁邏輯
+const privacyTabs = document.querySelectorAll('.privacy-tab');
+const privacyTabContents = document.querySelectorAll('.privacy-tab-content');
+privacyTabs.forEach(tab => {
+  tab.addEventListener('click', function() {
+    const tabName = this.getAttribute('data-tab');
+    privacyTabs.forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    privacyTabContents.forEach(c => {
+      if (c.id === tabName) {
+        c.style.display = '';
+      } else {
+        c.style.display = 'none';
+      }
+    });
+  });
+});
+// 預設顯示基本分頁
+if (privacyTabs.length) privacyTabs[0].classList.add('active');
+
+
+
+
+
+
             // user 已登入，開始取得 Firestore 資料
             const uid = user.uid;
             const userRef = db.collection('users').doc(uid);
@@ -1673,14 +1718,21 @@ function showTempTip(msg) {
                   generateBtn.addEventListener('click', generateLink);
               }
 
+              // 最多顯示10個字，超過以 ... 省略
+              let 頁tit加mail = data.email;
+              if (data.email.length > 8) 頁tit加mail = data.email.slice(0, 8) + '...';
+              document.title = 頁tit加mail + '@' + siteData.name;
+
+
               商家Gmail.innerHTML = data.email || '';
               nameInput.value = data.name || '';
               phoneInput.value = data.phone || '';
               addressInput.value = data.address || '';
               logoInput.value = data.logo || '';
 
-              商家名.innerHTML = data.name || '';
+              商家名.innerHTML = `<a href="./?ow=${uid}" target="_blank" title="您的團隊使用此網址登入會立即成為您名下" >${data.name}</a>`;
               商家WS.innerHTML = data.phone || '';
+
 
 
               logoPreview.innerHTML = data.logo ? `<img src='${data.logo}' style='max-width:60px;'>` : '';
@@ -1725,8 +1777,8 @@ function showTempTip(msg) {
                 try {
                   const updateUserProfile = firebase.functions().httpsCallable('updateUserProfile');
                   await updateUserProfile(newData);
-                  await savePaymentMethods(uid,'付款方式位');
-                  alert('已儲存會員資料與付款方式');
+                  await savePaymentMethods(uid,'收款方式位');
+                  alert('已儲存會員資料與收款方式');
                 } finally {
                   saveProfileBtn.disabled = false;
                   saveProfileBtn.textContent = '儲存會員資料';
@@ -1804,8 +1856,8 @@ function showTempTip(msg) {
             }
             waitForUserDoc();
 
-            // 付款方式編輯位
-            injectPaymentMethodsUI(uid,'付款方式位');
+            // 收款方式編輯位
+            injectPaymentMethodsUI(uid,'收款方式位');
           });
         } 
         else {
@@ -1875,13 +1927,13 @@ function showTempTip(msg) {
 
     // 收款方式管理
     function renderPaymentMethods(user, wrap) {
-      wrap.innerHTML = '<h2>收款方式管理</h2>';
+      wrap.innerHTML = '<h2>收款方式管理</h2><hr>';
       let methods = Array.isArray(user.paymentMethods) ? user.paymentMethods : [];
       methods.forEach((pm, idx) => {
         const div = document.createElement('div');
         div.style = 'display:flex;align-items:center;gap:8px;margin-bottom:8px;';
         div.innerHTML = `
-          <input type='text' value='${pm.name||''}' placeholder='付款方式名' style='width:60%;padding:4px 8px;border-radius:6px;border:1px solid #ccc;'>
+          <input type='text' value='${pm.name||''}' placeholder='收款方式名' style='width:60%;padding:4px 8px;border-radius:6px;border:1px solid #ccc;'>
           <input type='text' value='${pm.img||''}' placeholder='圖片網址' style='width:30%;padding:4px 8px;border-radius:6px;border:1px solid #ccc;'>
           <img src='${pm.img||''}' style='height:32px;width:32px;object-fit:contain;border-radius:6px;border:1px solid #eee;' onerror="this.style.display='none'">
           <button class='delPayBtn delete-btn' data-idx='${idx}' >刪除</button>

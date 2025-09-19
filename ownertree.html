@@ -20,6 +20,15 @@
     .downline { color: #1e3a5c; }
     .uid { color: #606060; font-size: 0.9em; }
     #logoutBtn { margin-top: 18px; }
+        .highlight {
+            background: linear-gradient(135deg, #D4AF37 0%, #F9E076 100%);
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
   </style>
 
     <script src="https://kit.fontawesome.com/fd27287143.js" crossorigin="anonymous">//抖音,threads icon</script>
@@ -72,7 +81,6 @@
 
 
   <div class="main">
-    <label class="card-header" for="card6">團隊樹 🌳</label>
             <div class="card-content">
                 <div class="card-content-inner">
                     <h3>所有同事，談成3店後，即可成為團長:</h3>
@@ -87,12 +95,15 @@
                     </ul>
 
 
-                    <div class="highlight">
+                    <div>
                             <p>一位團長旗下出5個團長後 → 可申請成為合夥人(限5位)，享有全香港所有店佣金 = 5%</p>
                         </div>
                 </div>
             </div>
   </div>
+
+
+
               <div id="ContactAKI" class="ContactAKI"><!-- JS _顯示聯莫 --></div>
             <p class="mokJsApi_copyright">版權</p>
             <div class="scroll-top" id="scrollTop" style="background: #debf56;bottom: 40%;" onclick="scrollToTop()">↑</div>
@@ -164,6 +175,8 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const authArea = document.getElementById('authArea');
     const treeArea = document.getElementById('treeArea');
+
+    const 團隊登入網址 = document.getElementById('團隊登入網址');
 
     loginBtn.onclick = () => {
       const provider = new firebase.auth.GoogleAuthProvider();
@@ -254,6 +267,8 @@
         treeArea.style.display = 'none';
       }
     });
+
+    
   </script>
 
 </html>
