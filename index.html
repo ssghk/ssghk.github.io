@@ -1532,6 +1532,7 @@ function showTempTip(msg) {
     <button class="privacy-tab" data-tab="基本" style="flex:1">基本</button>
     <button class="privacy-tab" data-tab="消費券上架" style="flex:1">消費券上架</button>
     <button class="privacy-tab" data-tab="收款方式位" style="flex:1">收款方式</button>
+    <a href="./0921.html" target="_blank" >說明</a>
   </div>
 
 
@@ -1593,7 +1594,9 @@ function showTempTip(msg) {
 
                     <div>本月使用次數：<span id="month"></span></div>
                     <div>累計使用次數：<span id="total"></span></div>
-                    <div style="color:var(--dark-gold);font-size:2em;">每次被掃qr，店主將消費1元</div>
+                    <div style="color:var(--dark-gold);font-size:2em;">
+                      每次被掃qr，店主將消費1元
+                    </div>
                     <button id="saveProfileBtn">儲存商家資料</button>
                     <span id=登出Box_FowNew>
                     <button id="logoutBtn" style="margin-left:16px;">登出</button>
@@ -1758,7 +1761,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
               }
               usageDiv.innerHTML = `<div style='color:#1e3a5c;'>剩餘使用次數：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div>
               <div style='color:#1e3a5c;'>上次使用時間：${formatHKTime(data.lastGetDate)||''}</div>
-              <a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank">充值！</a>`;
+              <a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank">充值！(每次充值最少$100元)</a>`;
 
               logoInput.oninput = () => {
                 logoPreview.innerHTML = logoInput.value ? `<img src='${logoInput.value}' style='max-width:60px;'>` : '';
@@ -1866,9 +1869,10 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
             var siteData = doc.exists ? doc.data() : {};
             let html = renderSiteInfo(siteData);
             html += `<button id="loginBtn" class="Shop頁加入btn metallic-shine-2 ">立即加盟!!</button><br>
-            <a class="Shop頁加入btn metallic-shine-2 " href="javascript:void(0)" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" id="aboutBtn">了解我們</a>
+            <a class="Shop頁加入btn metallic-shine-2 " href="./0921.html" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" id="aboutBtn">了解我們</a>
 
             <!-- 彈窗選擇 about 連結 -->
+            <!-- <a class="Shop頁加入btn metallic-shine-2 " href="javascript:void(0)" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" id="aboutBtn">了解我們</a> -->
             <div id="aboutModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:9999;justify-content:center;align-items:center;">
               <div style="background:#fffbe6;border:3px solid #bfa046;padding:32px 24px;border-radius:16px;width:90%;max-width:400px;box-shadow:0 4px 24px #222;position:relative;text-align:center;">
                 <h2 style="color:#bfa046;margin-bottom:18px;">選擇你想了解的內容</h2>
@@ -1900,6 +1904,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
               auth.signInWithPopup(provider);
             };
 
+            /*
             // 攔截「了解我們」按鈕，彈窗選擇
             setTimeout(function() {
               var aboutBtn = document.getElementById('aboutBtn');
@@ -1915,6 +1920,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
                 });
               }
             }, 500);
+            */
 
           });
         }
