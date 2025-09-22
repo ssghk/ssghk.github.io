@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -447,7 +446,7 @@
             ];
             _顯示聯莫(聯莫);
         }
-        琪琪修改('https://64071181.github.io/')
+        //琪琪修改('https://64071181.github.io/')
 
 
 
@@ -474,7 +473,7 @@
    +#++:++#+       +#++:++#++:   +#++:++#++     +#++:++#++
   +#+    +#+      +#+     +#+          +#+            +#+
  #+#    #+#      #+#     #+#   #+#    #+#     #+#    #+#
-#########       ###     ###    ########       ########
+########       ###     ###    ########       ########
 */
   // Firebase 配置
     const firebaseConfig = {
@@ -896,7 +895,7 @@ async function addRegionsToFirestore() {
           };
           loadCategories();
           // 公用廣告渲染與事件
-          function renderAdsAdmin() {
+          function renderAdsAdmin(page = 1, searchKw = '') {
             const adsListAdmin = document.getElementById('adsListAdmin');
             if (!adsListAdmin) return;
             adsListAdmin.innerHTML = '';
@@ -905,34 +904,90 @@ async function addRegionsToFirestore() {
             (window.categories||[]).forEach(cat => {
               catOptions += `<option value="${cat.name}">${cat.name}</option>`;
             });
-            (adsArr || []).forEach((ad, i) => {
+            // 搜尋過濾
+            let filteredAds = adsArr;
+            if (searchKw) {
+              const kw = searchKw.trim().toLowerCase();
+              filteredAds = adsArr.filter(ad =>
+                (ad.title||'').toLowerCase().includes(kw) ||
+                (ad.desc1||'').toLowerCase().includes(kw) ||
+                (ad.desc2||'').toLowerCase().includes(kw) ||
+                (ad.owner||'').toLowerCase().includes(kw)
+              );
+            }
+            // 分頁邏輯
+            const pageSize = 10;
+            const total = filteredAds.length;
+            const totalPages = Math.ceil(total / pageSize);
+            const startIdx = (page - 1) * pageSize;
+            const endIdx = Math.min(startIdx + pageSize, total);
+            // 顯示本頁廣告
+            (filteredAds.slice(startIdx, endIdx) || []).forEach((ad, i) => {
+              const realIdx = adsArr.indexOf(ad);
               const adDiv = document.createElement('div');
               adDiv.style = 'border:1px dashed #aaa;margin:4px 0;padding:2px;';
               // 地區多選
               let regionOptions = REGIONS.map(r => `<option value="${r}"${(ad.regions||['全香港']).includes(r)?' selected':''}>${r}</option>`).join('');
               adDiv.innerHTML = `
-                <div><a href="https://meee.com.tw/" target="_blank" >圖片網址</a>：<input type="text" value="${ad.img||''}" data-idx="${i}" class="ad-img-admin"></div>
-                <div>標題：<input type="text" value="${ad.title||''}" data-idx="${i}" class="ad-title-admin"></div>
-                <div>類別：<select data-idx="${i}" class="ad-category-admin">${catOptions}</select></div>
-                <div>地區：<select data-idx="${i}" class="ad-region-admin" >${regionOptions}</select></div>
-                <div>聯絡方式：<input type="text" value="${ad.contact||''}" data-idx="${i}" class="ad-contact-admin"></div>
-                <div>條款：<input type="text" value="${ad.desc1||''}" data-idx="${i}" class="ad-desc1-admin"></div>
-                <div>地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${i}" class="ad-desc2-admin"></div>
-                <div>廣告主ID：<input type="text" value="${ad.owner||''}" data-idx="${i}" class="ad-owner-admin" style="width:120px;"></div>
-                <div>下架時間：<input type="date" value="${ad.expireDate||''}" data-idx="${i}" class="ad-expire-admin" style="width:140px;"></div>
-                <button class="removeAdBtn" data-idx="${i}">移除</button>
+                <div><a href="https://meee.com.tw/" target="_blank" >圖片網址</a>：<input type="text" value="${ad.img||''}" data-idx="${realIdx}" class="ad-img-admin"></div>
+                <div>標題：<input type="text" value="${ad.title||''}" data-idx="${realIdx}" class="ad-title-admin"></div>
+                <div>類別：<select data-idx="${realIdx}" class="ad-category-admin">${catOptions}</select></div>
+                <div>地區：<select data-idx="${realIdx}" class="ad-region-admin" >${regionOptions}</select></div>
+                <div>聯絡方式：<input type="text" value="${ad.contact||''}" data-idx="${realIdx}" class="ad-contact-admin"></div>
+                <div>條款：<input type="text" value="${ad.desc1||''}" data-idx="${realIdx}" class="ad-desc1-admin"></div>
+                <div>地址或網址：<input type="text" value="${ad.desc2||''}" data-idx="${realIdx}" class="ad-desc2-admin"></div>
+                <div>廣告主ID：<input type="text" value="${ad.owner||''}" data-idx="${realIdx}" class="ad-owner-admin" style="width:120px;"></div>
+                <div>下架時間：<input type="date" value="${ad.expireDate||''}" data-idx="${realIdx}" class="ad-expire-admin" style="width:140px;"></div>
+                <button class="removeAdBtn" data-idx="${realIdx}">移除</button>
               `;
               adsListAdmin.appendChild(adDiv);
               // 設定選中值
               const sel = adDiv.querySelector('.ad-category-admin');
               if(sel && ad.category) sel.value = ad.category;
             });
+            // 分頁導航
+            if (totalPages > 1) {
+              const nav = document.createElement('div');
+              nav.style = 'text-align:center;margin:12px 0;';
+              for (let p = 1; p <= totalPages; p++) {
+                const btn = document.createElement('button');
+                btn.textContent = p;
+                btn.className = 'admin-nav-btn' + (p === page ? ' active' : '');
+                btn.style = 'margin:0 4px;padding:4px 12px;border-radius:6px;background:' + (p === page ? 'var(--dark-gold)' : '#e6e8ea') + ';color:' + (p === page ? '#fff' : '#1e3a5c') + ';font-weight:bold;border:none;';
+                btn.onclick = () => renderAdsAdmin(p, searchKw);
+                nav.appendChild(btn);
+              }
+              adsListAdmin.appendChild(nav);
+            }
             adsListAdmin.querySelectorAll('.removeAdBtn').forEach(btn => {
               btn.onclick = () => {
-                const idx = +btn.getAttribute('data-idx');
+                const idx = parseInt(btn.getAttribute('data-idx'), 10);
+                // 修正：搜尋結果刪除時，直接從 adsArr 刪除對應索引
                 adsArr.splice(idx, 1);
-                renderAdsAdmin();
+                // 重新搜尋分頁渲染
+                const newFilteredAds = searchKw ? adsArr.filter(ad =>
+                  (ad.title||'').toLowerCase().includes(searchKw.trim().toLowerCase()) ||
+                  (ad.desc1||'').toLowerCase().includes(searchKw.trim().toLowerCase()) ||
+                  (ad.desc2||'').toLowerCase().includes(searchKw.trim().toLowerCase()) ||
+                  (ad.owner||'').toLowerCase().includes(searchKw.trim().toLowerCase())
+                ) : adsArr;
+                const newTotalPages = Math.ceil(newFilteredAds.length / pageSize);
+                const newPage = (page > newTotalPages) ? newTotalPages : page;
+                renderAdsAdmin(newPage, searchKw);
               };
+            });
+          }
+          // 增加搜尋框
+          const adsAdminWrap = document.getElementById('adsAdminWrap');
+          if (adsAdminWrap && !document.getElementById('adsSearchInput')) {
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.id = 'adsSearchInput';
+            searchInput.placeholder = '搜尋廣告標題、描述、廣告主ID';
+            searchInput.style = 'margin-bottom:12px;width:220px;';
+            adsAdminWrap.insertBefore(searchInput, adsAdminWrap.firstChild);
+            searchInput.addEventListener('input', function() {
+              renderAdsAdmin(1, this.value);
             });
           }
           renderAdsAdmin();
@@ -943,26 +998,46 @@ async function addRegionsToFirestore() {
           document.getElementById('saveAdsAdmin').onclick = async () => {
             const adsListAdmin = document.getElementById('adsListAdmin');
             if (!adsListAdmin) return;
-            adsArr = Array.from(adsListAdmin.querySelectorAll('.ad-img-admin')).map((imgInput, i) => {
-              // 多選地區
-              const regionSel = adsListAdmin.querySelector(`.ad-region-admin[data-idx="${i}"]`);
-              const regions = regionSel ? Array.from(regionSel.selectedOptions).map(opt=>opt.value) : ['全香港'];
-              const ownerInput = adsListAdmin.querySelector(`.ad-owner-admin[data-idx="${i}"]`);
-              const expireInput = adsListAdmin.querySelector(`.ad-expire-admin[data-idx="${i}"]`);
-              return {
-                img: imgInput.value,
-                title: adsListAdmin.querySelector(`.ad-title-admin[data-idx="${i}"]`).value,
-                category: adsListAdmin.querySelector(`.ad-category-admin[data-idx="${i}"]`)?.value || '',
-                contact: adsListAdmin.querySelector(`.ad-contact-admin[data-idx="${i}"]`)?.value || '',
-                desc1: adsListAdmin.querySelector(`.ad-desc1-admin[data-idx="${i}"]`).value,
-                desc2: adsListAdmin.querySelector(`.ad-desc2-admin[data-idx="${i}"]`).value,
-                regions: regions.length ? regions : ['全香港'],
-                owner: ownerInput ? ownerInput.value.trim() : '',
-                expireDate: expireInput ? expireInput.value : ''
-              };
+            // 取得 Firestore 最新 adsArr
+            const adsDoc = await db.collection('ads').doc('main').get();
+            let latestAdsArr = (adsDoc.exists && Array.isArray(adsDoc.data().ads)) ? adsDoc.data().ads : [];
+            // 取得本頁分頁資訊
+            const pageSize = 10;
+            const navBtns = adsListAdmin.querySelectorAll('.admin-nav-btn');
+            let currentPage = 1;
+            navBtns.forEach((btn, idx) => {
+              if (btn.classList.contains('active')) currentPage = idx + 1;
+            });
+            const startIdx = (currentPage - 1) * pageSize;
+            const endIdx = Math.min(startIdx + pageSize, latestAdsArr.length);
+            // 更新本頁資料到最新 adsArr
+            Array.from(adsListAdmin.querySelectorAll('.ad-img-admin')).forEach((imgInput) => {
+              const idx = parseInt(imgInput.getAttribute('data-idx'), 10);
+              // 只更新 adsArr 中現有索引，確保可修改
+              if (adsArr[idx]) {
+                const titleInput = adsListAdmin.querySelector(`.ad-title-admin[data-idx="${idx}"]`);
+                const desc1Input = adsListAdmin.querySelector(`.ad-desc1-admin[data-idx="${idx}"]`);
+                const desc2Input = adsListAdmin.querySelector(`.ad-desc2-admin[data-idx="${idx}"]`);
+                const catInput = adsListAdmin.querySelector(`.ad-category-admin[data-idx="${idx}"]`);
+                const contactInput = adsListAdmin.querySelector(`.ad-contact-admin[data-idx="${idx}"]`);
+                const regionSel = adsListAdmin.querySelector(`.ad-region-admin[data-idx="${idx}"]`);
+                const ownerInput = adsListAdmin.querySelector(`.ad-owner-admin[data-idx="${idx}"]`);
+                const expireInput = adsListAdmin.querySelector(`.ad-expire-admin[data-idx="${idx}"]`);
+                adsArr[idx] = {
+                  img: imgInput.value,
+                  title: titleInput ? titleInput.value : '',
+                  category: catInput ? catInput.value : '',
+                  contact: contactInput ? contactInput.value : '',
+                  desc1: desc1Input ? desc1Input.value : '',
+                  desc2: desc2Input ? desc2Input.value : '',
+                  regions: regionSel ? Array.from(regionSel.selectedOptions).map(opt=>opt.value) : ['全香港'],
+                  owner: ownerInput ? ownerInput.value.trim() : '',
+                  expireDate: expireInput ? expireInput.value : ''
+                };
+              }
             });
             await db.collection('ads').doc('main').set({ ads: adsArr });
-            alert('已更新');
+            alert('已安全更新本頁資料，其他分頁不受影響');
           };
 
           // 儲存網站資料
@@ -1353,8 +1428,6 @@ function showTempTip(msg) {
                       adsHtml += `</div>`;
                       if(ad.desc2 && !(ad.desc2 && /^https?:\/\//.test(ad.desc2))) adsHtml += `<div style='position:absolute;bottom:8px;left:0;width:100%;text-align:center;z-index:2;color:#fff;font-size:24px;font-weight:900;letter-spacing:1px;padding:6px 18px;border-radius:12px;display:inline-block;background:linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 20%,rgba(0,0,0,0.5) 80%,rgba(0,0,0,0) 100%);'>${ad.desc2}</div>`;
                       adsHtml += `</div>`;
-                      // 顯示地區
-                      if(ad.regions) adsHtml += `<div style='position:fixed;bottom:8px;right:8px;color:#1e3a5c;font-size:0.95em;background:#fffbe6;padding:2px 10px;border-radius:8px;z-index:2;'>地區：${ad.regions.join(', ')}</div>`;
                     });
                     if (showAds.length > adsDisplayCount) {
                       adsHtml += `<div id="adsLoading" style="color:var(--dark-gold);margin:16px 0 24px 0;">繼續下拉顯示更多...</div>`;
@@ -1557,7 +1630,7 @@ function showTempTip(msg) {
      :::    :::       ::::::::       ::::::::::       :::::::::
     :+:    :+:      :+:    :+:      :+:              :+:    :+:
    +:+    +:+      +:+             +:+              +:+    +:+
-  +#+    +:+      +#++:++#++      +#++:++#         +#++:++#:
+  +#++:++#++      +#++:++#++      +#++:++#         +#++:++#:
  +#+    +#+             +#+      +#+              +#+    +#+
 #+#    #+#      #+#    #+#      #+#              #+#    #+#
 ########        ########       ##########       ###    ###
@@ -1736,7 +1809,6 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
 
 
 
-
             // user 已登入，開始取得 Firestore 資料
             const uid = user.uid;
             const userRef = db.collection('users').doc(uid);
@@ -1794,7 +1866,6 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
 
               商家名.innerHTML = `<a href="./?ow=${uid}" target="_blank" title="您的團隊使用此網址登入會立即成為您名下" >${data.name}</a>`;
               商家WS.innerHTML = data.phone || '';
-
 
 
               logoPreview.innerHTML = data.logo ? `<img src='${data.logo}' style='max-width:60px;'>` : '';
@@ -2220,10 +2291,7 @@ function injectPaymentMethodsUI(uid, Box位) {
 
 
 
-
-
-
-/*
+  /*
       ::::::::::       :::        ::::::::     :::       :::
      :+:              :+:       :+:    :+:    :+:       :+:
     +:+              +:+       +:+    +:+    +:+       +:+
@@ -2258,3 +2326,9 @@ function injectPaymentMethodsUI(uid, Box位) {
   </script>
 </body>
 </html>
+
+
+
+
+
+
