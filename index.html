@@ -992,8 +992,22 @@ async function addRegionsToFirestore() {
           }
           renderAdsAdmin();
           document.getElementById('addAdAdmin').onclick = () => {
-            adsArr.push({img:'',title:'',desc1:'',desc2:''});
-            renderAdsAdmin();
+            // 新增一個空廣告物件
+            adsArr.push({
+              img: '',
+              title: '',
+              category: '',
+              contact: '',
+              desc1: '',
+              desc2: '',
+              regions: ['全香港'],
+              owner: '',
+              expireDate: ''
+            });
+            // 重新渲染分頁，跳到最後一頁顯示新增的廣告
+            const pageSize = 10;
+            const totalPages = Math.ceil(adsArr.length / pageSize);
+            renderAdsAdmin(totalPages);
           };
           document.getElementById('saveAdsAdmin').onclick = async () => {
             const adsListAdmin = document.getElementById('adsListAdmin');
