@@ -2,293 +2,93 @@
 <html lang="zh-Hant">
 <head>
   <style>
-            :root {--gold: #C0C0C0;--dark-gold: #debf56;--light-gold: #f1f1f1;}
-
-.Shop頁加入btn {
-            display: block;
-            margin: 40px auto 0 auto;
-            font-size: 1.3em;
-            padding: 16px 40px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);
-            color: #6e6e6e;
-            font-weight: bold;
-            box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-/* 添加第二種金屬效果 */
-        .metallic-shine-2 {
-            background: linear-gradient(
-                125deg,
-                var(--dark-gold) 0%,
-                #f9e8a1 25%,
-                var(--dark-gold) 50%,
-                #f9e8a1 75%,
-                var(--dark-gold) 100%
-            );
-            background-size: 200% 200%;
-            animation: gradient-shift 4s infinite;
-        }
-        /* 懸停效果 */
-        .Shop頁加入btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 6px 16px rgba(187, 187, 187, 0.8);
-        }
-
-        .Shop頁加入btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 1px 6px rgba(187, 187, 187, 0.6);
-        }
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
+    :root {--gold: #C0C0C0;--dark-gold: #debf56;--light-gold: #f1f1f1;}
+    .Shop頁加入btn {display: block;margin: 40px auto 0 auto;font-size: 1.3em;padding: 16px 40px;border-radius: 12px;border: none;background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);color: #6e6e6e;font-weight: bold;box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);cursor: pointer;transition: transform 0.2s, box-shadow 0.2s;position: relative;overflow: hidden; }
+    /* 添加第二種金屬效果 */
+    .metallic-shine-2 {background: linear-gradient(
+    125deg,
+    var(--dark-gold) 0%,
+    #f9e8a1 25%,
+    var(--dark-gold) 50%,
+    #f9e8a1 75%,
+    var(--dark-gold) 100%
+        );background-size: 200% 200%;animation: gradient-shift 4s infinite; }
+    /* 懸停效果 */
+    .Shop頁加入btn:hover {transform: translateY(-3px) scale(1.02);box-shadow: 0 6px 16px rgba(187, 187, 187, 0.8); }
+    .Shop頁加入btn:active {transform: translateY(1px);box-shadow: 0 1px 6px rgba(187, 187, 187, 0.6); }
+    @keyframes gradient-shift {0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
     .scroll-top{background: var(--dark-gold);}
     /* 類別下拉美化 */
-    #main select.ad-category-admin,#main select.ad-region-admin {
-      font-size: 1.1em;
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: 1.5px solid var(--dark-gold);
-      background: #fffbe6;
-      color: #1e3a5c;
-      margin: 4px 0 8px 0;
-      width: 70%;
-      box-sizing: border-box;
-      outline: none;
-      transition: border 0.2s;
-    }
+    #main select.ad-category-admin,#main select.ad-region-admin {font-size: 1.1em;padding: 6px 12px;border-radius: 8px;border: 1.5px solid var(--dark-gold);background: #fffbe6;color: #1e3a5c;margin: 4px 0 8px 0;width: 70%;box-sizing: border-box;outline: none;transition: border 0.2s;}
     #main select.ad-category-admin:focus,
     #main select.ad-region-admin:focus
-    {
-      border: 2px solid #1e3a5c;
-      background: #fff;
-    }
+    {border: 2px solid #1e3a5c;background: #fff;}
     /* 未登入界面美化 */
-    body:not([data-login]) #main > button,#qr位 a {
-      display: block;
-      margin: 40px auto 0 auto;
-      font-size: 1.3em;
-      padding: 16px 40px;
-      border-radius: 12px;
-      border: none;
-
-      color: #fff;
-      font-weight: bold;
-      box-shadow: 0 2px 12px #bbb;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+    body:not([data-login]) #main > button,#qr位 a {display: block;margin: 40px auto 0 auto;font-size: 1.3em;padding: 16px 40px;border-radius: 12px;border: none;
+      color: #fff;font-weight: bold;box-shadow: 0 2px 12px #bbb;cursor: pointer;transition: background 0.2s, color 0.2s;}
+    body:not([data-login]) #main > #siteInfo {max-width: 420px;margin: 40px auto 0 auto;background: linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border-radius: 18px;box-shadow: 0 2px 12px #bbb;padding: 28px 18px 18px 18px;font-size: 1.15em;color: #222;}
+    body:not([data-login]) #main > #siteInfo img {display: block;margin: 0 auto 18px auto;max-width: 120px;border-radius: 12px;box-shadow: 0 2px 8px #ccc;}
+    body:not([data-login]) #main > #siteInfo div {margin-bottom: 10px;font-size: 1.1em;text-align: center;}
+    @media (max-width: 600px) {body:not([data-login]) #main > #siteInfo {  padding: 16px 4px 12px 4px;  font-size: 1em;}
+      body:not([data-login]) #main > button {  font-size: 1.1em;  padding: 12px 18px;}
     }
-    body:not([data-login]) #main > #siteInfo {
-      max-width: 420px;
-      margin: 40px auto 0 auto;
-      background: linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);
-      border-radius: 18px;
-      box-shadow: 0 2px 12px #bbb;
-      padding: 28px 18px 18px 18px;
-      font-size: 1.15em;
-      color: #222;
-    }
-    body:not([data-login]) #main > #siteInfo img {
-      display: block;
-      margin: 0 auto 18px auto;
-      max-width: 120px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px #ccc;
-    }
-    body:not([data-login]) #main > #siteInfo div {
-      margin-bottom: 10px;
-      font-size: 1.1em;
-      text-align: center;
-    }
-    @media (max-width: 600px) {
-      body:not([data-login]) #main > #siteInfo {
-        padding: 16px 4px 12px 4px;
-        font-size: 1em;
-      }
-      body:not([data-login]) #main > button {
-        font-size: 1.1em;
-        padding: 12px 18px;
-      }
-    }
-
     .警告訊息 {color:var(--dark-gold);font-size:1.3em;margin:40px auto;text-align:center;}
-
     /* 管理員界面美化 */
-              .admin-nav { display:flex;gap:12px;margin-bottom:18px; }
-              .admin-nav-btn { font-size:1.1em;padding:8px 18px;border-radius:8px;border:none;background:#e6e8ea;color:#1e3a5c;font-weight:bold;cursor:pointer;transition:background 0.2s; }
-              .admin-nav-btn.active { background:var(--dark-gold);color:#fff; }
-              .admin-section { display:none;background:linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border-radius:16px;box-shadow:0 2px 12px #bbb;padding:18px 12px 12px 12px;margin-bottom:18px; }
-              .admin-section.active { display:block; }
-    #main h3 {
-      font-size: 1.5em;
-      color: #1e3a5c;
-      margin: 24px 0 12px 0;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
+    .admin-nav { display:flex;gap:12px;margin-bottom:18px; }
+    .admin-nav-btn { font-size:1.1em;padding:8px 18px;border-radius:8px;border:none;background:#e6e8ea;color:#1e3a5c;font-weight:bold;cursor:pointer;transition:background 0.2s; }
+    .admin-nav-btn.active { background:var(--dark-gold);color:#fff; }
+    .admin-section { display:none;background:linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border-radius:16px;box-shadow:0 2px 12px #bbb;padding:18px 12px 12px 12px;margin-bottom:18px; }
+    .admin-section.active { display:block; }
+    #main h3 {font-size: 1.5em;color: #1e3a5c;margin: 24px 0 12px 0;font-weight: bold;letter-spacing: 1px;}
     #main > div[style*="border:1px solid #888"],
-    #main > div[style*="border:1px solid #ccc"] {
-      background: linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);
-      border-radius: 16px;
-      box-shadow: 0 2px 12px #bbb;
-      margin-bottom: 18px;
-      padding: 18px 12px 12px 12px !important;
-      border-width: 2px !important;
-    }
-    #main input[type="text"] {
-      font-size: 1.1em;
-      padding: 6px 10px;
-      border-radius: 8px;
-      border: 1.5px solid var(--dark-gold);
-      background: #fff;
-      margin: 4px 0 8px 0;
-      width: 70%;
-      box-sizing: border-box;
-    }
-    #main input[type="checkbox"] {
-      transform: scale(1.3);
-      margin: 0 8px 0 0;
-    }
+    #main > div[style*="border:1px solid #ccc"] {background: linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border-radius: 16px;box-shadow: 0 2px 12px #bbb;margin-bottom: 18px;padding: 18px 12px 12px 12px !important;border-width: 2px !important;}
+    #main input[type="text"] {font-size: 1.1em;padding: 6px 10px;border-radius: 8px;border: 1.5px solid var(--dark-gold);background: #fff;margin: 4px 0 8px 0;width: 70%;box-sizing: border-box;}
+    #main input[type="checkbox"] {transform: scale(1.3);margin: 0 8px 0 0;}
     #main button,
     #main .editUser,
     #main .addAdBtn,
     #main .removeAdBtn,
-    #main #saveSiteBtn {
-      font-size: 1.1em;
-      padding: 8px 18px;
-      border-radius: 8px;
-      border: none;
-      background: linear-gradient(90deg,var(--dark-gold) 0%,#e6e8ea 100%);
-      color: #222;
-      font-weight: bold;
-      margin: 6px 4px 0 0;
-      box-shadow: 0 2px 8px #eee;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
+    #main #saveSiteBtn {font-size: 1.1em;padding: 8px 18px;border-radius: 8px;border: none;background: linear-gradient(90deg,var(--dark-gold) 0%,#e6e8ea 100%);color: #222;font-weight: bold;margin: 6px 4px 0 0;box-shadow: 0 2px 8px #eee;cursor: pointer;transition: background 0.2s, color 0.2s;}
     #main button:active,
     #main .editUser:active,
     #main .addAdBtn:active,
     #main .removeAdBtn:active,
-    #main #saveSiteBtn:active {
-      background: var(--dark-gold);
-      color: #fff;
-    }
-    #main .addAdBtn {
-      background: linear-gradient(90deg,#1e3a5c 0%,var(--dark-gold) 100%);
-      color: #fff;
-      margin-top: 8px;
-    }
-    #main .removeAdBtn {
-      background: #fff;
-      color: var(--dark-gold);
-      border: 1.5px solid var(--dark-gold);
-      margin-left: 8px;
-    }
-    #main .removeAdBtn:active {
-      background: var(--dark-gold);
-      color: #fff;
-    }
-    #main a {
-      color: #1e3a5c;
-      text-decoration: underline;
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    #main .ad-img, #main .ad-title, #main .ad-desc1, #main .ad-desc2 {
-      width: 60%;
-      margin-bottom: 4px;
-    }
-    #main div[style*="border:1px dashed #aaa"] {
-      background: #f5f6fa;
-      border-radius: 10px;
-      margin: 8px 0;
-      padding: 8px 8px 8px 12px;
-      border-width: 1.5px !important;
-    }
-    @media (max-width: 600px) {
-      #main h3 { font-size: 1.2em; }
+    #main #saveSiteBtn:active {background: var(--dark-gold);color: #fff;}
+    #main .addAdBtn {background: linear-gradient(90deg,#1e3a5c 0%,var(--dark-gold) 100%);color: #fff;margin-top: 8px;}
+    #main .removeAdBtn {background: #fff;color: var(--dark-gold);border: 1.5px solid var(--dark-gold);margin-left: 8px;}
+    #main .removeAdBtn:active {background: var(--dark-gold);color: #fff;}
+    #main a {color: #1e3a5c;text-decoration: underline;font-weight: bold;font-size: 1.1em;}
+    #main .ad-img, #main .ad-title, #main .ad-desc1, #main .ad-desc2 {width: 60%;margin-bottom: 4px;}
+    #main div[style*="border:1px dashed #aaa"] {background: #f5f6fa;border-radius: 10px;margin: 8px 0;padding: 8px 8px 8px 12px;border-width: 1.5px !important;}
+    @media (max-width: 600px) {#main h3 { font-size: 1.2em; }
       #main input[type="text"] { font-size: 1em; }
       #main button { font-size: 1em; padding: 7px 12px; }
       #main > div[style*="border:1px solid #888"],
-      #main > div[style*="border:1px solid #ccc"] {
-        padding: 10px 4px 8px 4px !important;
-      }
+      #main > div[style*="border:1px solid #ccc"] {  padding: 10px 4px 8px 4px !important;}
     }
-
-
-
-    
-
     /* 會員界面美化 */
-                #memberMainWrap { max-width: 720px; margin: 0 auto; background: var(--3-gold); border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
-                #userPanel { margin-top: 12px; }
-                #商家私隱 > div { margin-bottom: 10px; font-size: 1.1em; }
-                #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--dark-gold); background: #fff; margin-left: 4px; }
-                #商家私隱 button, #userPanel button, 
-                #商家私隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
-                #logoPreview img { border-radius: 8px; border: 1px solid var(--dark-gold); margin-left: 8px; }
-                #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid var(--dark-gold); margin: 8px 0; padding: 8px; }
-
-
-
-                #qr位 a{ margin-top: 18px; text-align: center; }
-
-.add-Btn{margin-top:8px;color:#fff;background:var(--gold);border:none;border-radius:6px;padding:6px 18px;cursor:pointer;font-size:5em;}
-                .delete-btn{color:#fff;background:#e587a1;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;}
-
-                #payQrcodeCanvas_ { width:100% !important; height:100% !important; display:block; }
-                #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
-                #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
-                #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
-
-
-
-
-        .video-wrapper {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            padding-top: 480px; /* 9:16 纵横比 (适合Shorts) */
-            margin: 0 auto;
-            max-width: 720px; /* 限制最大宽度 */
-            border-radius: 12px;
-            background: #000;
-        }
-        
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 12px;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
+    #memberMainWrap { max-width: 720px; margin: 0 auto; background: var(--3-gold); border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
+    #userPanel { margin-top: 12px; }
+    #商家私隱 > div { margin-bottom: 10px; font-size: 1.1em; }
+    #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--dark-gold); background: #fff; margin-left: 4px; }
+    #商家私隱 button, #userPanel button, 
+    #商家私隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
+    #logoPreview img { border-radius: 8px; border: 1px solid var(--dark-gold); margin-left: 8px; }
+    #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid var(--dark-gold); margin: 8px 0; padding: 8px; }
+    #qr位 a{ margin-top: 18px; text-align: center; }
+    .add-Btn{margin-top:8px;color:#fff;background:var(--gold);border:none;border-radius:6px;padding:6px 18px;cursor:pointer;font-size:5em;}
+    .delete-btn{color:#fff;background:#e587a1;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;}
+    #payQrcodeCanvas_ { width:100% !important; height:100% !important; display:block; }
+    #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
+    #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
+    #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
+    .video-wrapper {position: relative;overflow: hidden;width: 100%;padding-top: 480px; /* 9:16 纵横比 (适合Shorts) */
+        margin: 0 auto;max-width: 720px; /* 限制最大宽度 */
+        border-radius: 12px;background: #000; }
+    .video-wrapper iframe {position: absolute;top: 0;left: 0;width: 100%;height: 100%;border: none;border-radius: 12px; }
   </style>
 
   <meta charset="utf-8">
@@ -517,8 +317,7 @@
       if (site.address) html += `<div>地址：${site.address}</div>`;
       if (site.phone) html += `<div>電話：${site.phone}</div>`;
       if (site.desc) html += `<div>${site.desc}</div>`;
-      return html ? `<div id="siteInfo" style="margin-bottom:1em;">${html}</div>` : '';
-    }
+      return html ? `<div id="siteInfo" style="margin-bottom:1em;">${html}</div>` : '';}
 
     // 共用廣告渲染/取得 function
     function renderAds(ads, adsList, removeCb) {
@@ -529,16 +328,14 @@
           const idx = +btn.getAttribute('data-idx');
           removeCb(idx);
         };
-      });
-    }
+      });}
     function getCurrentAds(adsList) {
       return Array.from(adsList.querySelectorAll('.ad-img')).map((imgInput, i) => ({
         img: imgInput.value,
         title: adsList.querySelector(`.ad-title[data-idx="${i}"]`).value,
         desc1: adsList.querySelector(`.ad-desc1[data-idx="${i}"]`).value,
         desc2: adsList.querySelector(`.ad-desc2[data-idx="${i}"]`).value
-      }));
-    }
+      }));}
 
 
     // geturl 流程：產生 token 並導向帶 token 的 shop page
@@ -572,8 +369,7 @@
         }
       }).catch(e => {
         document.getElementById('main').innerHTML = '<div style="color:red;text-align:center;margin:60px 0;font-size:1.2em;">產生消費劵連結失敗，請稍後再試</div>';
-      });
-    }
+      });}
 
 
 
@@ -716,7 +512,7 @@ async function addRegionsToFirestore() {
               </div>
             </div>
             <div id="adminSectionAds" class="admin-section">
-              <h3>公用廣告管理</h3>
+              <h3><a href="#ContactAKI">公用廣告管理</a></h3>
               <div id="categoryAdminWrap" style="border:1px solid var(--dark-gold);margin:8px 0 18px 0;padding:8px 8px 8px 12px;border-radius:10px;background:#f5f6fa;">
                 <b>類別管理：</b>
                 <div id="categoryListAdmin" style="margin-bottom:8px;"></div>
@@ -730,7 +526,7 @@ async function addRegionsToFirestore() {
               </div>
             </div>
             <div id="adminSectionUsers" class="admin-section">
-              <h3>會員管理</h3>
+              <h3><a href="#ContactAKI">會員管理</a></h3>
           `;
 
           /*------ 
@@ -752,8 +548,8 @@ async function addRegionsToFirestore() {
             users.forEach(d => {
               listHtml += `
               <div style="border:1px solid #ccc;margin:8px 0;padding:4px;">
-                <a href="${d.url}" target="_blank">${d.id}</a><br>
-                <span style='color:#1e3a5c;font-size:1em;'>${d.email||''}</span><br>
+                ${d.id}<br>
+                <h3 style='color:#1e3a5c;'>${d.email||''}</h3><br>
                 商家名稱: <input type="text" class="shopName" data-uid="${d.id}" value="${d.name||''}"><br>
                 VIP: <input type="checkbox" class="vip" data-uid="${d.id}" ${d.vip ? 'checked' : ''}><br>
                 商家電話: <input type="text" class="phone" data-uid="${d.id}" value="${d.phone||''}"><br>
@@ -1065,8 +861,7 @@ async function addRegionsToFirestore() {
             alert('已更新');
           };
         });
-      });
-    }
+      });}
 
 
 
@@ -1414,7 +1209,7 @@ function showTempTip(msg) {
                   lastShowAds = [...ownerAds, ...showAds];
                   let adsHtml = '';
                   // 新增：顯示廣告總數
-                  adsHtml += `<a href="#ContactAKI">↕️</a><div style='width:100%;max-width:720px;text-align:right;color:var(--dark-gold);font-size:1.1em;margin-bottom:4px;'>加盟店：${adsArr.length + 100}</div>`;
+                  adsHtml += `<div style='width:100%;max-width:720px;text-align:right;color:var(--dark-gold);font-size:1.1em;margin-bottom:4px;'><a href="#ContactAKI">加盟店：</a>${adsArr.length + 100}</div>`;
                   // 最上方獨立顯示廣告主ID的廣告
                   if (ownerAds.length) {
                     adsHtml += `<div id="ownerAdsArea" style="display:flex;flex-direction:column;align-items:center;margin-top:12px;">`;
@@ -1675,15 +1470,15 @@ function showTempTip(msg) {
                   <button id="showPrivacyBtn">💰</button>
                   <div id="商家私隱" style="display:none">
   <div id="privacyTabs" style="display:flex;gap:8px;margin-bottom:8px;">
-    <button class="privacy-tab" data-tab="基本" style="flex:1">基本</button>
-    <button class="privacy-tab" data-tab="消費券上架" style="flex:1">消費券上架</button>
-    <button class="privacy-tab" data-tab="收款方式位" style="flex:1">收款方式</button>
-    <a href="./0921.html" target="_blank" >說明</a>
+    <button class="privacy-tab" data-tab="基本" style="flex:1">🏢</button>
+    <button class="privacy-tab" data-tab="消費券上架" style="flex:1">🎯</button>
+    <button class="privacy-tab" data-tab="收款方式位" style="flex:1">🍽️</button>
+    <a href="./0921.html" target="_blank" >?</a>
   </div>
 
 
                     <div id="基本" class="privacy-tab-content" style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: var(--3-gold); box-shadow: rgb(187, 187, 187) 0px 2px 8px;">
-                        <h2>基本</h2>
+                        <h2>商家資料</h2>
                         <hr>
 
                         <span id="vip"></span><span style="margin-left:10px;margin-right:10px;" id="商家Gmail"></span><a href="./ownertree.html" title="團隊樹">🌳</a>
@@ -2013,7 +1808,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
             var siteData = doc.exists ? doc.data() : {};
             let html = renderSiteInfo(siteData);
             html += `<button id="loginBtn" class="Shop頁加入btn metallic-shine-2 ">立即加盟!!</button><br>
-            <a class="Shop頁加入btn metallic-shine-2 " href="./0921.html" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" id="aboutBtn">了解我們</a>
+            <a href="./0921.html" id="aboutBtn" style="font-size:2em;text-decoration: none;display:block;text-align:center;">?</a>
 
             <!-- 彈窗選擇 about 連結 -->
             <!-- <a class="Shop頁加入btn metallic-shine-2 " href="javascript:void(0)" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" id="aboutBtn">了解我們</a> -->
@@ -2068,8 +1863,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
 
           });
         }
-      });
-    }
+      });}
 
 
     
@@ -2108,8 +1902,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
           user.paymentMethods = methods;
           renderPaymentMethods(user, wrap);
         };
-      });
-    }
+      });}
 
 
 
@@ -2316,12 +2109,9 @@ function injectPaymentMethodsUI(uid, Box位) {
 */
     // 主流程
     if (getParam) {
-      handleGet();
-    } else if (params.has('u')) {
-      renderAdminPage();
-    } else if (userParam) {
-      renderPublicPage();
-    } else {
+      handleGet();} else if (params.has('u')) {
+      renderAdminPage();} else if (userParam) {
+      renderPublicPage();} else {
       // 新用戶註冊時，若網址有 ?ow= 參數，僅寫入 queue，不再直接 set 到 users/{uid}
       firebase.auth().onAuthStateChanged(async function(user) {
         if (user && params.has('ow')) {
@@ -2335,8 +2125,7 @@ function injectPaymentMethodsUI(uid, Box位) {
           }
         }
       });
-      renderMemberPage();
-    }
+      renderMemberPage();}
   </script>
 </body>
 </html>
