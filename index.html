@@ -3,6 +3,13 @@
 <head>
   <style>
     :root {--gold: #C0C0C0;--dark-gold: #debf56;--light-gold: #f1f1f1;}
+
+    .廣告內大圖{width:100%;height:auto;display:block;margin:0 0 18px 0;border-radius:12px;box-shadow:0 2px 8px #bbb;}
+
+    .廣告內標題{font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;text-align:center;}
+
+
+
     .Shop頁加入btn {display: block;margin: 40px auto 0 auto;font-size: 1.3em;padding: 16px 40px;border-radius: 12px;border: none;background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);color: #6e6e6e;font-weight: bold;box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);cursor: pointer;transition: transform 0.2s, box-shadow 0.2s;position: relative;overflow: hidden; }
     /* 添加第二種金屬效果 */
     .metallic-shine-2 {background: linear-gradient(
@@ -154,7 +161,7 @@
 #########       ########       #########       ###
  -->
   <div id="adInfoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
-    <div id="adInfoContent" style="background:#fffbe6;border:3px solid var(--dark-gold);padding:24px 32px;border-radius:16px;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
+    <div id="adInfoContent" style="background:#fffbe6;border:3px solid var(--dark-gold);padding:24px 32px;border-radius:16px;width:100%;max-width:90vw;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
   </div>
 <p id="translate"></p>
   <div id="main"></div>
@@ -1189,8 +1196,8 @@ function showTempTip(msg) {
                     ownerCards.forEach((card, idx) => {
                       card.onclick = function(e) {
                         const ad = ownerAds[idx];
-                        let content = `<img src='${ad.img||''}' style='max-width:90vw;max-height:40vh;display:block;margin:0 auto 18px auto;border-radius:12px;box-shadow:0 2px 8px #bbb;'>`;
-                        content += `<div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;text-align:center;'>${ad.title||''}</div>`;
+                        let content = `<a href='${ad.img||''}' target='_blank' style='cursor: pointer;'><img src='${ad.img||''}' class='廣告內大圖'></a>`;
+                        content += `<h2 class='廣告內標題'>${ad.title||''}</h2>`;
                         content += `<div style='font-size:1.2em;color:var(--dark-gold);margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
                         if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:var(--dark-gold);font-size:1.1em;'>類別：${ad.category}</div>`;
                         if(ad.regions) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>地區：${ad.regions.join(', ')}</div>`;
@@ -1279,8 +1286,9 @@ function showTempTip(msg) {
                     card.onclick = function(e) {
                       const idx = card.getAttribute('data-idx');
                       const ad = showAds[idx];
-                      let content = `<img src='${ad.img||''}' style='max-width:90vw;max-height:40vh;display:block;margin:0 auto 18px auto;border-radius:12px;box-shadow:0 2px 8px #bbb;'>`;
-                      content += `<div style='font-size:2em;font-weight:bold;color:#1e3a5c;margin-bottom:8px;text-align:center;'>${ad.title||''}</div>`;
+                      let content = `<a href='${ad.img||''}' target='_blank' style='cursor: pointer;'>
+                      <img src='${ad.img||''}' class='廣告內大圖'></a>`;
+                      content += `<h2 class='廣告內標題'>${ad.title||''}</h2>`;
                       content += `<div style='font-size:1.2em;color:var(--dark-gold);margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
                       if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:var(--dark-gold);font-size:1.1em;'>類別：${ad.category}</div>`;
                       if(ad.regions) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>地區：${ad.regions.join(', ')}</div>`;
