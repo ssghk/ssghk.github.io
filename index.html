@@ -1502,10 +1502,24 @@ function showTempTip(msg) {
                   <button id="showPrivacyBtn">💰</button>
                   <div id="商家私隱" style="display:none">
   <div id="privacyTabs" style="display:flex;gap:8px;margin-bottom:8px;">
-    <button class="privacy-tab" data-tab="基本" style="flex:1">🏢</button>
-    <button class="privacy-tab" data-tab="消費券上架" style="flex:1">🎯</button>
-    <button class="privacy-tab" data-tab="收款方式位" style="flex:1">🍽️</button>
-    <a href="./0921.html" target="_blank" >?</a>
+    <button class="privacy-tab" data-tab="基本" title="商家資料">🏢</button>
+    <button class="privacy-tab" data-tab="消費券上架" title="消費券上架">🎯</button>
+    <button class="privacy-tab" data-tab="收款方式位" title="收款方式">🍽️</button>
+
+    <hr>
+    <a href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02">
+      <button onclick="alert('最低充值金額為100元，充值後聯絡管理員啟動系統')" style="background: linear-gradient(
+    125deg,
+    var(--dark-gold) 0%,
+    #f9e8a1 25%,
+    var(--dark-gold) 50%,
+    #f9e8a1 75%,
+    var(--dark-gold) 100%
+        );background-size: 200% 200%;animation: gradient-shift 4s infinite;">充值</button>
+      </a>
+    <a href="./ownertree.html" title="團隊樹"><button >🌳</button></a>
+    <a href="./0921.html" title="說明"><button>❔</button></a>
+
   </div>
 
 
@@ -1513,7 +1527,7 @@ function showTempTip(msg) {
                         <h2>商家資料</h2>
                         <hr>
 
-                        <span id="vip"></span><span style="margin-left:10px;margin-right:10px;" id="商家Gmail"></span><a href="./ownertree.html" title="團隊樹">🌳</a>
+                        <span id="vip"></span><span style="margin-left:10px;margin-right:10px;" id="商家Gmail"></span>
                         
 
                         <div>商家名字：<input id="name" type="text"></div>
@@ -1565,15 +1579,16 @@ function showTempTip(msg) {
                     <div style="display:none">獨立網址Get：<span id="geturl"></span></div>
 
 
-                    <div>本月使用次數：<span id="month"></span></div>
-                    <div>累計使用次數：<span id="total"></span></div>
-                    <div style="color:var(--dark-gold);font-size:2em;">
-                      每次被掃qr，店主將消費1元
-                    </div>
                     <button id="saveProfileBtn">儲存商家資料</button>
                     <span id=登出Box_FowNew>
                     <button id="logoutBtn" style="margin-left:16px;">登出</button>
                     </span>
+
+                    <hr>
+                    <div>本月使用次數：<span id="month"></span></div>
+                    <div>累計使用次數：<span id="total"></span></div>
+                    
+                    
                   </div>
                   <h1 id="商家名" ></h1>
                   <br>
@@ -1705,7 +1720,41 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
               addressInput.value = data.address || '';
               logoInput.value = data.logo || '';
 
-              商家名.innerHTML = `<a href="./?ow=${uid}" target="_blank" title="您的團隊使用此網址登入會立即成為您名下" >${data.name}</a>`;
+              // 商家名顯示
+              商家名.innerHTML = `${data.name}`;
+              // 增加複製功能
+              const 商家名El = document.getElementById('qr位');
+              if (商家名El) {
+                商家名El.style.cursor = 'pointer';
+                商家名El.onclick = function() {
+                  // 修正：取得現時完整網址
+                  const url = `${location.origin}${location.pathname}?ow=${uid}`;
+                  navigator.clipboard.writeText(url).then(() => {
+                    // 顯示提示
+                    let tip = document.getElementById('copyTipMsg');
+                    if (!tip) {
+                      tip = document.createElement('div');
+                      tip.id = 'copyTipMsg';
+                      tip.style.position = 'fixed';
+                      tip.style.top = '20px';
+                      tip.style.left = '50%';
+                      tip.style.transform = 'translateX(-50%)';
+                      tip.style.background = 'rgba(34,34,34,0.92)';
+                      tip.style.color = '#fff';
+                      tip.style.padding = '12px 32px';
+                      tip.style.borderRadius = '8px';
+                      tip.style.fontSize = '1.2em';
+                      tip.style.zIndex = 9999;
+                      document.body.appendChild(tip);
+                    }
+                    tip.textContent = `已複製您的邀請碼，直接分享給商戶即可加盟！`;
+                    tip.style.display = '';
+                    clearTimeout(window._copyTipTimer);
+                    window._copyTipTimer = setTimeout(() => { tip.style.display = 'none'; }, 2000);
+                  });
+                };
+              }
+
               商家WS.innerHTML = data.phone || '';
 
 
@@ -1732,7 +1781,9 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
               }
               usageDiv.innerHTML = `<div style='color:#1e3a5c;'>剩餘使用次數：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div>
               <div style='color:#1e3a5c;'>上次使用時間：${formatHKTime(data.lastGetDate)||''}</div>
-              <a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank">充值！(每次充值最少$100元)</a>`;
+              <div style="color:var(--dark-gold);font-size:2em;">
+                      每次被掃qr，店主將消費1元
+                    </div>`;
 
               logoInput.oninput = () => {
                 logoPreview.innerHTML = logoInput.value ? `<img src='${logoInput.value}' style='max-width:60px;'>` : '';
@@ -1814,7 +1865,9 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
                 saveProfileBtn.style.display = 'none';
 
                 const 登出Box_FowNew = document.getElementById('登出Box_FowNew');
-                登出Box_FowNew.innerHTML = '<a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank" style="color:#fff;font-size:1.2em;text-align: center;margin: 24px 20%;text-decoration: none;" >剩餘使用次數不足，請先充值！</a>';
+                登出Box_FowNew.innerHTML = `<a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank" style="color:#fff;font-size:1.2em;text-align: center;margin: 24px 20%;text-decoration: none;" >
+                  <button onclick="alert('最低充值金額為100元，充值後聯絡管理員啟動系統')">剩餘使用次數不足，請先充值！</button>
+                  </a>`;
 
 
 
@@ -1899,7 +1952,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
 
     // 收款方式管理
     function renderPaymentMethods(user, wrap) {
-      wrap.innerHTML = '<h2>收款方式管理</h2><hr>';
+      wrap.innerHTML = '<h2>收款方式管理</h2><hr><a href="https://meee.com.tw/" target="_blank" >上傳收款方式圖片</a>';
       let methods = Array.isArray(user.paymentMethods) ? user.paymentMethods : [];
       methods.forEach((pm, idx) => {
         const div = document.createElement('div');
