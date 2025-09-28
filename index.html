@@ -1528,8 +1528,7 @@ function showTempTip(msg) {
                         <hr>
 
                         <span id="vip"></span><span style="margin-left:10px;margin-right:10px;" id="商家Gmail"></span>
-                        
-
+                        <span style="display:none" id="商家id"></span>
                         <div>商家名字：<input id="name" type="text"></div>
                         <div>商家電話：<input id="phone" type="text"></div>
                         <div>商家地址：<input id="address" type="text"></div>
@@ -1685,6 +1684,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
               privacyPanel.style.display = 'none';
 
               const 商家Gmail = document.getElementById('商家Gmail');
+              const 商家id = document.getElementById('商家id');
               const nameInput = document.getElementById('name');
               const phoneInput = document.getElementById('phone');
               const addressInput = document.getElementById('address');
@@ -1715,6 +1715,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
 
 
               商家Gmail.innerHTML = data.email || '';
+              商家id.innerHTML = uid || '';
               nameInput.value = data.name || '';
               phoneInput.value = data.phone || '';
               addressInput.value = data.address || '';
@@ -2021,6 +2022,49 @@ function injectPaymentMethodsUI(uid, Box位) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //消費券上架功能
         // 全局变量
         let groupCount = 1;
@@ -2160,6 +2204,9 @@ function injectPaymentMethodsUI(uid, Box位) {
             document.getElementById('generate').addEventListener('click', generateLink);
         });
  
+
+
+
 
 
 
