@@ -1211,7 +1211,7 @@ function showTempTip(msg) {
 
                         content += `<hr><div style='text-align:center;margin-bottom:8px;'>優惠均由商家自行上傳和管理。<br>
                           優惠的有效性、使用條件、適用範圍及有效期等均由商家全權決定。<br>
-                          本平臺不保證優惠持續有效，建議用戶在使用前聯繫商家確認優惠狀態。</div>`
+                          本平臺不保證優惠持續有效，建議用戶在使用前聯繫商家確認優惠狀態。</div>`;
                         document.getElementById('adInfoContent').innerHTML = content;
                         document.getElementById('adInfoModal').style.display = 'flex';
                       };
@@ -1303,6 +1303,10 @@ function showTempTip(msg) {
                       } else if(ad.desc2) {
                         content += `<div style='text-align:center;margin-bottom:8px;color:#222;font-size:1.1em;'><a href='https://www.google.com/maps/search/${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>${ad.desc2}</a></div>`;
                       }
+                      content += `<hr><div style='text-align:center;margin-bottom:8px;'>優惠均由商家自行上傳和管理。<br>
+                          優惠的有效性、使用條件、適用範圍及有效期等均由商家全權決定。<br>
+                          本平臺不保證優惠持續有效，建議用戶在使用前聯繫商家確認優惠狀態。</div>`;
+                          
                       document.getElementById('adInfoContent').innerHTML = content;
                       document.getElementById('adInfoModal').style.display = 'flex';
                     };
