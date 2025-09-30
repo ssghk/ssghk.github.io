@@ -79,10 +79,10 @@
     /* 會員界面美化 */
     #memberMainWrap { max-width: 720px; margin: 0 auto; background: var(--3-gold); border-radius: 18px; box-shadow: 0 4px 24px #bbb; padding: 24px 12px 40px 12px; }
     #userPanel { margin-top: 12px; }
-    #商家私隱 > div { margin-bottom: 10px; font-size: 1.1em; }
-    #商家私隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--dark-gold); background: #fff; margin-left: 4px; }
-    #商家私隱 button, #userPanel button, 
-    #商家私隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
+    #商傢俬隱 > div { margin-bottom: 10px; font-size: 1.1em; }
+    #商傢俬隱 input[type="text"] { font-size: 1.1em; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--dark-gold); background: #fff; margin-left: 4px; }
+    #商傢俬隱 button, #userPanel button, 
+    #商傢俬隱 { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #ccc; padding: 16px 8px; margin-bottom: 12px; }
     #logoPreview img { border-radius: 8px; border: 1px solid var(--dark-gold); margin-left: 8px; }
     #adsList > div { background: #f5f6fa; border-radius: 8px; border: 1px solid var(--dark-gold); margin: 8px 0; padding: 8px; }
     #qr位 a{ margin-top: 18px; text-align: center; }
@@ -92,8 +92,8 @@
     #logoAreaMember { display:flex;justify-content:space-between;align-items:center;width:100%;height:100px;margin:24px 0 0 0; }
     #memberLogoBox, #siteLogoBoxMember { flex:1;display:flex;justify-content:center;align-items:center;height:100%;cursor:pointer; }
     #memberLogoBox img, #siteLogoBoxMember img { max-height:80px;max-width:90%;object-fit:contain; }
-    .video-wrapper {position: relative;overflow: hidden;width: 100%;padding-top: 480px; /* 9:16 纵横比 (适合Shorts) */
-        margin: 0 auto;max-width: 720px; /* 限制最大宽度 */
+    .video-wrapper {position: relative;overflow: hidden;width: 100%;padding-top: 480px; /* 9:16 縱橫比 (適合Shorts) */
+        margin: 0 auto;max-width: 720px; /* 限制最大寬度 */
         border-radius: 12px;background: #000; }
     .video-wrapper iframe {position: absolute;top: 0;left: 0;width: 100%;height: 100%;border: none;border-radius: 12px; }
   </style>
@@ -1127,11 +1127,11 @@ function showTempTip(msg) {
                 const urlParams = new URLSearchParams(window.location.search);
                 const adOwnerId = urlParams.get('adOwner') || urlParams.get('owner') || urlParams.get('adowner') || urlParams.get('user');
                 if (adOwnerId) {
-                  // 1. 筛选广告主的广告 → 反转（让广告主的最后一条数据在最上）
+                  // 1. 篩選廣告主的廣告 → 反轉（讓廣告主的最後一條數據在最上）
                   const ownerAds = adsArr.filter(ad => ad.owner === adOwnerId).slice().reverse();
-                  // 2. 筛选非广告主的广告 → 反转（让非广告主的最后一条数据在最上）
+                  // 2. 篩選非廣告主的廣告 → 反轉（讓非廣告主的最後一條數據在最上）
                   const otherAds = adsArr.filter(ad => ad.owner !== adOwnerId).slice().reverse();
-                  // 3. 组合：广告主广告（已反转）在前，非广告主广告（已反转）在后
+                  // 3. 組合：廣告主廣告（已反轉）在前，非廣告主廣告（已反轉）在後
                   adsArr = [...ownerAds, ...otherAds];
                 } else {
                   adsArr = adsArr.slice().reverse();
@@ -1200,7 +1200,7 @@ function showTempTip(msg) {
                         let content = `<a href='${ad.img||''}' target='_blank' style='cursor: pointer;'><img src='${ad.img||''}' class='廣告內大圖'></a>`;
                         content += `<h2 class='廣告內標題'>${ad.title||''}</h2>`;
                         content += `<div style='font-size:1.2em;color:var(--dark-gold);margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
-                        if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:var(--dark-gold);font-size:1.1em;'>類別：${ad.category}</div>`;
+                        if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>類別：${ad.category}</div>`;
                         if(ad.regions) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>地區：${ad.regions.join(', ')}</div>`;
                         if(ad.contact) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div>`;
                         if(ad.desc2 && /^https?:\/\//.test(ad.desc2)) {
@@ -1208,6 +1208,10 @@ function showTempTip(msg) {
                         } else if(ad.desc2) {
                           content += `<div style='text-align:center;margin-bottom:8px;color:#222;font-size:1.1em;'><a href='https://www.google.com/maps/search/${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>${ad.desc2}</a></div>`;
                         }
+
+                        content += `<hr><div style='text-align:center;margin-bottom:8px;'>優惠均由商家自行上傳和管理。<br>
+                          優惠的有效性、使用條件、適用範圍及有效期等均由商家全權決定。<br>
+                          本平臺不保證優惠持續有效，建議用戶在使用前聯繫商家確認優惠狀態。</div>`
                         document.getElementById('adInfoContent').innerHTML = content;
                         document.getElementById('adInfoModal').style.display = 'flex';
                       };
@@ -1500,7 +1504,7 @@ function showTempTip(msg) {
                 <button id="loginBtn" style="display:none">Google登入</button>
                 <div id="userPanel" style="display:none">
                   <button id="showPrivacyBtn">💰</button>
-                  <div id="商家私隱" style="display:none">
+                  <div id="商傢俬隱" style="display:none">
   <div id="privacyTabs" style="display:flex;gap:8px;margin-bottom:8px;">
     <button class="privacy-tab" data-tab="基本" title="商家資料">🏢</button>
     <button class="privacy-tab" data-tab="消費券上架" title="消費券上架">🎯</button>
@@ -1546,7 +1550,7 @@ function showTempTip(msg) {
                         <h2>消費券上架</h2>
                         
                         <div id="voucher-container">
-                            <!-- 第一组输入框 -->
+                            <!-- 第一組輸入框 -->
                             <div class="voucher-group" id="group-1">
                                 <hr>
                                 
@@ -1629,9 +1633,9 @@ function showTempTip(msg) {
               }
             };
             logoutBtn.onclick = () => auth.signOut();
-            // 商家私隱顯示按鈕
+            // 商傢俬隱顯示按鈕
             const showPrivacyBtn = document.getElementById('showPrivacyBtn');
-            const privacyPanel = document.getElementById('商家私隱');
+            const privacyPanel = document.getElementById('商傢俬隱');
             showPrivacyBtn.onclick = () => {
               if (privacyPanel.style.display === 'none' || privacyPanel.style.display === '') {
                 privacyPanel.style.display = 'block';
@@ -1640,7 +1644,7 @@ function showTempTip(msg) {
               }
             };
 
-            // 商家私隱分頁邏輯
+            // 商傢俬隱分頁邏輯
 const privacyTabs = document.querySelectorAll('.privacy-tab');
 const privacyTabContents = document.querySelectorAll('.privacy-tab-content');
 privacyTabs.forEach(tab => {
@@ -1778,7 +1782,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
               if (!usageDiv) {
                 usageDiv = document.createElement('div');
                 usageDiv.id = 'usageInfo';
-                document.getElementById('商家私隱').appendChild(usageDiv);
+                document.getElementById('商傢俬隱').appendChild(usageDiv);
               }
               usageDiv.innerHTML = `<div style='color:#1e3a5c;'>剩餘使用次數：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div>
               <div style='color:#1e3a5c;'>上次使用時間：${formatHKTime(data.lastGetDate)||''}</div>
@@ -1897,7 +1901,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
             <a href="./0921.html" id="aboutBtn" style="font-size:2em;text-decoration: none;display:block;text-align:center;">?</a>
 
             <!-- 彈窗選擇 about 連結 -->
-            <!-- <a class="Shop頁加入btn metallic-shine-2 " href="javascript:void(0)" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" id="aboutBtn">了解我們</a> -->
+            <!-- <a class="Shop頁加入btn metallic-shine-2 " href="javascript:void(0)" style="color:#fff;font-size:2em;text-align: center;margin: 24px 20%;text-decoration: none;" id="aboutBtn">瞭解我們</a> -->
             <div id="aboutModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:9999;justify-content:center;align-items:center;">
               <div style="background:#fffbe6;border:3px solid #bfa046;padding:32px 24px;border-radius:16px;width:90%;max-width:400px;box-shadow:0 4px 24px #222;position:relative;text-align:center;">
                 <h2 style="color:#bfa046;margin-bottom:18px;">選擇你想了解的內容</h2>
@@ -1926,7 +1930,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
             };
 
             /*
-            // 攔截「了解我們」按鈕，彈窗選擇
+            // 攔截「瞭解我們」按鈕，彈窗選擇
             setTimeout(function() {
               var aboutBtn = document.getElementById('aboutBtn');
               var aboutModal = document.getElementById('aboutModal');
@@ -2066,13 +2070,13 @@ function injectPaymentMethodsUI(uid, Box位) {
 
 
 //消費券上架功能
-        // 全局变量
+        // 全局變量
         let groupCount = 1;
         
-        // 计算上架天数
+        // 計算上架天數
         function calculateDays(groupId) {
             const group = document.getElementById(`group-${groupId}`);
-            if (!group) return; // 确保组存在
+            if (!group) return; // 確保組存在
             
             const startDateInput = group.querySelector('.input5');
             const endDateInput = group.querySelector('.input6');
@@ -2083,9 +2087,9 @@ function injectPaymentMethodsUI(uid, Box位) {
                 const startDate = new Date(startDateInput.value);
                 const endDate = new Date(endDateInput.value);
                 
-                // 计算天数差
+                // 計算天數差
                 const timeDiff = endDate.getTime() - startDate.getTime();
-                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // 加1是因为包含开始日期
+                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // 加1是因為包含開始日期
                 
                 daysInput.value = `${daysDiff} 天`;
             } else if (daysInput) {
@@ -2093,7 +2097,7 @@ function injectPaymentMethodsUI(uid, Box位) {
             }
         }
 
-        // 添加一组新的输入框
+        // 添加一組新的輸入框
         function addGroup() {
             groupCount++;
             const newGroup = document.createElement('div');
@@ -2117,7 +2121,7 @@ function injectPaymentMethodsUI(uid, Box位) {
                 <input type="text" class="input7" readonly>
             `;
             
-            // 添加事件监听器到新创建的日期输入框
+            // 添加事件監聽器到新創建的日期輸入框
             const startDateInput = newGroup.querySelector('.input5');
             const endDateInput = newGroup.querySelector('.input6');
             
@@ -2129,7 +2133,7 @@ function injectPaymentMethodsUI(uid, Box位) {
             document.getElementById('voucher-container').appendChild(newGroup);
         }
         
-        // 生成整合链接
+        // 生成整合鏈接
         function generateLink() {
             const 商戶Gmail2 = document.getElementById('商家Gmail').textContent;
             const groups = document.querySelectorAll('.voucher-group');
@@ -2139,7 +2143,7 @@ function injectPaymentMethodsUI(uid, Box位) {
                 const inputs = group.querySelectorAll('input');
                 const groupNumber = index + 1;
                 
-                // 添加组标题
+                // 添加組標題
                 if (groupNumber === 1) {
                     message += "一:%0D%0A";
                 } else if (groupNumber === 2) {
@@ -2150,20 +2154,20 @@ function injectPaymentMethodsUI(uid, Box位) {
                     message += `---%0D%0A${groupNumber}:%0D%0A`;
                 }
                 
-                // 添加输入框值
+                // 添加輸入框值
                 inputs.forEach(input => {
                     message += `${input.value}%0D%0A`;
                 });
             });
             
             const whatsappUrl = `https://wa.me/85264071181/?text=${message}`;
-            // 直接在新标签页中打开WhatsApp
+            // 直接在新標籤頁中打開WhatsApp
             window.open(whatsappUrl, '_blank');
-            // 显示成功消息
+            // 顯示成功消息
             document.getElementById('success-message').style.display = 'block';
         }
         
-        // 删除组函数
+        // 刪除組函數
         function deleteGroup(id) {
             const groups = document.querySelectorAll('.voucher-group');
             if (groups.length > 1) {
@@ -2171,7 +2175,7 @@ function injectPaymentMethodsUI(uid, Box位) {
                 if (groupToDelete) {
                     groupToDelete.parentNode.removeChild(groupToDelete);
                     
-                    // 重新编号剩余的组
+                    // 重新編號剩餘的組
                     const remainingGroups = document.querySelectorAll('.voucher-group');
                     remainingGroups.forEach((group, index) => {
                         const title = group.querySelector('h3');
@@ -2180,7 +2184,7 @@ function injectPaymentMethodsUI(uid, Box位) {
                         }
                     });
                     
-                    // 更新组计数
+                    // 更新組計數
                     groupCount = remainingGroups.length;
                 }
             } else {
@@ -2188,9 +2192,9 @@ function injectPaymentMethodsUI(uid, Box位) {
             }
         }
         
-        // 页面加载完成后绑定事件
+        // 頁面加載完成後綁定事件
         document.addEventListener('DOMContentLoaded', function() {
-            // 为初始组的日期输入框添加事件监听器
+            // 為初始組的日期輸入框添加事件監聽器
             const startDateInput1 = document.querySelector('#group-1 .input5');
             const endDateInput1 = document.querySelector('#group-1 .input6');
             
@@ -2199,7 +2203,7 @@ function injectPaymentMethodsUI(uid, Box位) {
                 endDateInput1.addEventListener('change', () => calculateDays(1));
             }
             
-            // 绑定按钮事件
+            // 綁定按鈕事件
             document.getElementById('add-group').addEventListener('click', addGroup);
             document.getElementById('generate').addEventListener('click', generateLink);
         });
