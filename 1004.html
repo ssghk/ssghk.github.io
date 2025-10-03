@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>街坊聯盟消費券系統 - 專業商戶解決方案</title>
+    <link rel="icon" href="https://i.meee.com.tw/22tSagT.png" type="image/png">
+    <style>
+        :root {
+            --primary-blue: #1d214a;
+            --primary-gold: #D4AF37;
+            --light-gold: #F5E8C8;
+            --light-blue: #E6F0FF;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --border-color: #E1E5EB;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s ease;
+            --gold: #C0C0C0;--dark-gold: #debf56;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Noto Sans HK', sans-serif;
+        }
+        
+        body {
+            background-color: var(--white);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            color: var(--primary-gold);
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-gold);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(15, 43, 91, 0.9), rgba(15, 43, 91, 0.8)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary-gold);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-blue);
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-gold);
+            border-radius: 2px;
+        }
+        
+        /* Card Styles */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .card-header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            color: var(--primary-gold);
+            border-bottom: 3px solid var(--primary-gold);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Feature List */
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-list i {
+            color: var(--primary-gold);
+            margin-right: 1rem;
+            margin-top: 0.2rem;
+        }
+        
+        /* Step by Step */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        .steps:before {
+            content: "";
+            position: absolute;
+            width: 4px;
+            background-color: var(--primary-gold);
+            top: 0;
+            bottom: 0;
+            left: 30px;
+            z-index: 1;
+        }
+        
+        .step {
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+            margin-left: 70px;
+        }
+        
+        .step-number {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gold);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            left: -90px;
+            top: 15px;
+            z-index: 3;
+        }
+        
+        /* Pricing Plans */
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .pricing-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        
+        .pricing-card.featured {
+            border: 2px solid var(--primary-gold);
+            transform: scale(1.05);
+        }
+        
+        .pricing-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: var(--primary-gold);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-header h3 {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .price {
+            font-size: 3rem;
+            color: var(--primary-gold);
+            font-weight: 700;
+        }
+        
+        .price-period {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            padding: 0.8rem 0;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        /* FAQ */
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question:hover {
+            background: var(--light-gold);
+        }
+        
+        .faq-answer {
+            padding: 1.5rem;
+            color: var(--text-dark);
+            background: var(--white);
+            display: none;
+        }
+        
+        .faq-answer.active {
+            display: block;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary-blue);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links li {
+            margin: 0 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-gold);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 1.5rem;
+            }
+            
+            .nav-links li {
+                margin: 0 0.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .steps:before {
+                left: 20px;
+            }
+            
+            .step {
+                margin-left: 50px;
+            }
+            
+            .step-number {
+                left: -60px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+    .Shop頁加入btn { background: linear-gradient(90deg, var(--dark-gold) 0%, var(--gold) 100%);color: #6e6e6e;font-weight: bold;box-shadow: 0 2px 12px rgba(187, 187, 187, 0.6);cursor: pointer;transition: transform 0.2s, box-shadow 0.2s;position: relative;overflow: hidden; }
+
+
+    /* 添加第二種金屬效果 */
+    .metallic-shine-2 {background: linear-gradient(
+    125deg,
+    var(--dark-gold) 0%,
+    #f9e8a1 25%,
+    var(--dark-gold) 50%,
+    #f9e8a1 75%,
+    var(--dark-gold) 100%
+        );background-size: 200% 200%;animation: gradient-shift 4s infinite; }
+    @keyframes gradient-shift {0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://kit.fontawesome.com/fd27287143.js" crossorigin="anonymous">//抖音,threads icon</script>
+    <script src="https://cdn.staticfile.net/translate.js/3.1.7/translate.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://64071181.github.io/mokJsapi/a.js">//琪琪修改</script>
+
+  </head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Navigation -->
+    <p id="translate"></p>
+    <header>
+        <div class="container navbar">
+            <a href="./"><div class="logo">
+                <i class="fas fa-handshake"></i>
+                <span>街坊聯盟</span>
+            </div></a>
+            <ul class="nav-links">
+                
+                <li><a href="#how-it-works">如何運作</a></li>
+                <li><a href="#faq">常見問題</a></li>
+                <li><a href="#merchant-tab" class="tab" data-tab="merchant-tab">商戶指南</a></li>
+                
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>街坊聯盟消費券系統</h1>
+            <p>AI定位引流 • 跨業客戶共享 • 精準營銷解決方案</p>
+            <a href="./?20251102" class="btn metallic-shine-2">使用消費券</a>
+        </div>
+    </section>
+
+    <!-- Tabs Section -->
+    <section class="section">
+        <div class="container">
+            <div class="tabs">
+                <div class="tab active" data-tab="user-tab">客戶指南</div>
+                <div class="tab" data-tab="merchant-tab">商戶指南</div>
+            </div>
+            
+            <!-- User Tab Content -->
+            <div id="user-tab" class="tab-content active">
+                <div class="section-title">
+                    <h2>甚麼是消費券?</h2>
+                    <p>省錢、方便、智能的消費體驗</p>
+                </div>
+                
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-money-bill-wave"></i> 省錢消費
+                        </div>
+                        <div class="card-body">
+                            <p>通過消費券享受商家優惠，每次消費都能省錢。支付後自動獲得下次使用的消費券，形成省錢循環。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-map-marker-alt"></i> AI智能定位
+                        </div>
+                        <div class="card-body">
+                            <p>系統自動定位您的位置，實時推薦附近商家的優惠券，讓您輕鬆發現周邊好去處。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-gift"></i> 多重優惠
+                        </div>
+                        <div class="card-body">
+                            <p>一次消費可獲得多個商家的消費券，在不同商家享受優惠，體驗多樣化的消費樂趣。</p>
+                        </div>
+                    </div>
+
+                    <a href="./?20251102" >
+                    <div class="card metallic-shine-2" >
+                        <div class="card-header">
+                            <i class="fas fa-shopping-bag"></i> 立即體驗
+                        </div>
+                        <div class="card-body">
+                          <br>
+                            <p>(有效期至：2025-11-02)</p>
+                        </div>
+                    </div>
+                    </a>
+
+                </div>
+                
+                <div class="section-title">
+                    <h2>客戶如何取得消費券</h2>
+                    <p>簡單三步，輕鬆獲取</p>
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>掃描商家二維碼</h3>
+                            <p>在加盟商家處掃描收款碼完成支付</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>自動獲得消費券</h3>
+                            <p>支付成功後，系統自動發放消費券到您的手機</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>使用消費券</h3>
+                            <p>在有效期內到指定商家出示消費券即可享受優惠</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Merchant Tab Content -->
+            <div id="merchant-tab" class="tab-content">
+                <div class="section-title">
+                    <h2>消費券對商戶的好處</h2>
+                    <p>提升客流、增加收入、優化運營</p>
+                </div>
+                
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-users"></i> 增加客流
+                        </div>
+                        <div class="card-body">
+                            <p>通過跨業合作，將其他商家的客戶引流到您的店鋪，實現客流共享，增加新客戶。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-redo"></i> 提高回頭率
+                        </div>
+                        <div class="card-body">
+                            <p>消費券返客系統讓客戶支付後自動獲得下次使用的優惠券，顯著提高客戶回頭率。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-bullhorn"></i> 精準營銷
+                        </div>
+                        <div class="card-body">
+                            <p>AI定位系統將您的優惠精準推送給附近潛在客戶，提高營銷轉化率。</p>
+                        </div>
+                    </div>
+
+                    <a href="./?ow=109EjNOTmkh2CRuLghiIuwTDzl02">
+                    <div class="card metallic-shine-2" >
+                        <div class="card-header">
+                            <i class="fas fa-handshake"></i> 商戶立即加盟
+                        </div>
+                        <div class="card-body">
+                            <p>30秒立即加盟</p>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+                
+                <div id="merchant-benefits" class="section-title">
+                    <h2>商戶的兩種加盟方式</h2>
+                    <p>根據您的需求選擇合適的方案</p>
+                </div>
+                
+                <div class="pricing-container">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3>免費加盟</h3>
+                            <div class="price">HK$0</div>
+                            <div class="price-period">永久免費</div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> 免費上架消費券</li>
+                            <li><i class="fas fa-check"></i> 跨業合作引流</li>
+                            <li><i class="fas fa-check"></i> 基礎AI定位功能</li>
+                            <li><i class="fas fa-check"></i> 多平臺廣告展示</li>
+                        </ul>
+                        <a href="./?ow=109EjNOTmkh2CRuLghiIuwTDzl02" class="btn" style="width: 100%; text-align: center;">立即免費加盟</a>
+                    </div>
+                    
+                    <div class="pricing-card featured">
+                        <div class="pricing-badge">推薦</div>
+                        <div class="pricing-header">
+                            <h3>付費加盟</h3>
+                            <div class="price">HK$1</div>
+                            <div class="price-period">每次推送</div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> 所有免費加盟功能</li>
+                            <li><i class="fas fa-check"></i> 高級AI精準定位</li>
+                            <li><i class="fas fa-check"></i> 消費券置頂曝光</li>
+                            <li><i class="fas fa-check"></i> 過百KOL幫您宣傳</li>
+                            <li><i class="fas fa-check"></i> 即時到賬支付系統</li>
+                            <li><i class="fas fa-check"></i> 永久50%加盟佣金</li>
+                        </ul>
+                        <a href="./?ow=109EjNOTmkh2CRuLghiIuwTDzl02" class="btn metallic-shine-2" style="width: 100%; text-align: center;">限時試用</a>
+                    </div>
+                </div>
+                
+                <div id="how-it-works" class="section-title">
+                    <h2>商戶如何免費上架消費券</h2>
+                    <p>簡單四步，立即開始</p>
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>登錄系統</h3>
+                            <p>點擊免費加盟按鈕，登錄街坊聯盟系統</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>填寫商戶資料</h3>
+                            <p>完善您的商戶信息，包括店鋪位置、聯絡方式等</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>設置消費券</h3>
+                            <p>創建您的消費券優惠內容，如"消費滿$100減$10"</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>提交審核</h3>
+                            <p>提交消費券申請，通過審核後即可上架推廣</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                    <h2>商戶付費流程及好處</h2>
+                    <p>投資小，回報大</p>
+                </div>
+                
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-wallet"></i> 付費流程
+                        </div>
+                        <div class="card-body">
+                            <ol class="feature-list">
+                                <li><i class="fas fa-arrow-right"></i> 登錄系統選擇付費方案</li>
+                                <li><i class="fas fa-arrow-right"></i> 預繳最少$100服務費</li>
+                                <li><i class="fas fa-arrow-right"></i> 聯繫管理員啟動系統</li>
+                                <li><i class="fas fa-arrow-right"></i> 開始享受付費服務</li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i> 付費好處
+                        </div>
+                        <div class="card-body">
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check"></i> 高級AI定位，精準引流到店</li>
+                                <li><i class="fas fa-check"></i> 消費券置頂曝光，增加可見性</li>
+                                <li><i class="fas fa-check"></i> KOL探店宣傳，擴大品牌影響力</li>
+                                <li><i class="fas fa-check"></i> 即時到賬支付系統，提高資金週轉</li>
+                                <li><i class="fas fa-check"></i> 加盟佣金計劃，額外收入來源</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                    <h2>如何使用消費券吸引客戶</h2>
+                    <p>有效策略，提升業績</p>
+                </div>
+                
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-lightbulb"></i> 設計吸引人的優惠
+                        </div>
+                        <div class="card-body">
+                            <p>創建有吸引力的消費券，如"消費滿$100送價值$50的優惠券"，讓客戶感受到真正的實惠。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-crosshairs"></i> 精準定位目標客戶
+                        </div>
+                        <div class="card-body">
+                            <p>利用AI定位功能，將您的消費券精準推送給附近潛在客戶，提高轉化率。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-sync-alt"></i> 建立消費循環
+                        </div>
+                        <div class="card-body">
+                            <p>通過消費券返客系統，讓客戶每次消費後都能獲得下次使用的優惠，建立持續的消費循環。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section" style="background-color: var(--light-gray);">
+        <div class="container">
+            <div class="section-title">
+                <h2>常見問題</h2>
+            </div>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        消費券是什麼？如何使用？
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>消費券是街坊聯盟系統發放的電子優惠券，客戶可以在加盟商家處使用。客戶只需在商家處掃描二維碼支付，系統會自動發放消費券到客戶手機，下次消費時出示即可享受優惠。</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        商戶加盟需要什麼條件？
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>任何在香港合法經營的商戶都可以免費加盟街坊聯盟。只需提供基本的商戶信息，設置消費券優惠內容，通過審核後即可上架推廣。</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        AI定位引流如何工作？
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>系統通過客戶手機定位功能，當客戶進入您店鋪附近區域時，自動推送您的消費券優惠。這種精準營銷大大提高了客戶到店的可能性。</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        付費加盟有什麼額外好處？
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>付費加盟商戶享受高級AI定位功能、消費券置頂曝光、KOL探店宣傳、即時到賬支付系統以及加盟佣金計劃等增值服務，能顯著提升營銷效果和業務收入。</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        如何退出街坊聯盟？
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>商戶可以隨時停止使用街坊聯盟服務，無需支付任何退出費用。消費券默認上架期限為30天，到期後自動下架，您也可以隨時登錄系統手動下架。</p>
+                    </div>
+                </div>
+
+            <div class="section-title">
+                <a href="./about.html#faq"><p>更多常見問題</p></a>
+            </div>
+
+            </div>
+              
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section" style="background-color: var(--primary-blue); color: white;">
+        <div class="container" style="text-align: center;">
+            <h2 style="margin-bottom: 1.5rem;">商戶加盟</h2>
+            <p style="margin-bottom: 2rem; opacity: 0.9;">開啟智能引流，提升您的業務</p>
+            <a href="https://wa.me/85264071181/?text=莫生,我的店舖想加入街坊聯盟，請問有什麼加盟資格或條件嗎？" class="btn">立即諮詢加盟</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-handshake"></i>
+                <span>街坊聯盟</span>
+            </div>
+            
+            <ul class="footer-links">
+                <li><a href="#user-benefits">客戶指南</a></li>
+                <li><a href="#merchant-benefits">商戶指南</a></li>
+                <li><a href="#how-it-works">如何運作</a></li>
+                <li><a href="#faq">常見問題</a></li>
+            </ul>
+            
+            <div id="ContactAKI" class="ContactAKI"><!-- JS _顯示聯莫 --></div>
+            <p class="mokJsApi_copyright">版權</p>
+            <div class="scroll-top" id="scrollTop" style="background: #debf56;bottom: 40%;" onclick="scrollToTop()">↑</div>
+
+        </div>
+    </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+
+/*
+          :::        :::    :::       :::::::::::
+       :+: :+:      :+:   :+:            :+:
+     +:+   +:+     +:+  +:+             +:+
+   +#++:++#++:    +#++:++              +#+
+  +#+     +#+    +#+  +#+             +#+
+ #+#     #+#    #+#   #+#            #+#
+###     ###    ###    ###       ###########
+*/
+
+        // 動態內容自動翻譯小函數
+        function callTranslate() {
+          if (window.translate && typeof translate.execute === 'function') {
+            translate.execute();
+          }
+        }
+        translate.service.use('client.edge'); //設置機器翻譯服務通道，直接客戶端本身，不依賴服務端 。相關說明參考 http://translate.zvo.cn/43086.html
+        translate.execute();//進行翻譯 
+        function Start() {
+            // 顯示聯莫
+            //[mail,whatsapp,WechatQR,instagram,line,facebook,telegram,github,小紅書,抖音,threads,youtube]
+            const 聯莫 = ['','https://wa.me/85264071181/','https://i.meee.com.tw/4xTmYL9.jpeg','https://www.instagram.com/get300customersmonthforfree?igsh=cmtqeWlhYzJ4OTEy','','https://www.facebook.com/profile.php?id=61579586521973','','','https://www.xiaohongshu.com/user/profile/5d7781c30000000001018857?xsec_token=YBZh7Gn89FTue84tXj6SC4bbo_OZRntsilMRRtZq_onNw%3D&xsec_source=app_share&xhsshare=CopyLink&shareRedId=N0o5Nzs2Rzw2NzUyOTgwNjY0OTg8PTtA&apptime=1758041004&share_id=9a6bd84efc214bc593360e49a481b07f&share_channel=copy_link','https://v.douyin.com/hki89PGq2H8/','https://www.threads.com/@get300customersmonthforfree','https://youtube.com/channel/UCd6Y8_Vev2tFQMYMt5YLJdQ?si=RDk1nVEf5VcCWzXH'
+            ];
+            _顯示聯莫(聯莫);
+        }
+        琪琪修改('https://64071181.github.io/')
+
+
+
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // FAQ functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i');
+                
+                if (answer.classList.contains('active')) {
+                    answer.classList.remove('active');
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                } else {
+                    // Close all other FAQ answers
+                    document.querySelectorAll('.faq-answer').forEach(ans => {
+                        ans.classList.remove('active');
+                    });
+                    document.querySelectorAll('.faq-question i').forEach(icn => {
+                        icn.classList.remove('fa-chevron-up');
+                        icn.classList.add('fa-chevron-down');
+                    });
+                    
+                    // Open current FAQ answer
+                    answer.classList.add('active');
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
