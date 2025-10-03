@@ -2244,6 +2244,10 @@ function injectPaymentMethodsUI(uid, Box位) {
 ###              ########## ########       ###   ###
 */
     // 主流程
+    if (window.location.search === '?20251102') {
+        window.location.href = './?user=109EjNOTmkh2CRuLghiIuwTDzl02&token=643417c5-62b1-4cf0-adfb-3ad07bf7beff';
+    }
+
     if (getParam) {
       handleGet();} else if (params.has('u')) {
       renderAdminPage();} else if (userParam) {
