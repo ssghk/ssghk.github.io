@@ -52,7 +52,7 @@
     #main h3 {font-size: 1.5em;color: #1e3a5c;margin: 24px 0 12px 0;font-weight: bold;letter-spacing: 1px;}
     #main > div[style*="border:1px solid #888"],
     #main > div[style*="border:1px solid #ccc"] {background: linear-gradient(90deg,#fffbe6 0%,#e6e8ea 100%);border-radius: 16px;box-shadow: 0 2px 12px #bbb;margin-bottom: 18px;padding: 18px 12px 12px 12px !important;border-width: 2px !important;}
-    #main input[type="text"] {font-size: 1.1em;padding: 6px 10px;border-radius: 8px;border: 1.5px solid var(--dark-gold);background: #fff;margin: 4px 0 8px 0;width: 70%;box-sizing: border-box;}
+    #main input[type="text"],#main input[type="number"] {font-size: 1.1em;padding: 6px 10px;border-radius: 8px;border: 1.5px solid var(--dark-gold);background: #fff;margin: 4px 0 8px 0;width: 70%;box-sizing: border-box;}
     #main input[type="checkbox"] {transform: scale(1.3);margin: 0 8px 0 0;}
     #main button,
     #main .editUser,
@@ -566,10 +566,16 @@ async function addRegionsToFirestore() {
                   商家電話: <input id="phone" type="text" class="phone" data-uid="${d.id}" value="${d.phone||''}"><br>
                   商家地址: <input id="address" type="text" class="address" data-uid="${d.id}" value="${d.address||''}"><br>
                   <a href="https://meee.com.tw/" target="_blank" >商家logo網址</a>: <input id="logo" type="text" class="logo" data-uid="${d.id}" value="${d.logo||''}"><br>
+                  <hr>
+                  聯盟幣餘額: <input id="聯盟幣餘額Admin用" type="text" class="聯盟幣餘額Admin用" data-uid="${d.id}" value="${d.ssgtotalCoins || 0}"><br>
+                  <hr>
+                  
+                  
                   <div id="收款方式_${d.id}"></div>
-                  <span style='color:var(--dark-gold);font-weight:bold;'>本月使用數：${d.month||0}　累計使用數：${d.total||0}</span><br>
-                  <span style='color:#1e3a5c;'>💰：<input type="number" class="usageCount" data-uid="${d.id}" value="${typeof d.usageCount === 'number' ? d.usageCount : 0}" style="width:80px;"></span><br>
+                  <span style='color:var(--dark-gold);font-weight:bold;'>今月已收款：${d.month||0}　累計已收款：${d.total||0}</span><br>
                   <span style='color:#1e3a5c;'>上次使用時間：${formatHKTime(d.lastGetDate)||''}</span><br>
+                  <br>
+                  <span style='color:#1e3a5c;'>應繳費用： <input type="number" class="usageCount" data-uid="${d.id}" value="${typeof d.usageCount === 'number' ? d.usageCount : 0}" style="width:80px;"></span>
                   <button class="editUser" data-uid="${d.id}">儲存</button>
                 </div>
               </div>`;
@@ -586,6 +592,10 @@ async function addRegionsToFirestore() {
                 const address = document.querySelector(`.address[data-uid='${uid}']`).value;
                 const logo = document.querySelector(`.logo[data-uid='${uid}']`).value;
                 const name = document.querySelector(`.shopName[data-uid='${uid}']`).value;
+
+                const 聯盟幣餘額Admin用 = document.querySelector(`.聯盟幣餘額Admin用[data-uid='${uid}']`).value;
+
+
                 const usageInput = document.querySelector(`.usageCount[data-uid='${uid}']`);
                 const usageCount = parseInt(usageInput.value, 10);
                 const userDiv = btn.closest('div[style*="border:1px solid"]');
@@ -599,7 +609,7 @@ async function addRegionsToFirestore() {
                 btn.textContent = '儲存中...';
                 try {
                   const adminUpdateUser = firebase.functions().httpsCallable('adminUpdateUser');
-                  await adminUpdateUser({ uid, update: { vip, phone, address, logo, ads, name } });
+                  await adminUpdateUser({ uid, update: { vip, phone, address, logo, ads, name, ssgtotalCoins: Number(聯盟幣餘額Admin用) } });
                   const adminUpdateUserExtra = firebase.functions().httpsCallable('adminUpdateUserExtra');
                   await adminUpdateUserExtra({ uid, usageCount });
                   await savePaymentMethods(uid, `收款方式_${uid}`);
@@ -1037,6 +1047,7 @@ function showTempTip(msg) {
 
     // 商家頁流程
     function renderPublicPage() {
+
       // 彈窗遮罩點擊可關閉（點內容不關閉）
       setTimeout(function() {
         const adInfoModal = document.getElementById('adInfoModal');
@@ -1202,16 +1213,18 @@ function showTempTip(msg) {
                         content += `<div style='font-size:1.2em;color:var(--dark-gold);margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
                         if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>類別：${ad.category}</div>`;
                         if(ad.regions) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>地區：${ad.regions.join(', ')}</div>`;
-                        if(ad.contact) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div>`;
+                        if(ad.contact) content += `<a href="tel:${ad.contact}"><div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div></a>`;
                         if(ad.desc2 && /^https?:\/\//.test(ad.desc2)) {
-                          content += `<div style='text-align:center;margin-bottom:8px;'><a href='${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>查詢</a></div>`;
+                          content += `<div style='text-align:center;margin-bottom:8px;'><a href='${ad.desc2}' target='_blank' class='Shop頁加入btn metallic-shine-2'>查詢</a></div>`;
                         } else if(ad.desc2) {
                           content += `<div style='text-align:center;margin-bottom:8px;color:#222;font-size:1.1em;'><a href='https://www.google.com/maps/search/${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>${ad.desc2}</a></div>`;
                         }
 
                         content += `<hr><div style='text-align:center;margin-bottom:8px;'>優惠均由商家自行上傳和管理。<br>
                           優惠的有效性、使用條件、適用範圍及有效期等均由商家全權決定。<br>
-                          本平臺不保證優惠持續有效，建議用戶在使用前聯繫商家確認優惠狀態。</div>`;
+                          本平臺不保證優惠持續有效，建議用戶在使用前聯繫商家確認優惠狀態。<br><br>
+                          <a href="./Disclaimer.html">免責條款</a>
+                          </div>`;
                         document.getElementById('adInfoContent').innerHTML = content;
                         document.getElementById('adInfoModal').style.display = 'flex';
                       };
@@ -1297,9 +1310,9 @@ function showTempTip(msg) {
                       content += `<div style='font-size:1.2em;color:var(--dark-gold);margin-bottom:8px;text-align:center;'>${ad.desc1||''}</div>`;
                       if(ad.category) content += `<div style='text-align:center;margin-bottom:8px;color:var(--dark-gold);font-size:1.1em;'>類別：${ad.category}</div>`;
                       if(ad.regions) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>地區：${ad.regions.join(', ')}</div>`;
-                      if(ad.contact) content += `<div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div>`;
+                      if(ad.contact) content += `<a href="tel:${ad.contact}"><div style='text-align:center;margin-bottom:8px;color:#1e3a5c;font-size:1.1em;'>聯絡方式：${ad.contact}</div></a>`;
                       if(ad.desc2 && /^https?:\/\//.test(ad.desc2)) {
-                        content += `<div style='text-align:center;margin-bottom:8px;'><a href='${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>查詢</a></div>`;
+                        content += `<div style='text-align:center;margin-bottom:8px;'><a href='${ad.desc2}' target='_blank' class='Shop頁加入btn metallic-shine-2'>查詢</a></div>`;
                       } else if(ad.desc2) {
                         content += `<div style='text-align:center;margin-bottom:8px;color:#222;font-size:1.1em;'><a href='https://www.google.com/maps/search/${ad.desc2}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>${ad.desc2}</a></div>`;
                       }
@@ -1391,6 +1404,7 @@ function showTempTip(msg) {
                 }
               };
             }, 0);
+
             // 彈窗顯示商家/網站資料
             html += `<div id="infoModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
               <div id="infoContent" style="background:#fffbe6;border:3px solid var(--dark-gold);padding:24px 32px;border-radius:16px;width:90%;max-width:720px;max-height:80vh;overflow:auto;box-shadow:0 4px 24px #222;position:relative;" onclick="event.stopPropagation();"></div>
@@ -1416,8 +1430,7 @@ function showTempTip(msg) {
                 <div>${data.phone||''}</div>
                 <div>${`<a href='https://www.google.com/maps/search/${data.address}' target='_blank' style='color:#1e3a5c;font-size:1.1em;text-decoration:underline;'>${data.address}</a>`||''}</div>
                 <div>${data.logo?`<img src='${data.logo}' style='max-width:120px;'>`:''}</div>
-                <div>本月發出消費劵數：${data.month||0}</div>
-                <div>累計發出消費劵數：${data.total||0}</div>
+                <div>今月已收款：${data.month||0}</div>
               `;
               document.getElementById('infoModal').style.display = 'flex';
             };
@@ -1443,6 +1456,141 @@ function showTempTip(msg) {
         });
       }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+function 客戶取得消費劵後的存幣提醒(sel=false){
+
+
+  const 獲得聯盟幣 = localStorage.getItem('獲得聯盟幣');
+  const 從商家id獲得聯盟幣 = localStorage.getItem('商家id');
+  // 儲存當前頁面 URL 以便未登入使用
+  
+  if(!sel){
+    localStorage.setItem('取得的消費劵', window.location.href);
+    //alert('111'+localStorage.getItem('取得的消費劵'));
+  }
+  
+  // 若已登入，則存入會員資料庫
+  auth.onAuthStateChanged(async user => {
+        if (user) {
+          // 取得會員all料
+          const uid = user.uid;
+          const userRef = db.collection('users').doc(uid);
+          const doc = await userRef.get();
+          if (doc.exists) {
+            const data = doc.data();
+            // 會員all料 = data.xxx
+
+            // 保存取得的消費劵到 lastsggurl 欄位
+            const updateLastSggURL = firebase.functions().httpsCallable('updateLastSggURL');
+            await updateLastSggURL({ url: localStorage.getItem('取得的消費劵') });
+
+            // 保存聯盟幣資訊
+            const ssgcoins = Number(獲得聯盟幣) || 0;
+            const shopId = 從商家id獲得聯盟幣 || '';
+            if (ssgcoins > 0 && shopId) {
+              alert(`從商家id獲得聯盟幣=${從商家id獲得聯盟幣}\n獲得聯盟幣=${獲得聯盟幣}`);
+              try {
+                // 新增一筆到 users/{uid}/ssgcoins 子集合
+                const coinDoc = {
+                  amount: ssgcoins,
+                  shopId: shopId,
+                  createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                await userRef.collection('ssgcoins').add(coinDoc);
+
+
+
+                // 更新聯盟幣總和（改為呼叫 Cloud Function）
+                const updateSsgtotalCoins = firebase.functions().httpsCallable('updateSsgtotalCoins');
+                await updateSsgtotalCoins({ add: ssgcoins });
+                alert(`你已成功獲得 ${ssgcoins} 聯盟幣，請到「會員中心」查看你的聯盟幣餘額。`);
+              } catch (e) {
+                console.error('存聯盟幣失敗', e);
+              }
+
+
+
+
+              
+              // 清除 localStorage
+              localStorage.setItem('獲得聯盟幣', null);
+              localStorage.setItem('商家id', null);
+
+              if(window.location.hash.substring(1)==='backToCoupon'){
+                //alert(localStorage.getItem('取得的消費劵'));
+                window.location.href = localStorage.getItem('取得的消費劵');
+              }
+
+            }
+          }
+        }
+        // 使用者未登入
+        else {
+          alert('請先登入');
+          window.location.href = `./?ow=${從商家id獲得聯盟幣}#backToCoupon`;
+
+
+        }
+    });
+
+
+
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1488,6 +1636,12 @@ function showTempTip(msg) {
     function renderMemberPage() {
       auth.onAuthStateChanged(async user => {
         if (user) {
+
+          const 轉回消費劵平台 = window.location.hash.substring(1);
+          if(轉回消費劵平台==='backToCoupon'){
+            客戶取得消費劵後的存幣提醒(true);
+          }
+
           // 會員登入後，先檢查 email 欄位，若沒有則補齊
           const uid = user.uid;
           const userRef = db.collection('users').doc(uid);
@@ -1499,6 +1653,8 @@ function showTempTip(msg) {
             }
           }
 
+
+          // 查看你的聯盟幣餘額
           db.collection('site').doc('main').get().then(siteDoc => {
             var siteData = siteDoc.exists ? siteDoc.data() : {};
             const siteHtml = renderSiteInfo(siteData);
@@ -1532,6 +1688,36 @@ function showTempTip(msg) {
 
 
                     <div id="基本" class="privacy-tab-content" style="margin: 18px 0px 12px; padding: 12px; border-radius: 12px; background: var(--3-gold); box-shadow: rgb(187, 187, 187) 0px 2px 8px;">
+
+
+                      <button id="Last消息劵" style="background: linear-gradient(
+    125deg,
+    var(--dark-gold) 0%,
+    #f9e8a1 25%,
+    var(--dark-gold) 50%,
+    #f9e8a1 75%,
+    var(--dark-gold) 100%
+        );background-size: 200% 200%;animation: gradient-shift 4s infinite;">消息劵</button>
+<br>
+
+
+
+
+                        聯盟幣餘額<span style="margin-left:10px;margin-right:10px;" id="聯盟幣餘額">聯盟幣餘額</span>
+                        <a href="./gave.html">聯盟幣兌換品列表</a>
+                        <hr>
+
+
+
+
+
+
+
+
+
+
+
+                        
                         <h2>商家資料</h2>
                         <hr>
 
@@ -1592,15 +1778,19 @@ function showTempTip(msg) {
                     </span>
 
                     <hr>
-                    <div>本月使用次數：<span id="month"></span></div>
-                    <div>累計使用次數：<span id="total"></span></div>
+                    <div>今月已收款：<span id="month"></span></div>
+                    <div>累計已收款：<span id="total"></span></div>
                     
                     
                   </div>
                   <h1 id="商家名" ></h1>
+                  <h2 id="商家WS" ></h2>
+                  <h2>應付金額：$ <input id="應付金額" type="number" step="0.1" min="0"><br>
+                    <samp>(客戶消費$1 可獲得 1聯盟幣)</samp></h2>
+                  
                   <br>
                   <div id="qr位" ><canvas id="qrcode" class="Shop頁加入btn metallic-shine-2 "></canvas></div>
-                  <h1 id="商家WS" ></h1>
+                  
 
 
 
@@ -1615,6 +1805,12 @@ function showTempTip(msg) {
                 </div>
               </div>
             `;
+
+
+            
+
+
+
             const loginBtn = document.getElementById('loginBtn');
             const logoutBtn = document.getElementById('logoutBtn');
             const userPanel = document.getElementById('userPanel');
@@ -1705,7 +1901,31 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
               const 商家ws = document.getElementById('商家ws');
 
 
+              const Last消息劵 = document.getElementById('Last消息劵');
+              const 聯盟幣餘額 = document.getElementById('聯盟幣餘額');
+
+
               const data = doc.data();
+
+
+
+            // 應付金額自動保存到 localStorage
+            let 應付金額 = localStorage.getItem('應付金額');
+            setTimeout(() => {
+              const input = document.getElementById('應付金額');
+              if (input) {
+                // 載入時自動填入 localStorage 值
+                const saved = localStorage.getItem('應付金額');
+                if (saved !== null) input.value = saved;
+                // 變動時自動保存
+                input.addEventListener('input', function() {
+                  localStorage.setItem('應付金額', this.value);
+                  應付金額 = this.value;
+                  實時生成QR碼(uid,data.vip,應付金額);
+                });
+              }
+            }, 0);
+
 
               //消費券上架資訊生成器
               const addGroupBtn = document.getElementById('add-group');
@@ -1717,9 +1937,48 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
               }
 
               // 最多顯示10個字，超過以 ... 省略
-              let 頁tit加mail = data.email;
-              if (data.email.length > 8) 頁tit加mail = data.email.slice(0, 8) + '...';
-              document.title = 頁tit加mail + '@' + siteData.name;
+              //let 頁tit加mail = data.email;
+              //if (data.email.length > 8) 頁tit加mail = data.email.slice(0, 8) + '...';
+              document.title = data.name + '@' + siteData.name;
+
+              // 設定 favicon 為會員 logo（如有）
+              if (data.logo) {
+                let favicon = document.getElementById('dynamicFavicon');
+                if (favicon) favicon.href = data.logo;
+              }
+
+
+              // 客戶資訊
+              Last消息劵.onclick = function() {window.location.href = data.lastsggurl;};
+
+
+
+
+
+              // 顯示聯盟幣總餘額與最近5次交易
+              (async function() {
+                try {
+                  // 取得總餘額
+                  const total = data.ssgtotalCoins || 0;
+                  // 取得最近5次交易
+                  const coinsSnap = await userRef.collection('ssgcoins').orderBy('createdAt', 'desc').limit(5).get();
+                  let txHtml = '';
+                  coinsSnap.forEach(doc => {
+                    const c = doc.data();
+                    const t = c.createdAt && c.createdAt.toDate ? c.createdAt.toDate() : (c.createdAt && c.createdAt.seconds ? new Date(c.createdAt.seconds*1000) : '');
+                    txHtml += `<div style='font-size:0.95em;color:#555;margin-bottom:2px;'>+${c.amount} 幣 來自商家ID: ${c.shopId||''} <span style='color:#aaa;font-size:0.9em;'>${t?t.toLocaleString():'--'}</span></div>`;
+                  });
+                  document.getElementById('聯盟幣餘額').innerHTML = `<b>${total}</b> 幣<br>${txHtml}`;
+                } catch(e) {
+                  document.getElementById('聯盟幣餘額').innerHTML = '載入失敗';
+                  console.error('載入聯盟幣餘額失敗', e);
+                }
+              })();
+
+
+
+
+
 
 
               商家Gmail.innerHTML = data.email || '';
@@ -1788,11 +2047,13 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
                 usageDiv.id = 'usageInfo';
                 document.getElementById('商傢俬隱').appendChild(usageDiv);
               }
-              usageDiv.innerHTML = `<div style='color:#1e3a5c;'>剩餘使用次數：${typeof data.usageCount === 'number' ? data.usageCount : ''}</div>
-              <div style='color:#1e3a5c;'>上次使用時間：${formatHKTime(data.lastGetDate)||''}</div>
+              usageDiv.innerHTML = `<div style='color:#1e3a5c;'>上次使用時間：${formatHKTime(data.lastGetDate)||''}</div>
+              <div style='color:#1e3a5c;'>應繳費用： ${typeof data.usageCount === 'number' ? data.usageCount : ''}</div>
               <div style="color:var(--dark-gold);font-size:2em;">
-                      每次被掃qr，店主將消費1元
-                    </div>`;
+                      每次被掃qr，店主將消費付款金額的 1% 轉為聯盟幣，送如客戶。
+                    </div>
+                    
+              `;
 
               logoInput.oninput = () => {
                 logoPreview.innerHTML = logoInput.value ? `<img src='${logoInput.value}' style='max-width:60px;'>` : '';
@@ -1856,39 +2117,7 @@ if (privacyTabs.length) privacyTabs[0].classList.add('active');
                   infoContentMember.onclick = function(e) { e.stopPropagation(); };
                 }
               }
-              const qrDiv = document.getElementById('qr位');
-              // 依 vip 狀態顯示 QR code 或 WhatsApp 申請連結
-              qrDiv.innerHTML = '';
-              if (data.vip) {
-                // 只顯示 pay.html QR code
-                let payQrCanvas = document.createElement('canvas');
-                payQrCanvas.id = 'payQrcodeCanvas_';
-                qrDiv.appendChild(payQrCanvas);
-                let payQrLabel = document.createElement('div');
-                setTimeout(() => {
-                  QRCode.toCanvas(payQrCanvas, location.origin + '/pay.html?uid=' + uid);
-                }, 0);
-              } else {
-                // 剩餘使用次數不足 人手取消 vip：只顯示 WhatsApp 申請vip連結
-
-                saveProfileBtn.style.display = 'none';
-
-                const 登出Box_FowNew = document.getElementById('登出Box_FowNew');
-                登出Box_FowNew.innerHTML = `<a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank" style="color:#fff;font-size:1.2em;text-align: center;margin: 24px 20%;text-decoration: none;" >
-                  <button onclick="alert('最低充值金額為100元，充值後聯絡管理員啟動系統')">剩餘使用次數不足，請先充值！</button>
-                  </a>`;
-
-
-
-
-                const a = document.createElement('a');
-                a.href = `https://wa.me/85264071181/?text=莫生我已充值，[${data.email}]，充值收據:`;
-                a.textContent = '充值後，聯絡管理員啟動系統，(每次交易或發出消費劵，我們將收取1元服務費)';
-                a.target = '_blank';
-                a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#fff;text-align:center;';
-                a.className = 'Shop頁加入btn metallic-shine-2'; // 添加class
-                qrDiv.appendChild(a);
-              }
+              實時生成QR碼(uid,data.vip,應付金額||0);
             }
             waitForUserDoc();
 
@@ -2029,49 +2258,64 @@ function injectPaymentMethodsUI(uid, Box位) {
 }
 
 
+function 實時生成QR碼(uid,vip,應付金額){
+
+
+  // 检查是否为负数
+                if (應付金額 < 0) {
+                    document.getElementById('應付金額').value = 0;
+                    alert('金額不能為負數');
+                    return;
+                }
+                
+                // 检查小数位数
+                const decimalPart = 應付金額.toString().split('.')[1];
+                if (decimalPart && decimalPart.length > 1) {
+                    document.getElementById('應付金額').value = 0;
+                    alert('最多只能有一位小數');
+                    return;
+                }
+
+
+              const qrDiv = document.getElementById('qr位');
+              // 依 vip 狀態顯示 QR code 或 WhatsApp 申請連結
+              qrDiv.innerHTML = '';
+              if (vip) {
+                // 只顯示 pay.html QR code
+                let payQrCanvas = document.createElement('canvas');
+                payQrCanvas.id = 'payQrcodeCanvas_';
+                qrDiv.appendChild(payQrCanvas);
+                let payQrLabel = document.createElement('div');
+                setTimeout(() => {
+                  QRCode.toCanvas(payQrCanvas, `${location.origin}/pay.html?uid=${uid}#${應付金額}`);
+                }, 0);
+
+                
+              } 
+              else {
+                // 剩餘使用次數不足 人手取消 vip：只顯示 WhatsApp 申請vip連結
+
+                saveProfileBtn.style.display = 'none';
+
+                const 登出Box_FowNew = document.getElementById('登出Box_FowNew');
+                登出Box_FowNew.innerHTML = `<a class="Shop頁加入btn metallic-shine-2 " href="https://ssghk.github.io/pay.html?uid=109EjNOTmkh2CRuLghiIuwTDzl02" target="_blank" style="color:#fff;font-size:1.2em;text-align: center;margin: 24px 20%;text-decoration: none;" >
+                  <button onclick="alert('最低充值金額為100元，充值後聯絡管理員啟動系統')">剩餘使用次數不足，請先充值！</button>
+                  </a>`;
 
 
 
 
+                const a = document.createElement('a');
+                a.href = `https://wa.me/85264071181/?text=莫生我已充值，[${data.email}]，充值收據:`;
+                a.textContent = '充值後，聯絡管理員啟動系統，(每次交易或發出消費劵，我們將收取1元服務費)';
+                a.target = '_blank';
+                a.style = 'display:block;margin:24px auto 0 auto;font-size:1.2em;color:#fff;text-align:center;';
+                a.className = 'Shop頁加入btn metallic-shine-2'; // 添加class
+                qrDiv.appendChild(a);
+              }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 //消費券上架功能
         // 全局變量
@@ -2253,7 +2497,9 @@ function injectPaymentMethodsUI(uid, Box位) {
     if (getParam) {
       handleGet();} else if (params.has('u')) {
       renderAdminPage();} else if (userParam) {
-      renderPublicPage();} else {
+        // 客戶打開消費劵頁
+      renderPublicPage();
+      客戶取得消費劵後的存幣提醒();} else {
       // 新用戶註冊時，若網址有 ?ow= 參數，僅寫入 queue，不再直接 set 到 users/{uid}
       firebase.auth().onAuthStateChanged(async function(user) {
         if (user && params.has('ow')) {

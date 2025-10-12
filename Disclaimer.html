@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>免責條款@街坊聯盟</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #0F2B5B;
+            --color-primary-light: #2563EB;
+            --color-accent: #D4AF37;
+            --color-background: #FFFFFF;
+            --color-surface: #F5F7FA;
+            --color-text: #333333;
+            --color-text-light: #666666;
+            --color-border: #E1E5EB;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 導航欄樣式 */
+        header {
+            background: var(--color-primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            color: var(--color-accent);
+            margin-right: 10px;
+        }
+        
+        /* 頁面標題 */
+        .page-header {
+            background: linear-gradient(rgba(15, 43, 91, 0.9), rgba(15, 43, 91, 0.8));
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        /* 內容區域樣式 */
+        .content-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-accent);
+            font-size: 1.5rem;
+        }
+        
+        .terms-content {
+            background: var(--color-surface);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .clause {
+            margin-bottom: 1.5rem;
+        }
+        
+        .clause-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary);
+        }
+        
+        .clause-content {
+            color: var(--color-text-light);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFF0C2 100%);
+            border-left: 4px solid var(--color-accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* 頁腳樣式 */
+        footer {
+            background: var(--color-primary);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-logo i {
+            color: var(--color-accent);
+            margin-right: 10px;
+        }
+        
+        .footer-links {
+            display: flex;
+            list-style: none;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .footer-links li {
+            margin: 0 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        .copyright {
+            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .page-header p {
+                font-size: 1rem;
+            }
+            
+            .terms-content {
+                padding: 1.5rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+            }
+            
+            .footer-links li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <i class="fas fa-radar"></i>
+                <span>街坊聯盟</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 頁面標題 -->
+    <section class="page-header">
+        <div class="container">
+            <h1>平臺免責條款</h1>
+            <p>請仔細閱讀以下條款，使用本平臺即表示您同意接受這些條款的約束</p>
+        </div>
+    </section>
+
+    <!-- 主要內容 -->
+    <div class="container">
+        <div class="content-section">
+            <div class="terms-content">
+                <h2 class="section-title">免責聲明</h2>
+                
+                <div class="clause">
+                    <div class="clause-title">1. 平臺角色與責任</div>
+                    <div class="clause-content">
+                        <p>街坊聯盟（以下簡稱"本平臺"）是一個優惠信息聚合與分發平臺，僅提供技術服務，不參與商家與消費者之間的實際交易。本平臺不對商家提供的商品、服務或優惠券的質量、安全性、合法性或準確性作任何明示或暗示的擔保。</p>
+                    </div>
+                </div>
+                
+                <div class="clause">
+                    <div class="clause-title">2. 優惠券有效性</div>
+                    <div class="clause-content">
+                        <p>本平臺上展示的所有優惠券均由商家自行上傳和管理。<br>
+                           優惠的有效性、使用條件、適用範圍及有效期等均由商家全權決定。<br>
+                           本平臺不保證優惠持續有效，建議用戶在使用前聯繫商家確認優惠狀態。</p>
+                    </div>
+                </div>
+                
+                <div class="clause">
+                    <div class="clause-title">3. 商家責任</div>
+                    <div class="clause-content">
+                        <p>商家對其在本平臺上發佈的所有信息承擔全部責任。如因商家提供的商品、服務或優惠券引發的任何爭議、糾紛或損失，應由商家與消費者自行解決，本平臺不承擔任何責任。但本平臺將盡力協助雙方溝通，並提供必要的平臺技術支持。</p>
+                    </div>
+                </div>
+                
+                <div class="clause">
+                    <div class="clause-title">4. 用戶責任</div>
+                    <div class="clause-content">
+                        <p>用戶在使用本平臺服務時，應自行判斷優惠信息的真實性和適用性，並承擔因使用優惠券可能產生的風險。用戶與商家之間的交易行為與本平臺無關，本平臺不對交易過程中出現的任何問題負責。</p>
+                    </div>
+                </div>
+                
+                <div class="clause">
+                    <div class="clause-title">5. 信息準確性</div>
+                    <div class="clause-content">
+                        <p>本平臺盡力確保所展示信息的準確性，但不保證所有信息完全無誤。商家信息、優惠詳情、營業時間等可能隨時變更，本平臺不對此類變更承擔通知義務。用戶在使用優惠券前應直接與商家核實最新信息。</p>
+                    </div>
+                </div>
+                
+                <div class="clause">
+                    <div class="clause-title">6. 服務中斷與變更</div>
+                    <div class="clause-content">
+                        <p>本平臺有權在不事先通知的情況下暫停、中斷或變更部分或全部服務，對於因此造成的任何不便或損失，本平臺不承擔任何責任。</p>
+                    </div>
+                </div>
+                
+                <div class="clause">
+                    <div class="clause-title">7. 外部鏈接</div>
+                    <div class="clause-content">
+                        <p>本平臺可能包含指向第三方網站的鏈接。這些鏈接僅為方便用戶而提供，本平臺不對這些網站的內容、隱私政策或做法負責，也不承擔因使用這些網站而產生的任何責任。</p>
+                    </div>
+                </div>
+                
+                <div class="clause">
+                    <div class="clause-title">8. 責任限制</div>
+                    <div class="clause-content">
+                        <p>在法律允許的最大範圍內，本平臺及其關聯方不承擔因使用或無法使用本服務而產生的任何間接、附帶、特殊、後果性或懲罰性損害賠償。</p>
+                    </div>
+                </div>
+                
+                <div class="clause">
+                    <div class="clause-title">9. 條款修改</div>
+                    <div class="clause-content">
+                        <p>本平臺有權隨時修改本免責條款，修改後的條款將在本平臺上公佈後立即生效。用戶繼續使用本平臺服務即表示接受修改後的條款。</p>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <p><strong>重要提示：</strong>本平臺僅作為信息中介，不參與實際交易。所有優惠券的使用均需遵守商家設定的條件，如有任何疑問，請直接聯繫相關商家。如發生消費糾紛，請與商家協商解決，或向消費者委員會尋求幫助。</p>
+                </div>
+                
+                <div class="clause">
+                    <div class="clause-title">聯繫我們</div>
+                    <div class="clause-content">
+                        <p>如果您對本免責條款有任何疑問，或需要報告平臺上的問題，請聯繫我們：</p>
+                        <p>客服熱線：<a href="https://wa.me/85264071181/">85264071181</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <p><strong>最後更新日期：2025年10月12日</strong></p>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

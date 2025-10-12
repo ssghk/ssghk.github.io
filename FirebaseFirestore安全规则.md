@@ -2,7 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-
     match /userSignups/{uid} {
       allow create, update: if request.auth != null && request.auth.uid == uid;
       allow read: if false;
@@ -31,7 +30,7 @@ service cloud.firestore {
 
       // 允許首次建立 owner 欄位
       allow create: if request.auth != null && request.resource.data.keys().hasAny(['owner']);
-
+        
       // 允許管理員更新任何字段（包括付款方式）
       allow update: if request.auth != null && (
         // 管理員可以更新所有字段
@@ -41,22 +40,25 @@ service cloud.firestore {
         (request.auth.uid == userId && request.resource.data.paymentMethods is list)
       );
 
-
       // 會員自己只能新增/更新 email 欄位
       allow update: if request.auth != null &&
         request.auth.uid == userId &&
         request.resource.data.keys().hasOnly(['email']);
 
-
-
       // 只允許 Cloud Function 寫入統計欄位
       allow update: if request.auth != null &&
         request.auth.token.firebase.sign_in_provider == 'custom' &&
         request.resource.data.keys().hasOnly(['month', 'total', 'monthKey']);
-      
+
       allow write: if false;
     }
-    
+
+    // 保存聯盟幣資訊
+    match /users/{userId}/ssgcoins/{docId} {
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && request.auth.uid == userId;
+    }
+
     // 網站資料規則
     match /site/main {
       allow read: if true;

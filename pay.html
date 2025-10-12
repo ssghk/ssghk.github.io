@@ -211,9 +211,18 @@
     document.head.appendChild(script);
     script.onload = function() {
       window.onload = function() {
-  const payList = document.getElementById('payList');
-  const payTitle = document.getElementById('payTitle');
-  const 消費劵鍵 = document.getElementById('消費劵鍵');
+        const payList = document.getElementById('payList');
+        const payTitle = document.getElementById('payTitle');
+        const 消費劵鍵 = document.getElementById('消費劵鍵');
+        const 應付金額 = window.location.hash.substring(1);
+
+        // 获取当前URL的應付金額 並替换当前URL，不刷新页面
+          const currentUrl = window.location.href;
+          const newUrl = currentUrl.replace(/#\d+$/, '');
+          if (newUrl !== currentUrl) {
+              window.history.replaceState(null, null, newUrl);
+          }
+
         const db = firebase.firestore();
         // 取得 uid
         const urlParams = new URLSearchParams(window.location.search);
@@ -229,7 +238,13 @@
           return;
         }
         const payIncrementCount = firebase.functions().httpsCallable('payIncrementCount');
-        payIncrementCount({ uid }).then(result => {
+        // 取得應付金額數字
+        let amount = 0;
+        if (typeof 應付金額 === 'string' && 應付金額.match(/^\d+(\.\d+)?$/)) {
+          amount = Math.floor(Number(應付金額));
+          if (amount <= 0) amount = 0;
+        }
+        payIncrementCount({ uid, amount }).then(result => {
           console.log('payIncrementCount result:', result);
           db.collection('users').doc(uid).get().then(doc => {
             if (!doc.exists) { payList.innerHTML = '<div style="color:red;text-align:center;">查無此會員</div>'; payTitle.textContent = '查無此會員'; return; }
@@ -246,7 +261,26 @@
                   //此會員尚未設定付款方式
                   window.location.href = `index.html?user=${uid}&token=${token}`;
                 }
-                消費劵鍵.innerHTML = `<a href="index.html?get=${uid}&token=${token}" target="_blank" class="Shop頁加入btn metallic-shine-2 ">街坊聯盟消費劵</a>`;
+                // 付款前 將獲得聯盟幣存入 localStorage
+                // 在 index handleGet 中讀取
+
+                localStorage.setItem('獲得聯盟幣', 應付金額);
+                localStorage.setItem('商家id', uid);
+                let 獲得聯盟幣 = localStorage.getItem('獲得聯盟幣');
+                let 商家id = localStorage.getItem('商家id');
+                消費劵鍵.innerHTML = `<a href="index.html?get=${uid}&token=${token}" target="_blank" class="Shop頁加入btn metallic-shine-2 ">街坊聯盟消費劵<samp style="font-size:1.3em;">(打開獲得 ${獲得聯盟幣}聯盟幣)</samp></a>
+                <br>
+                <div class="pay-item">
+                <span class="pay-name">應付金額: $<span id="應付金額" >${獲得聯盟幣}</span></span>
+              </div>
+              
+              
+              
+              
+              `;
+              // 付款後 轉到消費劵頁 聯盟幣要換成提示 刪除網址上的#應付金額 qqq
+
+
               }).catch(e => {
                 消費劵鍵.innerHTML = '<div style="color:red;text-align:center;">產生消費劵失敗</div>';
               });

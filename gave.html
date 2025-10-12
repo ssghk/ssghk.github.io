@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聯盟幣兌換中心@街坊聯盟</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+          --gold: #C0C0C0;
+            --color-primary: #0F2B5B;
+            --color-primary-light: #2563EB;
+            --color-accent: #D4AF37;
+            --color-background: #FFFFFF;
+            --color-surface: #F5F7FA;
+            --color-text: #333333;
+            --color-text-light: #666666;
+            --color-border: #E1E5EB;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 導航欄樣式 */
+        header {
+            background: var(--color-primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            color: var(--color-accent);
+            margin-right: 10px;
+        }
+        
+        /* 頁面標題 */
+        .page-header {
+            background: linear-gradient(rgba(15, 43, 91, 0.9), rgba(15, 43, 91, 0.8));
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        /* 兌換品列表樣式 */
+        .exchange-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-accent);
+            font-size: 1.5rem;
+        }
+        
+        .points-display {
+            background: linear-gradient(135deg, #D4AF37 0%, #F9E076 100%);
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .item-card {
+            background: var(--color-surface);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .item-image {
+            height: 200px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .item-details {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .item-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary);
+        }
+        
+        .item-description {
+            color: var(--color-text-light);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        
+        .item-cost {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .cost-amount {
+            font-weight: bold;
+            color: var(--color-accent);
+            font-size: 1.3rem;
+        }
+        
+        .exchange-btn {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .exchange-btn:hover {
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+            box-shadow: 0 4px 12px rgba(15, 43, 91, 0.3);
+        }
+        
+        .exchange-btn.disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .exchange-btn.disabled:hover {
+            background: #cccccc;
+            box-shadow: none;
+        }
+        
+        /* 頁腳樣式 */
+        footer {
+            background: var(--color-primary);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-logo i {
+            color: var(--color-accent);
+            margin-right: 10px;
+        }
+        
+        .footer-links {
+            display: flex;
+            list-style: none;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .footer-links li {
+            margin: 0 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        .copyright {
+            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .page-header p {
+                font-size: 1rem;
+            }
+            
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+            }
+            
+            .footer-links li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
+
+
+    <script src="https://kit.fontawesome.com/fd27287143.js" crossorigin="anonymous">//抖音,threads icon</script>
+    
+    <script src="https://cdn.staticfile.net/translate.js/3.1.7/translate.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://64071181.github.io/mokJsapi/a.js">//琪琪修改</script>
+
+    <meta name="facebook-domain-verification" content="fm7dtzg135zibc8aph6nbffqi80cva" />
+    <meta name="google-site-verification" content="zKKu5phgon5Fp0BeiCOzKKveF1F_iRW9W9cbctL3Hl4" />
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 導航欄 -->
+    <header>
+      <p id="translate"></p>
+        <div class="container navbar">
+            <div class="logo">
+                <i class="fas fa-radar"></i>
+                <span>街坊聯盟</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 頁面標題 -->
+    <section class="page-header">
+        <div class="container">
+            <h1>聯盟幣兌換中心</h1>
+            <p>使用您在街坊聯盟獲得的聯盟幣，兌換各種精美禮品和專屬優惠</p>
+        </div>
+    </section>
+
+    <!-- 主要內容 -->
+    <div class="container">
+        <div class="exchange-section">
+            <div id="當前的聯盟幣餘額" class="points-display">您當前的聯盟幣餘額：</div>
+            
+            <h2 class="section-title">可兌換商品</h2>
+            
+            <div id="exchange-items" class="items-grid">
+                <!-- 兌換品將由JavaScript動態生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁腳 -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-radar"></i>
+                <span>街坊聯盟</span>
+            </div>
+            
+            <ul class="footer-links">
+                <li><a href="./">首頁</a></li>
+                <li><a href="./0921.html">關於我們</a></li>
+                <li><a href="./1004.html">商家加盟</a></li>
+                <li><a href="./about.html#faq">用戶幫助</a></li>
+                <li><a href="./Disclaimer.html">免責條款</a></li>
+                <li><a href="https://wa.me/85264071181/">聯繫我們</a></li>
+            </ul>
+            
+    <div id="ContactAKI" class="ContactAKI"><!-- JS _顯示聯莫 --></div>
+    <div class="copyright">
+        <p class="mokJsApi_copyright">版權</p>
+    </div>
+    <div class="scroll-top" id="scrollTop" style="background: var(--gold);bottom: 40%;" onclick="scrollToTop()">↑</div>
+
+
+
+        </div>
+    </footer>
+
+    <script>
+
+/*
+          :::        :::    :::       :::::::::::
+       :+: :+:      :+:   :+:            :+:
+     +:+   +:+     +:+  +:+             +:+
+   +#++:++#++:    +#++:++              +#+
+  +#+     +#+    +#+  +#+             +#+
+ #+#     #+#    #+#   #+#            #+#
+###     ###    ###    ###       ###########
+*/
+
+        // 動態內容自動翻譯小函數
+        function callTranslate() {
+          if (window.translate && typeof translate.execute === 'function') {
+            translate.execute();
+          }
+        }
+        translate.service.use('client.edge'); //設置機器翻譯服務通道，直接客戶端本身，不依賴服務端 。相關說明參考 http://translate.zvo.cn/43086.html
+        translate.execute();//進行翻譯 
+        function Start() {
+            // 顯示聯莫
+            //[mail,whatsapp,WechatQR,instagram,line,facebook,telegram,github,小紅書,抖音,threads,youtube]
+            const 聯莫 = ['','https://wa.me/85264071181/','https://i.meee.com.tw/4xTmYL9.jpeg','https://www.instagram.com/get300customersmonthforfree?igsh=cmtqeWlhYzJ4OTEy','','https://www.facebook.com/profile.php?id=61579586521973','','','https://www.xiaohongshu.com/user/profile/5d7781c30000000001018857?xsec_token=YBZh7Gn89FTue84tXj6SC4bbo_OZRntsilMRRtZq_onNw%3D&xsec_source=app_share&xhsshare=CopyLink&shareRedId=N0o5Nzs2Rzw2NzUyOTgwNjY0OTg8PTtA&apptime=1758041004&share_id=9a6bd84efc214bc593360e49a481b07f&share_channel=copy_link','https://v.douyin.com/hki89PGq2H8/','https://www.threads.com/@get300customersmonthforfree','https://youtube.com/channel/UCd6Y8_Vev2tFQMYMt5YLJdQ?si=RDk1nVEf5VcCWzXH'
+            ];
+            _顯示聯莫(聯莫);
+        }
+        琪琪修改('https://64071181.github.io/')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+      :::::::::           :::        ::::::::       ::::::::
+     :+:    :+:        :+: :+:     :+:    :+:     :+:    :+:
+    +:+    +:+       +:+   +:+    +:+            +:+
+   +#++:++#+       +#++:++#++:   +#++:++#++     +#++:++#++
+  +#+    +#+      +#+     +#+          +#+            +#+
+ #+#    #+#      #+#     #+#   #+#    #+#     #+#    #+#
+########       ###     ###    ########       ########
+*/
+  // Firebase 配置
+    const firebaseConfig = {
+      apiKey: "AIzaSyAe9fiJ-awc_QcHaT_GjrcYnSSGhl-weLM",
+      authDomain: "ssg1111.firebaseapp.com",
+      projectId: "ssg1111",
+      storageBucket: "ssg1111.firebasestorage.app",
+      messagingSenderId: "645347114148",
+      appId: "1:645347114148:web:a380b5bf76f659c7e47a31",
+      measurementId: "G-EH0Z16872Q"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // 兌換品數據
+        const exchangeItems = [
+            {
+                id: 1,
+                name: "高級餐廳雙人套餐",
+                description: "米其林推薦餐廳的雙人晚餐套餐，包含前菜、主菜和甜點",
+                image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                cost: 5000,
+                link: "https://example.com/redeem/1"
+            },
+            {
+                id: 2,
+                name: "豪華酒店住宿券",
+                description: "五星級酒店豪華房一晚住宿券，含雙人早餐",
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                cost: 8000,
+                link: "https://example.com/redeem/2"
+            },
+            {
+                id: 3,
+                name: "智能手機",
+                description: "最新款智能手機，128GB存儲，高性能處理器",
+                image: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                cost: 15000,
+                link: "https://example.com/redeem/3"
+            },
+            {
+                id: 4,
+                name: "咖啡店現金券",
+                description: "本地精品咖啡店$50現金券，可兌換任何飲品和食品",
+                image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                cost: 500,
+                link: "https://example.com/redeem/4"
+            },
+            {
+                id: 5,
+                name: "電影票兩張",
+                description: "任意影院電影票兩張，包含3D和IMAX選項",
+                image: "https://images.unsplash.com/photo-1489599809505-7c6f0e6275c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                cost: 1000,
+                link: "https://example.com/redeem/5"
+            },
+            {
+                id: 6,
+                name: "品牌購物券",
+                description: "知名時尚品牌$200購物券，適用於所有門店和線上商城",
+                image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                cost: 2000,
+                link: "https://example.com/redeem/6"
+            },
+            {
+                id: 7,
+                name: "健身中心月卡",
+                description: "高級健身中心單月會員卡，包含所有設施和團體課程",
+                image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                cost: 3000,
+                link: "https://example.com/redeem/7"
+            },
+            {
+                id: 8,
+                name: "電子產品代金券",
+                description: "電子產品專賣店$100代金券，適用於手機、平板等",
+                image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                cost: 1000,
+                link: "https://example.com/redeem/8"
+            }
+        ];
+
+        // 按兌換費用從高到低排序
+        exchangeItems.sort((a, b) => b.cost - a.cost);
+
+        // 生成兌換品列表
+        function generateExchangeItems() {
+            
+            
+            
+            auth.onAuthStateChanged(async user => {
+        if (user) {
+          // 取得會員all料
+          const uid = user.uid;
+          const userRef = db.collection('users').doc(uid);
+          const doc = await userRef.get();
+          if (doc.exists) {
+            const data = doc.data();
+            
+            // 更新餘額顯示
+
+            document.getElementById('當前的聯盟幣餘額').innerHTML = `
+            <a href="${data.lastsggurl}">
+              <i class="fas fa-coins"></i> 您當前的聯盟幣餘額：${data.ssgtotalCoins || 0} 幣
+            </a>
+            `
+
+
+            
+
+
+
+            //document.getElementById('聯盟幣餘額').textContent = data.ssgtotalCoins || 0;
+          
+
+            const container = document.getElementById('exchange-items');
+            // 清空容器
+            container.innerHTML = '';
+            
+            // 生成每個兌換品卡片
+            exchangeItems.forEach(item => {
+                const canAfford = data.ssgtotalCoins >= item.cost;
+                
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                
+                itemCard.innerHTML = `
+                    <div class="item-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-description">${item.description}</div>
+                        <div class="item-cost">
+                            <span class="cost-amount">${item.cost} 聯盟幣</span>
+                        </div>
+                        <a href="${item.link}" class="exchange-btn ${canAfford ? '' : 'disabled'}" ${canAfford ? '' : 'onclick="return false;"'}>
+                            ${canAfford ? '立即兌換' : '聯盟幣不足'}
+                        </a>
+                    </div>
+                `;
+                
+                container.appendChild(itemCard);
+            });
+
+          }
+        }
+      });
+
+        }
+
+        // 頁面加載完成後生成兌換品列表
+        document.addEventListener('DOMContentLoaded', generateExchangeItems);
+    </script>
+</body>
+</html>
