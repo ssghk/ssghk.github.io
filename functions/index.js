@@ -1,3 +1,4 @@
+
 /*
 cd C:\Users\mokaki\Desktop\金\ssghk.github.io
 firebase deploy --only functions
@@ -148,26 +149,35 @@ exports.updateAdList = functions.https.onCall(async (data, context) => {
 
 
 // 比錢版 9s 月/最少 $0.62 USD
-// pay.html 專用計數器，每次打開 pay.html?uid= 時 month+1, total+1, usageCount-1
-  exports.payIncrementCount = functions
-    .runWith({ minInstances: 1 })
-    .https
-    .onCall(async (data, context) => {
+// pay.html 專用計數器，每次客戶掃碼打開 pay.html 時 不論有沒付款,有沒打開消費劵,
+// month + 應付金額, total + 應付金額
+
+exports.payIncrementCount = functions
+  .runWith({ minInstances: 1 })
+  .https
+  .onCall(async (data, context) => {
     const uid = data.uid;
     if (!uid) throw new functions.https.HttpsError('invalid-argument', 'Missing uid');
+    // 新增：取得金額
+    let amount = 0;
+    if (typeof data.amount === 'number' && !isNaN(data.amount) && data.amount > 0) {
+      amount = Math.floor(data.amount);
+    }
     const userRef = admin.firestore().collection('users').doc(uid);
     const doc = await userRef.get();
     if (!doc.exists) throw new functions.https.HttpsError('not-found', 'User not found');
     const userData = doc.data();
     const now = new Date();
     const monthKey = now.getFullYear() + '-' + (now.getMonth() + 1);
-    let month = userData.month || 0;
-    let total = userData.total || 0;
+    let month = userData.month || 0; // 今月已收款
+    let total = userData.total || 0; // 累計已收款
+    let usageCount = userData.usageCount || 0; // 商戶欠款
     if (userData.monthKey !== monthKey) month = 0;
-    month++;
-    total++;
-    let usageCount = (userData.usageCount || 0) - 1;
+    month += amount;
+    total += amount;
+    usageCount += amount * (1/100); // 每次被掃qr，店主將消費付款金額的 1% 轉為聯盟幣，送如客戶。
     let lastGetDate = now.toISOString();
+
     await userRef.update({ month, total, monthKey, usageCount, lastGetDate });
     return { success: true };
   });
@@ -272,4 +282,34 @@ exports.incrementCount = functions.https.onCall(async (data, context) => {
   
   // 直接返回第一次获取的 URL，避免第二次读取
   return { url: userData.url };
+});
+
+// 保存取得的消費劵到 lastsggurl 欄位
+exports.updateLastSggURL = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', '請先登入');
+  }
+  const uid = context.auth.uid;
+  const url = data.url;
+  if (!url) throw new functions.https.HttpsError('invalid-argument', '缺少網址');
+  await admin.firestore().collection('users').doc(uid).update({ lastsggurl: url });
+  return { success: true };
+});
+
+
+// 更新聯盟幣總和
+exports.updateSsgtotalCoins = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', '請先登入');
+  }
+  const uid = context.auth.uid;
+  const add = Number(data.add) || 0;
+  if (!add) throw new functions.https.HttpsError('invalid-argument', '缺少 add 數值');
+  const userRef = admin.firestore().collection('users').doc(uid);
+  const doc = await userRef.get();
+  if (!doc.exists) throw new functions.https.HttpsError('not-found', 'User not found');
+  const old = doc.data().ssgtotalCoins || 0;
+  const ssgtotalCoins = old + add;
+  await userRef.update({ ssgtotalCoins });
+  return { ssgtotalCoins };
 });
